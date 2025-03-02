@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
+import { isDev } from "./utils.js";
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({});
@@ -8,8 +9,11 @@ app.on("ready", () => {
   mainWindow.setMenuBarVisibility(false);
   mainWindow.setTitle("City-Furshet Backoffice");
 
-  mainWindow.maximize(); // TODO dev mode
-  mainWindow.webContents.openDevTools(); // TODO dev mode
-
-  mainWindow.loadFile(path.join(app.getAppPath(), "dist-react/index.html"));
+  if (isDev()) {
+    mainWindow.maximize();
+    mainWindow.webContents.openDevTools();
+    mainWindow.loadURL("http://localhost:5123/");
+  } else {
+    mainWindow.loadFile(path.join(app.getAppPath(), "dist-react/index.html"));
+  }
 });

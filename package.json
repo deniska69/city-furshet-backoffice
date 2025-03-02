@@ -8,11 +8,12 @@
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
+    "dev": "npm-run-all --parallel dev:r dev:e",
     "dev:r": "vite",
     "build:r": "tsc -b && vite build",
     "build:r:ts": "tsc -b && vite build && rm -rf dist-react",
     "preview:r": "vite preview",
-    "dev:e": "npm run build:r && electron .",
+    "dev:e": "npm run transpile:e && cross-env NODE_ENV=development electron .",
     "transpile:e": "tsc --project src/electron/tsconfig.json",
     "build:e:win": "npm run transpile:e && npm run build:r && electron-builder --win --x64"
   },
@@ -29,12 +30,14 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "^7.0.3",
     "electron": "^34.3.0",
     "electron-builder": "^25.1.8",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "npm-run-all": "^4.1.5",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"

@@ -1,6 +1,8 @@
-# React + TypeScript + Vite + Electron
+# Vite + React + TypeScript + Electron
 
 Desktop backoffice-app for [`City Furshet`](https://city-furshet.ru/)
+
+Built on the basis of [`YouTube: Electron Course - Code Desktop Applications (inc. React and Typescript)`](https://youtu.be/fP-371MN0Ck?si=d4TpLcIr49PxUQCx)
 
 ## Install
 
@@ -51,10 +53,9 @@ to:
 
 ```json
 "scripts": {
+    "dev": "npm-run-all --parallel dev:r dev:e",
     "dev:r": "vite",
     "build:r": "tsc -b && vite build",
-    "build:r:ts": "tsc -b && vite build && rm -rf dist-react",
-    "preview:r": "vite preview",
     "dev:e": "electron .",
     "transpile:e": "tsc --project src/electron/tsconfig.json",
     "build:e:win": "npm run transpile:e && npm run build:r && electron-builder --win --x64"
@@ -95,10 +96,10 @@ app.on("ready", () => {
 }
 ```
 
-10. Add Electron libs:
+10. Add libs:
 
 ```
-yarn add -D electron electron-builder
+yarn add -D electron electron-builder npm-run-all cross-env
 ```
 
 ## Start dev mode React
@@ -111,6 +112,12 @@ yarn dev:r
 
 ```
 yarn dev:e
+```
+
+## `Start parallel dev mode React + Electron`
+
+```
+yarn dev
 ```
 
 ## Build poduction Electron app for Windows OS
