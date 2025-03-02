@@ -24,7 +24,7 @@ mv !(react) react &&
 cd ..
 ```
 
-3. Change React entry point `index.html` from:
+3. Change React entry point in `index.html` from:
 
 ```html
 <script type="module" src="/src/main.tsx"></script>
@@ -73,7 +73,7 @@ app.on("ready", () => {
 });
 ```
 
-8. Add `TS` config for Electron app to `src/electron/tsconfig.json`:
+8. Add `TypeScript` config for Electron app to `src/electron/tsconfig.json`:
 
 ```json
 {
@@ -87,7 +87,7 @@ app.on("ready", () => {
 }
 ```
 
-9. Add `TS` rule to `tsconfig.app.json` and `tsconfig.node.json`:
+9. Add `TypeScript` rule to `tsconfig.app.json` and `tsconfig.node.json`:
 
 ```json
 {
@@ -98,31 +98,23 @@ app.on("ready", () => {
 10. Add Electron libs:
 
 ```
-
 yarn add -D electron electron-builder
-
 ```
 
 ## Start dev mode React
 
 ```
-
 yarn dev:r
-
 ```
 
 ## Start dev mode Electron
 
 ```
-
 yarn dev:e
-
 ```
 
 ## Build poduction Electron app for Windows OS
 
 ```
-
 yarn build:e:win
-
 ```
