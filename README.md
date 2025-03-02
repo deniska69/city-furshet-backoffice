@@ -24,13 +24,13 @@ mv !(react) react &&
 cd ..
 ```
 
-3. Change React entry point (`index.html`) from:
+3. Change React entry point `index.html` from:
 
 ```html
 <script type="module" src="/src/main.tsx"></script>
 ```
 
-to
+to:
 
 ```html
 <script type="module" src="/src/react/main.tsx"></script>
@@ -38,18 +38,47 @@ to
 
 4. Add to `vite.config.ts`:
 
-```js
+```javascript
 build: {
+    base: "./",
     outDir: "dist-react",
 }
 ```
 
-5. Add `dist-react` to `.gitignore`
+5. Add `dist-react` to `.gitignore`.
 
-## Start dev mode
+6. Add scripts to `package.json`:
+
+```javascript
+scripts: {
+    "dev:r": "vite",
+    "dev:e": "electron .",
+    "build": "tsc -b && vite build",
+},
+```
+
+7. Add file `src/electron/main.js` to run Electron app:
+
+```javascript
+import { app, BrowserWindow } from "electron";
+import path from "path";
+
+app.on("ready", () => {
+  const mainWindow = new BrowserWindow({});
+  mainWindow.loadFile(path.join(app.getAppPath(), "dist-react/index.html"));
+});
+```
+
+## Start dev mode React
 
 ```
-yarn dev
+yarn dev:r
 ```
 
-Open in browser: [http://localhost:5173/](http://localhost:5173/)
+## Start dev mode Electron
+
+> Before start Electron app: requreds build React app `yarn build`
+
+```
+yarn dev:e
+```
