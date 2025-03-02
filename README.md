@@ -26,23 +26,25 @@ cd ..
 
 3. Change React entry point (`index.html`) from:
 
-```
+```html
 <script type="module" src="/src/main.tsx"></script>
 ```
 
 to
 
-```
+```html
 <script type="module" src="/src/react/main.tsx"></script>
 ```
 
 4. Add to `vite.config.ts`:
 
-```
+```js
 build: {
     outDir: "dist-react",
 }
 ```
+
+5. Add `dist-react` to `.gitignore`
 
 ## Start dev mode
 
