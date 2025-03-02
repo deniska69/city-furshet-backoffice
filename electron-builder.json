@@ -1,0 +1,8 @@
+{
+  "appId": "com.gostev-dev.city-furshet-backoffice",
+  "files": ["dist-electron", "dist-react"],
+  "icon": "./desktopIcon.png",
+  "win": {
+    "target": ["portable", "msi"]
+  }
+}

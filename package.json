@@ -1,18 +1,20 @@
 {
   "name": "city-furshet-backoffice",
+  "productName": "City Furshet Backoffice",
   "description": "Desktop app back-office for city-furshet.ru",
   "repository": "https://github.com/deniska69/city-furshet-backoffice.git",
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "main": "src/electron/main.js",
+  "main": "dist-electron/main.js",
   "scripts": {
     "dev:r": "vite",
-    "dev:e": "electron .",
-    "build": "tsc -b && vite build",
-    "build-test": "tsc -b && vite build && rm -rf dist-react",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build:r": "tsc -b && vite build",
+    "build:r:ts": "tsc -b && vite build && rm -rf dist-react",
+    "preview:r": "vite preview",
+    "dev:e": "npm run build:r && electron .",
+    "transpile:e": "tsc --project src/electron/tsconfig.json",
+    "build:e:win": "npm run transpile:e && npm run build:r && electron-builder --win --x64"
   },
   "author": {
     "name": "deniska69",
@@ -28,6 +30,7 @@
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
     "electron": "^34.3.0",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",

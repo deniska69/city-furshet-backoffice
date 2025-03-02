@@ -4,7 +4,7 @@ Desktop backoffice-app for [`City Furshet`](https://city-furshet.ru/)
 
 ## Install
 
-1. Init [`Vite`](https://vite.dev/) & install all dependencies
+1. Init [`Vite + React + TypeScript`](https://vite.dev/) & install all dependencies
 
 ```
 yarn create vite
@@ -36,28 +36,32 @@ to:
 <script type="module" src="/src/react/main.tsx"></script>
 ```
 
-4. Add to `vite.config.ts`:
+4. Add rules to `vite.config.ts`:
 
-```javascript
-build: {
-    base: "./",
-    outDir: "dist-react",
+```json
+"build": {
+    "base": "./",
+    "outDir": "dist-react",
 }
 ```
 
-5. Add `dist-react` to `.gitignore`.
+5. Add `dist`, `dist-react` and `dist-electron` to `.gitignore`.
 
 6. Add scripts to `package.json`:
 
-```javascript
-scripts: {
+```json
+"scripts": {
     "dev:r": "vite",
+    "build:r": "tsc -b && vite build",
+    "build:r:ts": "tsc -b && vite build && rm -rf dist-react",
+    "preview:r": "vite preview",
     "dev:e": "electron .",
-    "build": "tsc -b && vite build",
-},
+    "transpile:e": "tsc --project src/electron/tsconfig.json",
+    "build:e:win": "npm run transpile:e && npm run build:r && electron-builder --win --x64"
+}
 ```
 
-7. Add file `src/electron/main.js` to run Electron app:
+7. Add file `src/electron/main.ts` to run Electron app:
 
 ```javascript
 import { app, BrowserWindow } from "electron";
@@ -69,16 +73,56 @@ app.on("ready", () => {
 });
 ```
 
+8. Add `TS` config for Electron app to `src/electron/tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "outDir": "../../dist-electron",
+    "skipLibCheck": true
+  }
+}
+```
+
+9. Add `TS` rule to `tsconfig.app.json` and `tsconfig.node.json`:
+
+```json
+{
+  "exclude": ["src/electron"]
+}
+```
+
+10. Add Electron libs:
+
+```
+
+yarn add -D electron electron-builder
+
+```
+
 ## Start dev mode React
 
 ```
+
 yarn dev:r
+
 ```
 
 ## Start dev mode Electron
 
-> Before start Electron app: requreds build React app `yarn build`
+```
+
+yarn dev:e
 
 ```
-yarn dev:e
+
+## Build poduction Electron app for Windows OS
+
+```
+
+yarn build:e:win
+
 ```
