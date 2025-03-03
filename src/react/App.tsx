@@ -6,6 +6,12 @@ import "./App.css";
 function App() {
   const [count, setCount] = useState(0);
 
+  const handlePress = () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.electron.writeBackupPrice();
+  };
+
   return (
     <>
       <div>
@@ -19,6 +25,7 @@ function App() {
       <h1>Vite + React + TypeScript + Electron</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
+        <button onClick={handlePress}>test</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
