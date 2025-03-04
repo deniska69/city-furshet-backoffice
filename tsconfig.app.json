@@ -30,7 +30,6 @@
 			"@helpers": ["src/react/helpers"],
 			"@hooks": ["src/react/hooks"],
 			"@modules/*": ["src/react/modules/*"],
-			"@navigation": ["src/react/navigation"],
 			"@services": ["src/react/services"],
 			"@stores": ["src/react/stores"],
 			"@types": ["src/react/types"],

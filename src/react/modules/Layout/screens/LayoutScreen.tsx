@@ -12,11 +12,11 @@ const Component = () => {
 	const [isShowSplash, setIsShowSplash] = useState(true);
 
 	useLayoutEffect(() => {
-		if (!priceStore.exPrice()) {
-			navigate('/start', { replace: true });
+		if (!priceStore.exPrice() && !isShowSplash) {
+			navigate('/start');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [priceStore.exPrice()]);
+	}, [priceStore.exPrice(), isShowSplash]);
 
 	const handleHideSplash = () => setIsShowSplash(false);
 

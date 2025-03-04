@@ -9,9 +9,6 @@ export default defineConfig({
 		port: 5123,
 		strictPort: true,
 	},
-	preview: {
-		port: 4173,
-	},
 	plugins: [react(), tailwindcss()],
 	base: './',
 	build: {
@@ -24,7 +21,6 @@ export default defineConfig({
 			'@helpers': path.resolve(__dirname, './src/react/helpers'),
 			'@hooks': path.resolve(__dirname, './src/react/hooks'),
 			'@modules': path.resolve(__dirname, './src/react/modules'),
-			'@navigation': path.resolve(__dirname, './src/react/navigation'),
 			'@services': path.resolve(__dirname, './src/react/services'),
 			'@stores': path.resolve(__dirname, './src/react/stores'),
 			'@types': path.resolve(__dirname, './src/react/types'),
