@@ -25,8 +25,8 @@ const writeBackupPrice = async () => {
 		console.log('\n[preload.cts] good 1:');
 		console.log(await client.list());
 
-		await client.uploadFrom('README.md', 'README_FTP.md');
-		await client.downloadTo('README_COPY.md', 'README_FTP.md');
+		// await client.uploadFrom('README.md', 'README_FTP.md');
+		// await client.downloadTo('README_COPY.md', 'README_FTP.md');
 
 		console.log('\n[preload.cts] good 2:');
 	} catch (err) {

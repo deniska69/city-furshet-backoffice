@@ -8,22 +8,18 @@ Built on the basis of [`YouTube: Electron Course - Code Desktop Applications (in
 
 1. Init [`Vite + React + TypeScript`](https://vite.dev/) & install all dependencies
 
-```
+```bash
 yarn create vite
 ```
 
-```
+```bash
 yarn install
 ```
 
 2. Move all files from `src` to `src/react`
 
-```
-cd src &&
-shopt -s extglob &&
-mkdir react &&
-mv !(react) react &&
-cd ..
+```bash
+cd src && shopt -s extglob && mkdir react && mv !(react) react && cd ..
 ```
 
 3. Change React entry point in `index.html` from:
@@ -98,7 +94,7 @@ app.on('ready', () => {
 
 10. Add libs:
 
-```
+```bash
 yarn add -D electron electron-builder npm-run-all cross-env basic-ftp dotenv
 ```
 
@@ -114,24 +110,24 @@ FTP_PASSWORD=password
 
 ## Start dev mode React
 
-```
+```bash
 yarn dev:r
 ```
 
 ## Start dev mode Electron
 
-```
+```bash
 yarn dev:e
 ```
 
 ## `Start parallel dev mode React + Electron`
 
-```
+```bash
 yarn dev
 ```
 
 ## Build poduction Electron app for Windows OS
 
-```
+```bash
 yarn build:e:win
 ```
