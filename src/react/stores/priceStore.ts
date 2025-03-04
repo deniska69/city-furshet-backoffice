@@ -1,7 +1,6 @@
 import { PRICE_URL } from '@constants';
-import { decodeResponse } from '@helpers';
-import { api } from '@services';
 import { action, makeAutoObservable } from 'mobx';
+import { layoutStore } from './layoutStore';
 
 class PriceStore {
 	//#region Variables & Сhanging variables
@@ -28,33 +27,28 @@ class PriceStore {
 
 	//#region Api actions
 
-	getPriceSync = async () => {
+	getPrice = async () => {
 		this.setLoading();
 		this.clearError();
+		layoutStore.setLoading();
 
-		return api
-			.get(PRICE_URL, {
-				responseType: 'arraybuffer',
-				headers: {
-					'Access-Control-Allow-Origin': '*',
-					'Access-Control-Allow-Credentials': true,
-				},
-			})
-			.then(({ data }) => {
+		fetch(PRICE_URL, { mode: 'no-cors' })
+			.then((data) => {
+				console.log('[priceStore] getPrice() then:');
 				console.log(data);
 
-				const resDecode = decodeResponse(data);
-
-				console.log(resDecode);
-
-				// writeBackupPrice(resDecode);
-				return Promise.resolve(resDecode);
+				// const resDecode = decodeResponse(data);
 			})
 			.catch((e) => {
-				console.log('[PriceStore] getPriceSync() catch:', e);
-				this.setError('[PriceStore] getPriceSync()');
+				console.log('[priceStore] getPrice() catch:');
+				console.log(e);
 			})
-			.finally(() => this.setLoading(false));
+			.finally(() => {
+				setTimeout(() => {
+					this.setLoading(false);
+					layoutStore.setLoading(false);
+				}, 1500);
+			});
 	};
 
 	//#endregion

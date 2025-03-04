@@ -1,1 +1,1 @@
-export { Div } from "./Div";
+export * from './Div';
