@@ -1,6 +1,4 @@
-import { PRICE_URL } from '@constants';
 import { action, makeAutoObservable } from 'mobx';
-import { layoutStore } from './layoutStore';
 
 class PriceStore {
 	//#region Variables & Сhanging variables
@@ -27,29 +25,7 @@ class PriceStore {
 
 	//#region Api actions
 
-	getPrice = async () => {
-		this.setLoading();
-		this.clearError();
-		layoutStore.setLoading();
-
-		fetch(PRICE_URL, { mode: 'no-cors' })
-			.then((data) => {
-				console.log('[priceStore] getPrice() then:');
-				console.log(data);
-
-				// const resDecode = decodeResponse(data);
-			})
-			.catch((e) => {
-				console.log('[priceStore] getPrice() catch:');
-				console.log(e);
-			})
-			.finally(() => {
-				setTimeout(() => {
-					this.setLoading(false);
-					layoutStore.setLoading(false);
-				}, 1500);
-			});
-	};
+	getPrice = async () => {};
 
 	//#endregion
 }

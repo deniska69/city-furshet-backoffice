@@ -8,10 +8,19 @@ const Component = () => {
 		priceStore.getPrice();
 	};
 
+	const handlePressButton2 = () => {
+		console.log('[handlePressButton2]');
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		window.electron.writeBackupPrice();
+	};
+
 	return (
 		<Div className="flex h-screen w-full items-center justify-center">
 			<Stack className="gap-y-3">
-				<Button onClick={handlePressButton}>Скачать прайс</Button>
+				<Button onClick={handlePressButton}>Скачать прайс через React</Button>
+
+				<Button onClick={handlePressButton2}>Скачать прайс через Nodejs</Button>
 			</Stack>
 		</Div>
 	);
