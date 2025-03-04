@@ -65,12 +65,12 @@ to:
 7. Add file `src/electron/main.ts` to run Electron app:
 
 ```javascript
-import { app, BrowserWindow } from "electron";
-import path from "path";
+import { app, BrowserWindow } from 'electron';
+import path from 'path';
 
-app.on("ready", () => {
-  const mainWindow = new BrowserWindow({});
-  mainWindow.loadFile(path.join(app.getAppPath(), "dist-react/index.html"));
+app.on('ready', () => {
+	const mainWindow = new BrowserWindow({});
+	mainWindow.loadFile(path.join(app.getAppPath(), 'dist-react/index.html'));
 });
 ```
 
@@ -78,13 +78,13 @@ app.on("ready", () => {
 
 ```json
 {
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "outDir": "../../dist-electron",
-    "skipLibCheck": true
-  }
+	"compilerOptions": {
+		"strict": true,
+		"target": "ESNext",
+		"module": "NodeNext",
+		"outDir": "../../dist-electron",
+		"skipLibCheck": true
+	}
 }
 ```
 
@@ -92,14 +92,24 @@ app.on("ready", () => {
 
 ```json
 {
-  "exclude": ["src/electron"]
+	"exclude": ["src/electron"]
 }
 ```
 
 10. Add libs:
 
 ```
-yarn add -D electron electron-builder npm-run-all cross-env
+yarn add -D electron electron-builder npm-run-all cross-env basic-ftp dotenv
+```
+
+11. Add `.env` file
+
+```env
+PORT_LOCAL_DEV_SERVER_REACT=5123
+URL_LOCAL_DEV_SERVER_REACT=http://localhost:
+FTP_HOST=myftpserver.com
+FTP_USER=username
+FTP_PASSWORD=password
 ```
 
 ## Start dev mode React

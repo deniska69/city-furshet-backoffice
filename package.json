@@ -24,7 +24,9 @@
 	"dependencies": {
 		"@heroicons/react": "^2.2.0",
 		"@tailwindcss/vite": "^4.0.9",
+		"basic-ftp": "^5.0.5",
 		"classnames": "^2.5.1",
+		"dotenv": "^16.4.7",
 		"mobx": "^6.13.6",
 		"mobx-react": "^9.2.0",
 		"react": "^19.0.0",

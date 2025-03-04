@@ -26,3 +26,4 @@ dist-ssr
 # Project ignore
 dist-react
 dist-electron
+.env
