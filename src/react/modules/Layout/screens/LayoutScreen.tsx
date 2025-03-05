@@ -4,6 +4,10 @@ import { Loader, Splash } from '@modules/Elements';
 import { useTheme } from '@hooks';
 import { layoutStore, priceStore } from '@stores';
 import { observer } from 'mobx-react';
+import { Div, HStack, Stack } from '@ui';
+
+import Sidebar from '../containers/Sidebar';
+import Header from '../containers/Header';
 
 const Component = () => {
 	useTheme();
@@ -21,11 +25,22 @@ const Component = () => {
 	const handleHideSplash = () => setIsShowSplash(false);
 
 	return (
-		<Suspense>
+		<HStack>
 			{isShowSplash ? <Splash onHide={handleHideSplash} /> : null}
 			{layoutStore.loading ? <Loader /> : null}
-			<Outlet />
-		</Suspense>
+
+			<Sidebar />
+
+			<Stack className="h-screen w-full">
+				<Header />
+
+				<Div className="flex h-full overflow-x-hidden overflow-y-auto">
+					<Suspense>
+						<Outlet />
+					</Suspense>
+				</Div>
+			</Stack>
+		</HStack>
 	);
 };
 
