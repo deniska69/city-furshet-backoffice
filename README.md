@@ -106,6 +106,7 @@ URL_LOCAL_DEV_SERVER_REACT=http://localhost:
 FTP_HOST=myftpserver.com
 FTP_USER=username
 FTP_PASSWORD=password
+PRICE_FILE_NAME=file_name.ext
 ```
 
 ## Start dev mode React
