@@ -10,10 +10,10 @@ class HostingStore {
 
 	setError = (e: string) => layoutStore.setError(`[React] [HostingStore] ${e}`);
 
-	setPrice = action((price: unknown) => {
+	setPrice = action((price?: unknown) => {
 		console.log('\n[HostingStore] setPrice()');
 		console.log(price);
-		// this.isPrice = true;
+		this.isPrice = !!price;
 	});
 
 	connect = action(async () => {
@@ -41,6 +41,7 @@ class HostingStore {
 			.getPrice()
 			.then((data: unknown) => this.setPrice(data))
 			.catch((e: string) => {
+				this.setPrice();
 				this.setConnect(false);
 				this.setError('getPrice(): Ошибка получения прайса.\n' + e);
 			})

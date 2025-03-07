@@ -1,12 +1,13 @@
 import { Client } from 'basic-ftp';
-import dotenv from 'dotenv';
 
-dotenv.config();
+import { FTP_CLIENT_CONFIG, FTP_HOME_DIR, PRICE_FULL_NAME } from '../constants.cjs';
+import { getPriceBackupFileName } from '../utils.cjs';
 
 class FTP {
 	client: undefined | Client;
 	error: undefined | string;
 	isConnect: boolean = false;
+	lastModPrice: undefined | string;
 
 	connect = async () => {
 		console.log('\n[Electron] [FTP] connect()');
@@ -18,16 +19,8 @@ class FTP {
 				return Promise.resolve();
 			}
 
-			await this.client.access({
-				host: process.env.FTP_HOST,
-				user: process.env.FTP_USER,
-				password: process.env.FTP_PASSWORD,
-				secure: true,
-				port: 21,
-				secureOptions: { rejectUnauthorized: false },
-			});
-
-			await this.client.cd(process.env.FTP_HOME_DIR || '/');
+			await this.client.access(FTP_CLIENT_CONFIG);
+			await this.client.cd(FTP_HOME_DIR || '/');
 
 			this.isConnect = !this.client.closed;
 			return Promise.resolve();
@@ -48,7 +41,27 @@ class FTP {
 		}
 
 		try {
-			console.log(await this.client.list());
+			const lastModPrice = await this.client.lastMod(PRICE_FULL_NAME);
+
+			if (!lastModPrice) {
+				this.error = '[Electron] [FTP] getPrice(): Не найден прайс.';
+				return Promise.reject(this.error);
+			}
+
+			const fileName = getPriceBackupFileName(lastModPrice);
+
+			console.log({ fileName });
+
+			// const currDir = await this.client.pwd();
+
+			// console.log('---------------');
+			// console.log(await this.client.list());
+			// console.log('---------------');
+			// console.log({ FTP_HOME_DIR });
+			// console.log({ currDir });
+			// console.log({ PRICE_FULL_NAME });
+			// console.log({ lastModPrice });
+			// console.log('---------------');
 
 			return Promise.resolve();
 

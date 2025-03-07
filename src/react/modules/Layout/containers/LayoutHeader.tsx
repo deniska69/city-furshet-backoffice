@@ -19,7 +19,7 @@ const Component = () => {
 			className={cn(
 				'max-h-16 min-h-16 w-full',
 				'border-x-0 border-t-0 border-b',
-				'flex flex-row justify-end gap-x-6 !px-6 !py-3',
+				'flex flex-row justify-end gap-x-6 !px-6 items-center',
 			)}
 		>
 			{hostingStore.isConnect && !hostingStore.isPrice ? (

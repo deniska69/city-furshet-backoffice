@@ -1,13 +1,8 @@
-import { app, BrowserWindow } from 'electron';
 import path from 'path';
-import dotenv from 'dotenv';
+import { app, BrowserWindow } from 'electron';
 
-import { getAssetPath, getPreloadPath, isDev } from './utils.js';
-
-dotenv.config();
-
-const PORT = process.env.PORT_LOCAL_DEV_SERVER_REACT || '';
-const URL = process.env.URL_LOCAL_DEV_SERVER_REACT || '';
+import { PORT, PROJECT_TITLE, URL } from './constants.cjs';
+import { getAssetPath, getPreloadPath, isDev } from './utils.cjs';
 
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({
@@ -20,7 +15,7 @@ app.on('ready', () => {
 
 	mainWindow.setMinimumSize(1280, 720);
 	mainWindow.setMenuBarVisibility(false);
-	mainWindow.setTitle('City-Furshet Backoffice');
+	mainWindow.setTitle(PROJECT_TITLE);
 
 	if (isDev()) {
 		mainWindow.maximize();
