@@ -1,8 +1,10 @@
 import { action, makeAutoObservable } from 'mobx';
+
 import { layoutStore } from './layoutStore';
 
 class HostingStore {
 	isConnect: boolean = false;
+	isPrice: boolean = false;
 
 	connect = action(async () => {
 		layoutStore.setLoading();
@@ -14,7 +16,7 @@ class HostingStore {
 			.then(() => this.setConnect())
 			.catch(() => {
 				this.setConnect(false);
-				layoutStore.setError('Ошибка подключеия к хостингу');
+				layoutStore.setError('Ошибка подключения к хостингу');
 			})
 			.finally(() => layoutStore.setLoading(false));
 	});

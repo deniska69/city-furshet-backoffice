@@ -1,13 +1,15 @@
 import { Suspense, useLayoutEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router';
-import { Loader, Splash } from '@modules/Elements';
-import { useTheme } from '@hooks';
-import { layoutStore, priceStore } from '@stores';
 import { observer } from 'mobx-react';
+import { Outlet, useNavigate } from 'react-router';
+
+import { useTheme } from '@hooks';
+import { Loader, Splash } from '@modules/Elements';
+import { ErrorSplashScreen } from '@modules/Error';
+import { layoutStore, priceStore } from '@stores';
 import { Div, HStack, Stack } from '@ui';
 
-import Sidebar from '../containers/Sidebar';
-import Header from '../containers/Header';
+import LayoutHeader from '../containers/LayoutHeader';
+import LayoutSidebar from '../containers/LayoutSidebar';
 
 const Component = () => {
 	useTheme();
@@ -26,13 +28,14 @@ const Component = () => {
 
 	return (
 		<HStack>
+			<ErrorSplashScreen />
 			{isShowSplash ? <Splash onHide={handleHideSplash} /> : null}
 			{layoutStore.loading ? <Loader /> : null}
 
-			<Sidebar />
+			<LayoutSidebar />
 
 			<Stack className="h-screen w-full">
-				<Header />
+				<LayoutHeader />
 
 				<Div className="flex h-full overflow-x-hidden overflow-y-auto">
 					<Suspense>

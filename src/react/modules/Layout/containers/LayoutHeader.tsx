@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/16/solid';
+import { observer } from 'mobx-react';
+
 import { hostingStore } from '@stores';
 import { Button, Card, cn, HStack, Text } from '@ui';
-import { observer } from 'mobx-react';
-import { useEffect } from 'react';
 
 const Component = () => {
 	useEffect(() => {
@@ -35,6 +36,6 @@ const Component = () => {
 	);
 };
 
-const Header = observer(Component);
+const LayoutHeader = observer(Component);
 
-export default Header;
+export default LayoutHeader;

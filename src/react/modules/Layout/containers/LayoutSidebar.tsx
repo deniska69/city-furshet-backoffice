@@ -1,7 +1,7 @@
-import { Card, cn, Div, Image } from '@ui';
 import logoFull from '@assets/logo_full.png';
+import { Card, cn, Div, Image } from '@ui';
 
-const Sidebar = () => {
+const LayoutSidebar = () => {
 	return (
 		<Card
 			className={cn(
@@ -17,4 +17,4 @@ const Sidebar = () => {
 	);
 };
 
-export default Sidebar;
+export default LayoutSidebar;

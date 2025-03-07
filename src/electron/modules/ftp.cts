@@ -40,15 +40,6 @@ class FTP {
 			return Promise.reject(this.error);
 		}
 	};
-
-	checkConnection = () => {
-		console.log('\n[Electron] [FTP] checkConnection()');
-		return this.isConnect;
-	};
-
-	getPrice = async () => {
-		console.log('\n[Electron] [FTP] getPrice()');
-	};
 }
 
 export const ftp = new FTP();
