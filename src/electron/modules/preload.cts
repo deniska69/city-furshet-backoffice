@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { contextBridge } from 'electron';
 
-import { ftp } from './modules/ftp.cjs';
+import { ftp } from './ftp.cjs';
 
 dotenv.config();
 

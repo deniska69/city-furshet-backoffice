@@ -1,8 +1,8 @@
 import path from 'path';
 import { app, BrowserWindow } from 'electron';
 
-import { PORT, PROJECT_TITLE, URL } from './constants.cjs';
-import { getAssetPath, getPreloadPath, isDev } from './utils.cjs';
+import { PORT, PROJECT_TITLE, URL } from './utils/constants.cjs';
+import { getAssetPath, getPreloadPath, isDev } from './utils/utils.cjs';
 
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({
