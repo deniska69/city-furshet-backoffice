@@ -8,10 +8,6 @@ class FTP {
 	error: undefined | string;
 	isConnect: boolean = false;
 
-	constructor() {
-		if (!this.isConnect) this.connect();
-	}
-
 	connect = async () => {
 		console.log('\n[Electron] [FTP] connect()');
 
@@ -39,6 +35,12 @@ class FTP {
 			this.error = '[Electron] [FTP] connnect(): Ошибка подключения.';
 			return Promise.reject(this.error);
 		}
+	};
+
+	getPrice = async () => {
+		console.log('\n[Electron] [FTP] getPrice()');
+
+		if (!this.isConnect) return this.connect();
 	};
 }
 

@@ -1,9 +1,12 @@
-import { contextBridge } from 'electron';
 import dotenv from 'dotenv';
+import { contextBridge } from 'electron';
+
 import { ftp } from './modules/ftp.cjs';
 
 dotenv.config();
 
 const connectHosting = async () => ftp.connect();
 
-contextBridge.exposeInMainWorld('electron', { connectHosting });
+const getPrice = async () => ftp.getPrice();
+
+contextBridge.exposeInMainWorld('electron', { connectHosting, getPrice });

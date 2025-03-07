@@ -12,6 +12,8 @@ const Component = () => {
 
 	const handleConnect = () => hostingStore.connect();
 
+	const handleGetPice = () => hostingStore.getPrice();
+
 	return (
 		<Card
 			className={cn(
@@ -20,6 +22,8 @@ const Component = () => {
 				'flex flex-row justify-end gap-x-6 !px-6 !py-3',
 			)}
 		>
+			{!hostingStore.isPrice ? <Button onClick={handleGetPice} text="Получить прайс" /> : null}
+
 			{!hostingStore.isConnect ? (
 				<Button onClick={handleConnect} text="Подключиться к хостингу" />
 			) : null}
