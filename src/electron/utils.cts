@@ -1,7 +1,7 @@
 import path from 'path';
 import { app } from 'electron';
 
-import { PRICE_FILE_NAME } from './constants.cjs';
+import { FTP_PRICE_FILE_NAME } from './constants.cjs';
 
 export const isDev = () => process.env.NODE_ENV === 'development';
 
@@ -14,11 +14,18 @@ export const getAssetPath = () => {
 };
 
 export const getPriceBackupFileName = (lastMod: Date) => {
-	const fileName =
-		`${PRICE_FILE_NAME.replace('.csv', '')} (${lastMod.toLocaleDateString()} ${lastMod.toLocaleTimeString()}).csv`.replaceAll(
-			':',
-			'-',
-		);
+	const fileName = FTP_PRICE_FILE_NAME.replace('.csv', '');
 
-	return fileName;
+	const lastModDate = lastMod.toLocaleDateString();
+	const lastModTime = lastMod.toLocaleTimeString();
+	const lastModeFull = `(${lastModDate} ${lastModTime})`;
+
+	// const curDate = new Date();
+	// const curModDate = curDate.toLocaleDateString();
+	// const curModTime = curDate.toLocaleTimeString();
+	// const curModeFull = `(${curModDate} ${curModTime})`;
+
+	return `${fileName} ${lastModeFull}.csv`.replaceAll(':', '-');
+
+	// return `${fileName} ${lastModeFull} ${curModeFull}.csv`.replaceAll(':', '-');
 };

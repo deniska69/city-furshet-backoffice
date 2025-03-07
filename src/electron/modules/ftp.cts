@@ -1,6 +1,8 @@
+import * as fs from 'fs';
+import path from 'path';
 import { Client } from 'basic-ftp';
 
-import { FTP_CLIENT_CONFIG, FTP_HOME_DIR, PRICE_FULL_NAME } from '../constants.cjs';
+import { BUCKUP_DIR, FTP_CLIENT_CONFIG, FTP_HOME_DIR, FTP_PRICE_FULL_NAME } from '../constants.cjs';
 import { getPriceBackupFileName } from '../utils.cjs';
 
 class FTP {
@@ -24,9 +26,7 @@ class FTP {
 
 			this.isConnect = !this.client.closed;
 			return Promise.resolve();
-
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		} catch (e: unknown) {
+		} catch (e) {
 			this.error = '[Electron] [FTP] connnect(): Ошибка подключения.\n' + e;
 			return Promise.reject(this.error);
 		}
@@ -41,33 +41,38 @@ class FTP {
 		}
 
 		try {
-			const lastModPrice = await this.client.lastMod(PRICE_FULL_NAME);
+			await this.downloadAndWriteBackup();
+
+			return Promise.resolve();
+		} catch (e) {
+			this.error = '[Electron] [FTP] getPrice(): Ошибка получения прайса.\n' + e;
+			return Promise.reject(this.error);
+		}
+	};
+
+	downloadAndWriteBackup = async () => {
+		console.log('\n[Electron] [FTP] downloadAndWriteBackup()');
+
+		if (this.client?.closed || !this.client) {
+			this.error = '[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.';
+			return Promise.reject(this.error);
+		}
+
+		try {
+			const lastModPrice = await this.client.lastMod(FTP_PRICE_FULL_NAME);
 
 			if (!lastModPrice) {
-				this.error = '[Electron] [FTP] getPrice(): Не найден прайс.';
+				this.error = '[Electron] [FTP] downloadAndWriteBackup(): Не найден прайс.';
 				return Promise.reject(this.error);
 			}
 
-			const fileName = getPriceBackupFileName(lastModPrice);
+			const priceBackupFullname = path.join(BUCKUP_DIR, getPriceBackupFileName(lastModPrice));
 
-			console.log({ fileName });
+			if (!fs.existsSync(BUCKUP_DIR)) fs.mkdirSync(BUCKUP_DIR);
 
-			// const currDir = await this.client.pwd();
-
-			// console.log('---------------');
-			// console.log(await this.client.list());
-			// console.log('---------------');
-			// console.log({ FTP_HOME_DIR });
-			// console.log({ currDir });
-			// console.log({ PRICE_FULL_NAME });
-			// console.log({ lastModPrice });
-			// console.log('---------------');
-
-			return Promise.resolve();
-
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		} catch (e: unknown) {
-			this.error = '[Electron] [FTP] getPrice(): Ошибка получения прайса.\n' + e;
+			return await this.client.downloadTo(priceBackupFullname, FTP_PRICE_FULL_NAME);
+		} catch (e) {
+			this.error = '[Electron] [FTP] downloadAndWriteBackup(): Ошибка.\n' + e;
 			return Promise.reject(this.error);
 		}
 	};
