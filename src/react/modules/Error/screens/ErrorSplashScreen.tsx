@@ -15,7 +15,7 @@ const Component = () => {
 
 			<Text className="block text-center text-4xl font-bold text-white">Произошла ошибка</Text>
 
-			<Div className="bg-red-600/20 !p-4 !mt-6 rounded-xl border border-red-900">
+			<Div className="bg-red-600/20 !p-4 !mt-6 rounded-xl border border-red-900 max-w-[60%] text-center">
 				<Text className="!mt-6 text-neutral-400 whitespace-pre-line text-center">
 					{layoutStore.error}
 				</Text>

@@ -61,8 +61,8 @@ to:
 7. Add file `src/electron/main.ts` to run Electron app:
 
 ```javascript
-import { app, BrowserWindow } from 'electron';
 import path from 'path';
+import { app, BrowserWindow } from 'electron';
 
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({});
@@ -106,6 +106,7 @@ URL_LOCAL_DEV_SERVER_REACT=http://localhost:
 FTP_HOST=myftpserver.com
 FTP_USER=username
 FTP_PASSWORD=password
+FTP_HOME_DIR=anyfolder/anyfolder/anyfolder/
 PRICE_FILE_NAME=file_name.ext
 ```
 

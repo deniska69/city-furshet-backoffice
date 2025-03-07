@@ -10,9 +10,10 @@ class HostingStore {
 
 	setError = (e: string) => layoutStore.setError(`[React] [HostingStore] ${e}`);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	setPrice = action((price: unknown) => {
-		this.isPrice = true;
+		console.log('\n[HostingStore] setPrice()');
+		console.log(price);
+		// this.isPrice = true;
 	});
 
 	connect = action(async () => {
@@ -26,7 +27,7 @@ class HostingStore {
 			.catch((e: string) => {
 				console.log(e);
 				this.setConnect(false);
-				this.setError('connect(): Ошибка подключения к хостингу\n\n' + e);
+				this.setError('connect(): Ошибка подключения к хостингу.\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	});
@@ -41,7 +42,7 @@ class HostingStore {
 			.then((data: unknown) => this.setPrice(data))
 			.catch((e: string) => {
 				this.setConnect(false);
-				this.setError('getPrice(): Ошибка получения прайса\n\n' + e);
+				this.setError('getPrice(): Ошибка получения прайса.\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	});

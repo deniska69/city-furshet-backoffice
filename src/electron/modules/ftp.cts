@@ -27,12 +27,14 @@ class FTP {
 				secureOptions: { rejectUnauthorized: false },
 			});
 
+			await this.client.cd(process.env.FTP_HOME_DIR || '/');
+
 			this.isConnect = !this.client.closed;
 			return Promise.resolve();
 
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (e: unknown) {
-			this.error = '[Electron] [FTP] connnect(): Ошибка подключения.';
+			this.error = '[Electron] [FTP] connnect(): Ошибка подключения.\n' + e;
 			return Promise.reject(this.error);
 		}
 	};
@@ -40,7 +42,21 @@ class FTP {
 	getPrice = async () => {
 		console.log('\n[Electron] [FTP] getPrice()');
 
-		if (!this.isConnect) return this.connect();
+		if (this.client?.closed || !this.client) {
+			this.error = '[Electron] [FTP] getPrice(): Ошибка подключения.';
+			return Promise.reject(this.error);
+		}
+
+		try {
+			console.log(await this.client.list());
+
+			return Promise.resolve();
+
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch (e: unknown) {
+			this.error = '[Electron] [FTP] getPrice(): Ошибка получения прайса.\n' + e;
+			return Promise.reject(this.error);
+		}
 	};
 }
 
