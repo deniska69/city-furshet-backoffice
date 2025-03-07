@@ -1,19 +1,24 @@
 import { action, makeAutoObservable } from 'mobx';
 
+import { TypePrice, TypeReturnGetPrice } from '@types';
+
 import { layoutStore } from './layoutStore';
 
 class HostingStore {
 	isConnect: boolean = false;
 	isPrice: boolean = false;
+	price: TypePrice | undefined;
+	lastMod: Date | undefined;
 
 	setConnect = action((value: boolean = true) => (this.isConnect = value));
 
 	setError = (e: string) => layoutStore.setError(`[React] [HostingStore] ${e}`);
 
-	setPrice = action((price?: unknown) => {
-		console.log('\n[HostingStore] setPrice()');
-		console.log(price);
-		this.isPrice = !!price;
+	setPrice = action(async (data?: TypeReturnGetPrice) => {
+		this.price = data?.price;
+		this.lastMod = data?.lastMod;
+		this.isPrice = !!data?.lastMod && !!data.price;
+		return Promise.resolve();
 	});
 
 	connect = action(async () => {
@@ -25,7 +30,6 @@ class HostingStore {
 			.connectHosting()
 			.then(() => this.setConnect())
 			.catch((e: string) => {
-				console.log(e);
 				this.setConnect(false);
 				this.setError('connect(): Ошибка подключения к хостингу.\n' + e);
 			})
@@ -39,7 +43,7 @@ class HostingStore {
 		// @ts-ignore
 		await window.electron
 			.getPrice()
-			.then((data: unknown) => this.setPrice(data))
+			.then(async (data: TypeReturnGetPrice) => await this.setPrice(data))
 			.catch((e: string) => {
 				this.setPrice();
 				this.setConnect(false);

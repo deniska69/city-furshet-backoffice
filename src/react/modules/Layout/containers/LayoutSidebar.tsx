@@ -1,7 +1,9 @@
+import { observer } from 'mobx-react';
+
 import logoFull from '@assets/logo_full.png';
 import { Card, cn, Div, Image } from '@ui';
 
-const LayoutSidebar = () => {
+const Component = () => {
 	return (
 		<Card
 			className={cn(
@@ -16,5 +18,7 @@ const LayoutSidebar = () => {
 		</Card>
 	);
 };
+
+const LayoutSidebar = observer(Component);
 
 export default LayoutSidebar;

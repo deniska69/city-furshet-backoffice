@@ -2,13 +2,16 @@ import { useEffect } from 'react';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/16/solid';
 import { observer } from 'mobx-react';
 
+import { getLastModText } from '@helpers';
 import { hostingStore } from '@stores';
-import { Button, Card, cn, HStack, Text } from '@ui';
+import { Button, Card, cn, Div, HStack, Text } from '@ui';
 
 const Component = () => {
 	useEffect(() => {
 		handleConnect();
 	}, []);
+
+	const lastMod = getLastModText(hostingStore.lastMod);
 
 	const handleConnect = () => hostingStore.connect();
 
@@ -22,6 +25,19 @@ const Component = () => {
 				'flex flex-row justify-end gap-x-6 !px-6 items-center',
 			)}
 		>
+			{lastMod ? (
+				<Div
+					className={cn(
+						'!pr-6 min-h-[50px] flex items-center',
+						'border-r border-y-0 border-l-0',
+						'bg-card-bg-light dark:bg-card-bg-dark',
+						'border-border-light dark:border-border-dark border',
+					)}
+				>
+					<Text>Последнее изменение прайса: {lastMod}</Text>
+				</Div>
+			) : null}
+
 			{hostingStore.isConnect && !hostingStore.isPrice ? (
 				<Button onClick={handleGetPice} text="Получить прайс" />
 			) : null}

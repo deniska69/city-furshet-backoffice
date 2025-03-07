@@ -1,9 +1,6 @@
-import dotenv from 'dotenv';
 import { contextBridge } from 'electron';
 
 import { ftp } from './ftp.cjs';
-
-dotenv.config();
 
 const connectHosting = async () => ftp.connect();
 
