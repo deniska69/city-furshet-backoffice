@@ -103,11 +103,12 @@ yarn add -D electron electron-builder npm-run-all cross-env basic-ftp dotenv
 ```env
 PORT_LOCAL_DEV_SERVER_REACT=5123
 URL_LOCAL_DEV_SERVER_REACT=http://localhost:
+PROJECT_TITLE=Title
 FTP_HOST=myftpserver.com
 FTP_USER=username
 FTP_PASSWORD=password
 FTP_HOME_DIR=anyfolder/anyfolder/anyfolder/
-PRICE_FILE_NAME=file_name.ext
+FTP_PRICE_FILE_NAME=file_name.csv
 ```
 
 ## Start dev mode React
