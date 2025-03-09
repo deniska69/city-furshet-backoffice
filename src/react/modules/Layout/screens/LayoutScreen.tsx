@@ -35,7 +35,7 @@ const Component = () => {
 			<Stack className="h-screen w-full">
 				<LayoutHeaderContainer />
 
-				<Div className="flex h-full overflow-x-hidden overflow-y-auto">
+				<Div className="flex h-full overflow-x-hidden overflow-y-auto !p-6">
 					<Suspense>
 						<Outlet />
 					</Suspense>

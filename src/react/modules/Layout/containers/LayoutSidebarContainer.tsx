@@ -1,4 +1,5 @@
 import { observer } from 'mobx-react';
+import { useNavigate } from 'react-router';
 
 import { hostingStore } from '@stores';
 import { Button, Card, cn, Stack, Text } from '@ui';
@@ -6,8 +7,12 @@ import { Button, Card, cn, Stack, Text } from '@ui';
 import LayoutLogo from '../components/LayoutLogo';
 
 const Component = () => {
+	const navigate = useNavigate();
+
+	const handleAddCategory = () => navigate('/category');
+
 	return (
-		<Card className="h-screen max-w-64 min-w-64 !px-4 border-y-0 border-r border-l-0 flex flex-col">
+		<Card className="h-screen max-w-64 min-w-64 !px-4 !py-0 border-y-0 border-r border-l-0 flex flex-col !rounded-none">
 			<LayoutLogo />
 
 			<Stack
@@ -20,7 +25,7 @@ const Component = () => {
 			>
 				{!hostingStore.isPrice ? (
 					<Text variant="muted" className="text-center">
-						Для отображения категорий необходимо открыть прайс
+						Для отображения категорий необходимо получить прайс
 					</Text>
 				) : null}
 
@@ -31,7 +36,12 @@ const Component = () => {
 				) : null}
 
 				{hostingStore.isPrice && !hostingStore.categories ? (
-					<Button variant="muted" className="text-center" text="+" />
+					<Button
+						variant="muted"
+						className="text-center"
+						text="+"
+						onClick={handleAddCategory}
+					/>
 				) : null}
 			</Stack>
 		</Card>

@@ -1,21 +1,17 @@
 @import 'tailwindcss';
 
 @theme {
-	--color-primary-lime: #8cbe22;
-	--color-primary-lime-muted: #577713;
-
-	--color-primary-orange: #f7852f;
-	--color-primary-orange-muted: #cc6f28;
+	--color-primary: #8cbe22;
+	--color-primary-muted: #577713;
 
 	--color-bg-light: var(--color-gray-100);
 	--color-bg-dark: var(--color-neutral-900);
 
-	--color-text-light: #3c3c43;
-	--color-text-dark: #dfdfd6;
+	--color-text-light: var(--color-neutral-600);
+	--color-text-dark: var(--color-neutral-200);
 
-	--color-muted: #adadad;
-	--color-muted-light: #67676c;
-	--color-muted-dark: #98989f;
+	--color-muted-light: var(--color-neutral-400);
+	--color-muted-dark: var(--color-neutral-500);
 
 	--color-card-bg-light: var(--color-white);
 	--color-card-bg-dark: var(--color-neutral-800);
@@ -28,8 +24,7 @@
 
 * {
 	-webkit-tap-highlight-color: transparent;
-	padding: 0;
-	margin: 0;
+	@apply [&::-webkit-scrollbar]:my-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700;
 }
 
 :root {
@@ -78,9 +73,5 @@ html.dark {
 }
 
 .shadow-lime {
-	filter: drop-shadow(0 0 2em var(--color-primary-lime));
-}
-
-.shadow-orange {
-	filter: drop-shadow(0 0 2em var(--color-primary-orange));
+	filter: drop-shadow(0 0 2em var(--color-primary));
 }

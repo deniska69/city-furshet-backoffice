@@ -5,7 +5,10 @@
 	"printWidth": 100,
 	"singleQuote": true,
 	"importOrderSeparation": true,
-	"plugins": ["prettier-plugin-tailwindcss", "@ianvs/prettier-plugin-sort-imports"],
+	"plugins": [
+		"prettier-plugin-tailwindcss",
+		"@ianvs/prettier-plugin-sort-imports"
+	],
 	"importOrder": [
 		"^react$",
 		"<THIRD_PARTY_MODULES>",

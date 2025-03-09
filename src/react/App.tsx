@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import './index.css';
 
 import { ErrorScreen, NotFoundScreen } from '@modules/Error';
+import { FormsCategoryScreen } from '@modules/Forms';
 import { LayoutHomeScreen, LayoutScreen } from '@modules/Layout';
 import * as stores from '@stores';
 
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
 				index: true,
 				path: '/home/*',
 				Component: LayoutHomeScreen,
+			},
+			{
+				path: '/category/:id?',
+				Component: FormsCategoryScreen,
 			},
 		],
 	},

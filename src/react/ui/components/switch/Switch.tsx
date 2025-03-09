@@ -18,7 +18,7 @@ export const Switch = (props: ISwitch) => (
 			'relative flex cursor-pointer items-center overflow-hidden rounded-full',
 			'transition-all duration-200',
 			'bg-neutral-400',
-			{ 'dark:!bg-primary-lime': props.value },
+			{ 'dark:!bg-primary': props.value },
 			props.className,
 		)}
 		onClick={() => props.onChange(!props.value)}
@@ -32,7 +32,7 @@ export const Switch = (props: ISwitch) => (
 				'z-1 flex rounded-full',
 				'shadow-lg shadow-black/50',
 				'transition-all duration-200',
-				'border border-neutral-400 dark:border-primary-lime',
+				'border border-neutral-400 dark:border-primary',
 				'bg-white dark:bg-white',
 				{ '!ml-6': props.value },
 			)}

@@ -13,7 +13,7 @@ interface IText extends HTMLAttributes<HTMLSpanElement> {
 }
 
 const textVariants = {
-	default: 'text-black dark:text-white',
+	default: 'text-text-light dark:text-text-dark',
 	muted: 'text-muted-light dark:text-muted-dark',
 };
 

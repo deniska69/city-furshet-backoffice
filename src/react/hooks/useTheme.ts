@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
+
 import { DEFAULT_THEME, KEY_LOCAL_STORAGE } from '@constants';
 import { localStore } from '@stores';
 
@@ -18,16 +19,22 @@ export const useTheme = () => {
 	const [theme, setTheme] = useState<ThemeVariants>('dark');
 
 	useLayoutEffect(() => {
-		const localStoreTheme = (localStore.get(KEY_LOCAL_STORAGE) as ThemeVariants) || DEFAULT_THEME;
-		toggleTheme(localStoreTheme);
+		const localStoreValue = localStore.get(KEY_LOCAL_STORAGE);
+
+		if (localStoreValue === 'light' || localStoreValue === 'dark') {
+			handleSetTheme(localStoreValue);
+		} else {
+			handleSetTheme(DEFAULT_THEME);
+		}
 	}, []);
 
-	const onToggleTheme = () => {
-		const value: ThemeVariants = theme === 'light' ? 'dark' : 'light';
+	const handleSetTheme = (value: ThemeVariants) => {
 		setTheme(value);
 		toggleTheme(value);
 		localStore.set(KEY_LOCAL_STORAGE, value);
 	};
+
+	const onToggleTheme = () => handleSetTheme(theme === 'light' ? 'dark' : 'light');
 
 	return { theme, onToggleTheme };
 };

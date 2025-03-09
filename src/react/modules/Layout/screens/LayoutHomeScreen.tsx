@@ -10,7 +10,7 @@ const Component = () => (
 		) : null}
 
 		{hostingStore.isConnect && !hostingStore.isPrice ? (
-			<Text variant="muted">Программа готова к работе, неободимо получить прайс</Text>
+			<Text variant="muted">Программа готова к работе, необходимо получить прайс</Text>
 		) : null}
 
 		{hostingStore.isConnect && hostingStore.isPrice ? (
