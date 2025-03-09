@@ -2,19 +2,18 @@ import { HTMLAttributes, ReactNode, Ref } from 'react';
 
 import { cn } from '../../utils';
 
-type TypeTextVariants = 'default' | 'muted';
-
 interface IText extends HTMLAttributes<HTMLSpanElement> {
 	ref?: Ref<HTMLSpanElement>;
 	text?: string | number;
 	className?: string;
 	children?: ReactNode;
-	variant?: TypeTextVariants;
+	variant?: 'default' | 'muted' | 'primary';
 }
 
 const textVariants = {
 	default: 'text-text-light dark:text-text-dark',
 	muted: 'text-muted-light dark:text-muted-dark',
+	primary: 'text-primary',
 };
 
 export const Text = ({ className, text, variant = 'default', children, ...props }: IText) => (

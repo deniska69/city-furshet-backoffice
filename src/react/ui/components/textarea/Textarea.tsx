@@ -16,7 +16,7 @@ export const Textarea = ({ className, variant, isInvalid, ...props }: ITextarea)
 		className={cn(
 			inputVariants({ variant }),
 			isInvalid && inputVariants({ variant: 'invalid' }),
-			'max-h-44',
+			'min-h-[100px] max-h-[200px]',
 			className,
 		)}
 		{...props}

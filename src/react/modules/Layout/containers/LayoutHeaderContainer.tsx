@@ -4,7 +4,7 @@ import { FolderOpenIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 
 import { getLastModText, openBackupdDir } from '@helpers';
-import { hostingStore } from '@stores';
+import { priceStore } from '@stores';
 import { Button, Card, cn, HStack, Text } from '@ui';
 
 import LayoutThemeWidget from './LayoutThemeWidget';
@@ -14,11 +14,11 @@ const Component = () => {
 		handleConnect();
 	}, []);
 
-	const lastMod = getLastModText(hostingStore.lastMod);
+	const lastMod = getLastModText(priceStore.lastMod);
 
-	const handleConnect = () => hostingStore.connect();
+	const handleConnect = () => priceStore.connect();
 
-	const handleGetPice = () => hostingStore.getPrice();
+	const handleGetPice = () => priceStore.getPrice();
 
 	return (
 		<Card
@@ -38,7 +38,7 @@ const Component = () => {
 				>
 					<Text className="text-sm">Последнее изменение прайса: {lastMod}</Text>
 					<Button
-						variant="ghost-primary"
+						variant="ghost"
 						onClick={openBackupdDir}
 						className="!px-1.5 !py-4 !rounded-full"
 					>
@@ -47,11 +47,11 @@ const Component = () => {
 				</HStack>
 			) : null}
 
-			{hostingStore.isConnect && !hostingStore.isPrice ? (
+			{priceStore.isConnect && !priceStore.price ? (
 				<Button onClick={handleGetPice} text="Получить прайс" />
 			) : null}
 
-			{!hostingStore.isConnect ? (
+			{!priceStore.isConnect ? (
 				<Button onClick={handleConnect} text="Подключиться к хостингу" />
 			) : null}
 
@@ -64,7 +64,7 @@ const Component = () => {
 				)}
 			>
 				<Text className="text-sm">Статус подключения к хостингу:</Text>
-				{hostingStore.isConnect ? (
+				{priceStore.isConnect ? (
 					<CheckCircleIcon className="text-primary !mt-1 w-5" />
 				) : (
 					<XCircleIcon className="!mt-1 w-5 text-red-500" />

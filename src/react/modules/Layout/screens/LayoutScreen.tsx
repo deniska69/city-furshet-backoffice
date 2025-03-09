@@ -18,9 +18,9 @@ const Component = () => {
 	const [isShowSplash, setIsShowSplash] = useState(true);
 
 	useLayoutEffect(() => {
-		if (!priceStore.isPriceExist() && !isShowSplash) navigate('/home');
+		if (!priceStore.price && !isShowSplash) navigate('/home');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [priceStore.isPriceExist(), isShowSplash]);
+	}, [priceStore.price, isShowSplash]);
 
 	const handleHideSplash = () => setIsShowSplash(false);
 
