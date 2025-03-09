@@ -8,8 +8,8 @@ import { ErrorSplashScreen } from '@modules/Error';
 import { layoutStore, priceStore } from '@stores';
 import { Div, HStack, Stack } from '@ui';
 
-import LayoutHeader from '../containers/LayoutHeader';
-import LayoutSidebar from '../containers/LayoutSidebar';
+import LayoutHeaderContainer from '../containers/LayoutHeaderContainer';
+import LayoutSidebarContainer from '../containers/LayoutSidebarContainer';
 
 const Component = () => {
 	useTheme();
@@ -32,10 +32,10 @@ const Component = () => {
 			{isShowSplash ? <Splash onHide={handleHideSplash} /> : null}
 			{layoutStore.loading ? <Loader /> : null}
 
-			<LayoutSidebar />
+			<LayoutSidebarContainer />
 
 			<Stack className="h-screen w-full">
-				<LayoutHeader />
+				<LayoutHeaderContainer />
 
 				<Div className="flex h-full overflow-x-hidden overflow-y-auto">
 					<Suspense>

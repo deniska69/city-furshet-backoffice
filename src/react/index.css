@@ -7,7 +7,7 @@
 	--color-primary-orange: #f7852f;
 	--color-primary-orange-muted: #cc6f28;
 
-	--color-bg-light: #fff;
+	--color-bg-light: var(--color-gray-100);
 	--color-bg-dark: var(--color-neutral-900);
 
 	--color-text-light: #3c3c43;
@@ -17,10 +17,10 @@
 	--color-muted-light: #67676c;
 	--color-muted-dark: #98989f;
 
-	--color-card-bg-light: var(--color-neutral-800);
+	--color-card-bg-light: var(--color-white);
 	--color-card-bg-dark: var(--color-neutral-800);
 
-	--color-border-light: var(--color-neutral-700);
+	--color-border-light: var(--color-neutral-200);
 	--color-border-dark: var(--color-neutral-700);
 }
 

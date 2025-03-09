@@ -7,4 +7,5 @@ export * from './image';
 export * from './input';
 export * from './spinner';
 export * from './stack';
+export * from './switch';
 export * from './text';

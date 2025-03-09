@@ -6,6 +6,8 @@ import { getLastModText } from '@helpers';
 import { hostingStore } from '@stores';
 import { Button, Card, cn, Div, HStack, Text } from '@ui';
 
+import LayoutThemeWidget from './LayoutThemeWidget';
+
 const Component = () => {
 	useEffect(() => {
 		handleConnect();
@@ -54,10 +56,12 @@ const Component = () => {
 					<XCircleIcon className="!mt-1 w-5 text-red-500" />
 				)}
 			</HStack>
+
+			<LayoutThemeWidget />
 		</Card>
 	);
 };
 
-const LayoutHeader = observer(Component);
+const LayoutHeaderContainer = observer(Component);
 
-export default LayoutHeader;
+export default LayoutHeaderContainer;
