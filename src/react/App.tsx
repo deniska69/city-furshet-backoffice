@@ -1,11 +1,11 @@
-import { createBrowserRouter, RouterProvider } from 'react-router';
 import { Provider } from 'mobx-react';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 
 import './index.css';
-import * as stores from '@stores';
-import { LayoutScreen } from '@modules/Layout';
+
 import { ErrorScreen, NotFoundScreen } from '@modules/Error';
-import { StartRouter } from '@modules/Start';
+import { LayoutHomeScreen, LayoutScreen } from '@modules/Layout';
+import * as stores from '@stores';
 
 const router = createBrowserRouter([
 	{
@@ -14,8 +14,9 @@ const router = createBrowserRouter([
 		ErrorBoundary: ErrorScreen,
 		children: [
 			{
-				path: '/start/*',
-				Component: StartRouter,
+				index: true,
+				path: '/home/*',
+				Component: LayoutHomeScreen,
 			},
 		],
 	},

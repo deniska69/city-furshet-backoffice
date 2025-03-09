@@ -7,13 +7,7 @@ import LayoutLogo from '../components/LayoutLogo';
 
 const Component = () => {
 	return (
-		<Card
-			className={cn(
-				'h-screen max-w-64 min-w-64 !px-4',
-				'border-y-0 border-r border-l-0',
-				'flex flex-col',
-			)}
-		>
+		<Card className="h-screen max-w-64 min-w-64 !px-4 border-y-0 border-r border-l-0 flex flex-col">
 			<LayoutLogo />
 
 			<Stack
@@ -32,14 +26,12 @@ const Component = () => {
 
 				{hostingStore.isPrice && !hostingStore.categories ? (
 					<Text variant="muted" className="text-center">
-						В прайсе нет найденных категорий
+						В прайсе нет найденных категорий, нажмите на кнопку добавить:
 					</Text>
 				) : null}
 
 				{hostingStore.isPrice && !hostingStore.categories ? (
-					<Button variant="muted" className="text-center max-h-8">
-						+
-					</Button>
+					<Button variant="muted" className="text-center" text="+" />
 				) : null}
 			</Stack>
 		</Card>

@@ -1,0 +1,3 @@
+const CategoryScreen = () => {
+	return null;
+};

@@ -30,13 +30,13 @@ const Component = () => {
 			{lastMod ? (
 				<Div
 					className={cn(
-						'!pr-6 min-h-[50px] flex items-center',
+						'!pr-6 min-h-[40px] flex items-center',
 						'border-r border-y-0 border-l-0',
 						'bg-card-bg-light dark:bg-card-bg-dark',
 						'border-border-light dark:border-border-dark border',
 					)}
 				>
-					<Text>Последнее изменение прайса: {lastMod}</Text>
+					<Text className="text-sm">Последнее изменение прайса: {lastMod}</Text>
 				</Div>
 			) : null}
 
@@ -48,8 +48,15 @@ const Component = () => {
 				<Button onClick={handleConnect} text="Подключиться к хостингу" />
 			) : null}
 
-			<HStack className="items-center gap-x-3">
-				<Text>Статус подключения к хостингу:</Text>
+			<HStack
+				className={cn(
+					'!pr-6 min-h-[40px] flex items-center gap-x-3',
+					'border-r border-y-0 border-l-0',
+					'bg-card-bg-light dark:bg-card-bg-dark',
+					'border-border-light dark:border-border-dark border',
+				)}
+			>
+				<Text className="text-sm">Статус подключения к хостингу:</Text>
 				{hostingStore.isConnect ? (
 					<CheckCircleIcon className="text-primary-lime !mt-1 w-5" />
 				) : (
