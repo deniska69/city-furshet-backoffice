@@ -38,7 +38,7 @@ const Component = () => {
 				>
 					<Text className="text-sm">Последнее изменение прайса: {lastMod}</Text>
 					<Button
-						variant="ghost"
+						variant="ghost-primary"
 						onClick={openBackupdDir}
 						className="!px-1.5 !py-4 !rounded-full"
 					>

@@ -1,6 +1,6 @@
 import { action, makeAutoObservable } from 'mobx';
 
-import { TypePrice, TypePriceCatory, TypePriceProduct, TypeReturnGetPrice } from '@types';
+import { TypePrice, TypePriceCategory, TypePriceProduct, TypeReturnGetPrice } from '@types';
 
 import { layoutStore } from './layoutStore';
 
@@ -9,8 +9,8 @@ class HostingStore {
 	isPrice: boolean = false;
 	price: TypePrice | undefined;
 	lastMod: Date | undefined;
-	categories: Array<TypePriceCatory> | undefined;
-	products: Map<TypePriceCatory['category_id'], Array<TypePriceProduct>> | undefined;
+	categories: Array<TypePriceCategory> | undefined;
+	products: Map<TypePriceCategory['category_id'], Array<TypePriceProduct>> | undefined;
 
 	setConnect = action((value: boolean = true) => (this.isConnect = value));
 

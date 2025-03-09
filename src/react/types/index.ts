@@ -1,13 +1,13 @@
-export type TypePriceCatory = {
+export type TypePriceCategory = {
 	category_id: string;
-	category_hide: string;
+	category_hide: boolean;
 	category_title: string;
 	category_description: string;
 };
 
 export type TypePriceProduct = {
 	product_id: string;
-	product_hide: string;
+	product_hide: boolean;
 	product_title: string;
 	product_title_description: string;
 	product_description: string;
@@ -17,7 +17,7 @@ export type TypePriceProduct = {
 	product_gallery: string;
 };
 
-export type TypePriceRow = TypePriceCatory & TypePriceProduct;
+export type TypePriceRow = TypePriceCategory & TypePriceProduct;
 
 export type TypePrice = Array<TypePriceRow>;
 

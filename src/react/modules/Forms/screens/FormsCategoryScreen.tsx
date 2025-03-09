@@ -1,31 +1,74 @@
 import { observer } from 'mobx-react';
+import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router';
+import ShortUniqueId from 'short-unique-id';
 
-import { Card, Divider, Form, HStack, Input, Stack, Text, Textarea } from '@ui';
+import { TypePriceCategory } from '@types';
+import { Button, Card, Form, HStack, Input, Switch, Text, Textarea } from '@ui';
 
-const Component = (props: unknown) => {
-	console.log(props);
+import FormsHeader from '../components/FormsHeader';
+
+const Component = () => {
+	const { id } = useParams();
+	const uid = new ShortUniqueId();
+
+	const {
+		watch,
+		register,
+		setValue,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<TypePriceCategory>({
+		defaultValues: {
+			category_id: id || uid.rnd(),
+			category_title: '',
+			category_description: '',
+			category_hide: false,
+		},
+	});
+
+	const handleChangeHide = (value: boolean) => setValue('category_hide', value);
+
+	const handleSave = (values: TypePriceCategory) => {
+		console.log(values);
+	};
+
 	return (
-		<Card className="w-full">
-			<Stack className="gap-y-3">
-				<Text className="text-bold text-2xl">Редактор категории</Text>
-				<Divider />
-			</Stack>
+		<Card className="max-w-xl">
+			<FormsHeader />
 
-			<Form className="gap-y-3 !mt-6">
+			<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
 				<HStack className="max-w-[600px] gap-x-3 items-center">
 					<Text className="min-w-24" variant="muted">
-						ID:
+						ID
 					</Text>
-					<Input className="" disabled />
+					<Input
+						disabled
+						isInvalid={!!errors.category_id}
+						{...register('category_id', { required: true })}
+					/>
 				</HStack>
 				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Text className="min-w-24">Название:</Text>
-					<Input className="" />
+					<Text className="min-w-24">Скрыто</Text>
+					<Switch value={watch('category_hide')} onChange={handleChangeHide} />
+				</HStack>
+				<HStack className="max-w-[600px] gap-x-3 items-center">
+					<Text className="min-w-24">
+						Название<Text className="!text-red-500">*</Text>
+					</Text>
+					<Input
+						isInvalid={!!errors.category_title}
+						{...register('category_title', { required: true })}
+					/>
 				</HStack>
 				<HStack className="max-w-[600px] gap-x-3 items-start">
-					<Text className="min-w-24 mt-1">Описание:</Text>
-					<Textarea className="" />
+					<Text className="min-w-24 mt-1" {...register('category_description')}>
+						Описание
+					</Text>
+					<Textarea />
 				</HStack>
+
+				<Button className="self-end mt-4" type="submit" text="Сохранить" />
 			</Form>
 		</Card>
 	);

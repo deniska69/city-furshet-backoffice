@@ -9,7 +9,7 @@ export interface IInput
 }
 
 export const inputVariants = cva(
-	'block w-full rounded-lg px-4 min-h-8 max-h-8 py-3 text-sm placeholder:text-neutral-500 disabled:bg-neutral-300 disabled:dark:!bg-neutral-800',
+	'block w-full rounded-lg px-4 min-h-8 max-h-8 py-1 text-sm placeholder:text-neutral-500 disabled:bg-card-bg-light disabled:dark:!bg-neutral-800 disabled:text-muted-light disabled:dark:text-muted-dark',
 	{
 		variants: {
 			variant: {

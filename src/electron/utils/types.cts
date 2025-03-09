@@ -1,4 +1,4 @@
-export type TypePriceCatory = {
+export type TypePriceCategory = {
 	category_id: string;
 	category_hide: string;
 	category_title: string;
@@ -17,4 +17,4 @@ export type TypePriceProduct = {
 	product_gallery: string;
 };
 
-export type TypePriceModel = TypePriceCatory & TypePriceProduct;
+export type TypePriceModel = TypePriceCategory & TypePriceProduct;

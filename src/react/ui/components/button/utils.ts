@@ -15,7 +15,8 @@ export const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				ghost: '!text-primary hover:bg-primary/30',
+				ghost: '!text-text-light hover:bg-text-light/20 dark:!text-text-dark dark:hover:!bg-text-dark/10',
+				'ghost-primary': '!text-primary hover:bg-primary/20',
 				link: 'text-light dark:text-dark hover:underline hover:text-primary dark:hover:text-primary',
 				outline:
 					'border-gray-200 text-gray-500 hover:border-primary hover:text-primary focus:outline-hidden focus:border-primary focus:text-primary dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-primary dark:hover:border-primary dark:focus:text-primary dark:focus:border-primary',

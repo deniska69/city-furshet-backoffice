@@ -1,6 +1,9 @@
-import { cn } from "../../utils";
-import { IDivider } from "./utils";
+import { cn } from '../../utils';
+
+interface IDivider {
+	className?: string;
+}
 
 export const Divider = ({ className }: IDivider) => (
-  <hr className={cn("border-neutral-300 dark:border-neutral-700", className)} />
+	<hr className={cn('border-border-light dark:border-border-dark', className)} />
 );
