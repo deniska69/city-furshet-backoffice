@@ -19,7 +19,7 @@ const Component = () => {
 		navigate('/category/' + id, { replace: true });
 	};
 
-	const categories = priceStore.getCategories();
+	const categories = priceStore.categories;
 
 	return (
 		<Card className="h-screen max-w-64 min-w-64 !px-4 !py-0 border-y-0 border-r border-l-0 flex flex-col !rounded-none">

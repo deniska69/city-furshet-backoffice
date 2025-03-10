@@ -22,3 +22,11 @@ export type TypePriceRow = TypePriceCategory & TypePriceProduct;
 export type TypePrice = Array<TypePriceRow>;
 
 export type TypeReturnGetPrice = { price: TypePrice; lastMod: Date };
+
+export type TypePriceStoreCategory =
+	| (TypePriceCategory & {
+			index: number;
+			first: boolean;
+			last: boolean;
+	  })
+	| null;

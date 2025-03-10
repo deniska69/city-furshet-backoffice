@@ -1,6 +1,12 @@
-import { action, makeAutoObservable, values } from 'mobx';
+import { action, makeAutoObservable, toJS } from 'mobx';
 
-import { TypePrice, TypePriceCategory, TypePriceProduct, TypeReturnGetPrice } from '@types';
+import {
+	TypePrice,
+	TypePriceCategory,
+	TypePriceProduct,
+	TypePriceStoreCategory,
+	TypeReturnGetPrice,
+} from '@types';
 
 import { layoutStore } from './layoutStore';
 
@@ -8,7 +14,7 @@ class PriceStore {
 	isConnect: boolean = false;
 	price: TypePrice | undefined;
 	lastMod: Date | undefined;
-	categoriesMap: Map<TypePriceCategory['category_id'], TypePriceCategory> | undefined;
+	categories: Array<TypePriceCategory> | undefined;
 	products: Map<TypePriceCategory['category_id'], Array<TypePriceProduct>> | undefined;
 
 	setConnect = action((value: boolean = true) => (this.isConnect = value));
@@ -53,19 +59,49 @@ class PriceStore {
 	});
 
 	addCategory = action((values: TypePriceCategory) => {
-		if (!this.categoriesMap) this.categoriesMap = new Map();
-		this.categoriesMap.set(values.category_id, values);
+		if (!Array.isArray(this.categories)) this.categories = [];
+		this.categories.push(values);
 	});
 
-	getCategory = (id: TypePriceCategory['category_id']) => {
-		if (!this.categoriesMap?.has(id)) return null;
-		return this.categoriesMap.get(id);
+	getCategory = (id: TypePriceCategory['category_id']): TypePriceStoreCategory => {
+		if (!this.categories) return null;
+
+		const item = this.categories
+			.map(
+				(el, index) =>
+					el.category_id === id && {
+						...el,
+						index,
+						first: index === 0,
+						last: index + 1 === this.categories?.length,
+					},
+			)
+			.filter((el) => el)[0];
+
+		return item || null;
 	};
 
-	getCategories = () => {
-		if (!this.categoriesMap) return null;
-		return values(this.categoriesMap) as unknown as Array<TypePriceCategory>;
-	};
+	changeCategoriesPosition = action((index: number, direction: 'up' | 'down') => {
+		console.log('[changeCategoriesPosition]');
+		console.log(this.categories, this.categories?.length);
+
+		if (!this.categories || this.categories?.length < 2) return;
+		if (direction === 'up' && index === 0) return;
+		if (direction === 'down' && index + 1 === this.categories?.length) return;
+
+		const arr: Array<TypePriceCategory> = toJS(this.categories);
+
+		console.log(arr);
+
+		const from = index;
+		const to = direction === 'up' ? index + 1 : index - 1;
+
+		[arr[from], arr[to]] = [arr[to], arr[from]];
+
+		console.log(arr);
+
+		this.categories = arr;
+	});
 }
 
 export const priceStore = makeAutoObservable(new PriceStore());
