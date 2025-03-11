@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import logoLime from '@assets/icon.svg';
+import logoLime from '@assets/icon.png';
 import { SPLASH_SCREEN_DURATION } from '@constants';
 import { Div, Image } from '@ui';
 

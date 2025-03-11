@@ -27,8 +27,8 @@ const Component = () => {
 	return (
 		<HStack>
 			<ErrorSplashScreen />
-			{isShowSplash ? <Splash onHide={handleHideSplash} /> : null}
 			{layoutStore.loading ? <Loader /> : null}
+			{isShowSplash ? <Splash onHide={handleHideSplash} /> : null}
 
 			<LayoutSidebarContainer />
 

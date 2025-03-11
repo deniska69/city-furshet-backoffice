@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
-
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
 import dotenv from 'dotenv';
+import { defineConfig } from 'vite';
+
 dotenv.config();
 
 const PORT = process.env.PORT_LOCAL_DEV_SERVER_REACT || '3000';
@@ -21,7 +21,7 @@ export default defineConfig({
 	},
 	resolve: {
 		alias: {
-			'@assets': path.resolve(__dirname, './src/react/assets'),
+			'@assets': path.resolve(__dirname, './src/assets'),
 			'@constants': path.resolve(__dirname, './src/react/constants'),
 			'@helpers': path.resolve(__dirname, './src/react/helpers'),
 			'@hooks': path.resolve(__dirname, './src/react/hooks'),

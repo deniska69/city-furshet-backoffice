@@ -25,7 +25,7 @@
 		/* Aliases */
 		"baseUrl": ".",
 		"paths": {
-			"@assets/*": ["src/react/assets/*"],
+			"@assets/*": ["src/assets/*"],
 			"@constants": ["src/react/constants"],
 			"@helpers": ["src/react/helpers"],
 			"@hooks": ["src/react/hooks"],
