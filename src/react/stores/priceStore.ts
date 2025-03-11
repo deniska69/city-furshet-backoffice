@@ -63,6 +63,11 @@ class PriceStore {
 		this.categories.push(values);
 	});
 
+	deleteCategory = action((index: number) => {
+		if (!Array.isArray(this.categories)) this.categories = [];
+		this.categories = toJS(this.categories).filter((el, i) => i !== index && el);
+	});
+
 	saveCategory = action((index: number, values: TypePriceCategory) => {
 		if (!Array.isArray(this.categories)) this.categories = [];
 		this.categories = toJS(this.categories).map((el, i) => (index === i ? values : el));

@@ -10,6 +10,7 @@ import { Div, HStack, Stack } from '@ui';
 
 import LayoutHeaderContainer from '../containers/LayoutHeaderContainer';
 import LayoutSidebarContainer from '../containers/LayoutSidebarContainer';
+import { LayoutAlertScreen } from './LayoutAlertScreen';
 
 const Component = () => {
 	useTheme();
@@ -29,10 +30,11 @@ const Component = () => {
 			<ErrorSplashScreen />
 			{layoutStore.loading ? <Loader /> : null}
 			{isShowSplash ? <Splash onHide={handleHideSplash} /> : null}
+			<LayoutAlertScreen />
 
 			<LayoutSidebarContainer />
 
-			<Stack className="h-screen w-full">
+			<Stack className="h-screen w-full max-h-screen">
 				<LayoutHeaderContainer />
 
 				<Div className="h-full overflow-x-hidden overflow-y-auto !p-6">

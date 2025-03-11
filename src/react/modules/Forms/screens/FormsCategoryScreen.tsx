@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import ShortUniqueId from 'short-unique-id';
 
-import { priceStore } from '@stores';
+import { layoutStore, priceStore } from '@stores';
 import { TypePriceCategory } from '@types';
 import { Button, Card, cn, Form, HStack, Input, Switch, Text, Textarea } from '@ui';
 
@@ -57,6 +57,18 @@ const Component = () => {
 		if (category?.index !== undefined) {
 			priceStore.changeCategoriesPosition(category?.index, 'down');
 		}
+	};
+
+	const handleDelete = () => {
+		if (typeof category?.index !== 'number') return;
+
+		layoutStore.alert(
+			`Вы действительно хотите удалить категорию "${category.category_title}" ?`,
+			() => {
+				priceStore.deleteCategory(category?.index);
+				navigate('/', { replace: true });
+			},
+		);
 	};
 
 	return (
@@ -121,7 +133,15 @@ const Component = () => {
 						</HStack>
 					) : null}
 
-					<Button className="self-end mt-4" type="submit" text="Сохранить" />
+					<HStack className="gap-x-3">
+						{!isNew ? (
+							<Button className="!px-2" variant="error" onClick={handleDelete}>
+								<TrashIcon className="w-5" />
+							</Button>
+						) : null}
+
+						<Button type="submit" text="Сохранить" />
+					</HStack>
 				</HStack>
 			</Form>
 		</Card>
