@@ -38,18 +38,23 @@ const Component = () => {
 	const handleChangeHide = (value: boolean) => setValue('category_hide', value);
 
 	const handleSave = (values: TypePriceCategory) => {
-		priceStore.addCategory(values);
+		if (category?.category_id) {
+			priceStore.saveCategory(category.index, values);
+		} else {
+			priceStore.addCategory(values);
+		}
+
 		navigate('/', { replace: true });
 	};
 
 	const handleUp = () => {
-		if (category?.index) {
+		if (category?.index !== undefined) {
 			priceStore.changeCategoriesPosition(category?.index, 'up');
 		}
 	};
 
 	const handleDown = () => {
-		if (category?.index) {
+		if (category?.index !== undefined) {
 			priceStore.changeCategoriesPosition(category?.index, 'down');
 		}
 	};

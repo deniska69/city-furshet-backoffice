@@ -63,6 +63,11 @@ class PriceStore {
 		this.categories.push(values);
 	});
 
+	saveCategory = action((index: number, values: TypePriceCategory) => {
+		if (!Array.isArray(this.categories)) this.categories = [];
+		this.categories = toJS(this.categories).map((el, i) => (index === i ? values : el));
+	});
+
 	getCategory = (id: TypePriceCategory['category_id']): TypePriceStoreCategory => {
 		if (!this.categories) return null;
 
@@ -82,23 +87,16 @@ class PriceStore {
 	};
 
 	changeCategoriesPosition = action((index: number, direction: 'up' | 'down') => {
-		console.log('[changeCategoriesPosition]');
-		console.log(this.categories, this.categories?.length);
-
 		if (!this.categories || this.categories?.length < 2) return;
 		if (direction === 'up' && index === 0) return;
 		if (direction === 'down' && index + 1 === this.categories?.length) return;
 
 		const arr: Array<TypePriceCategory> = toJS(this.categories);
 
-		console.log(arr);
-
 		const from = index;
-		const to = direction === 'up' ? index + 1 : index - 1;
+		const to = direction === 'up' ? index - 1 : index + 1;
 
 		[arr[from], arr[to]] = [arr[to], arr[from]];
-
-		console.log(arr);
 
 		this.categories = arr;
 	});
