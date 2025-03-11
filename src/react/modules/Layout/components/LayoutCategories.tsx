@@ -18,7 +18,7 @@ const LayoutCategories = ({ items, onSelect, onAdd }: ILayoutCategories) => {
 	return (
 		<Stack
 			className={cn(
-				'px-4 gap-y-3 h-full max-h-[calc(100vh-148px)]',
+				'px-4 gap-y-3 h-full max-h-[calc(100vh-190px)]',
 				items && items.length > 0 ? 'justify-start' : 'justify-center',
 			)}
 		>

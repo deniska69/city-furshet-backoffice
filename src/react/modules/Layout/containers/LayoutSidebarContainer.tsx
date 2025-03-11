@@ -18,11 +18,11 @@ const Component = () => {
 	};
 
 	return (
-		<Card className="h-screen !max-h-screen max-w-64 min-w-64 !p-0 border-y-0 border-r border-l-0 flex flex-col !rounded-none">
+		<Card className="h-screen !max-h-screen max-w-64 min-w-64 !p-0 border-y-0 border-r border-l-0 flex flex-col !rounded-none justify-between">
 			<LayoutLogo />
 
 			{priceStore.price ? (
-				<Stack className="h-full max-h-[calc(100vh-48px)] justify-between overflow-hidden grow-0">
+				<Stack className="h-full max-h-[calc(100vh-90px)] justify-between overflow-hidden grow-0">
 					<LayoutCategories
 						onAdd={handleAdd}
 						onSelect={handleSelect}
