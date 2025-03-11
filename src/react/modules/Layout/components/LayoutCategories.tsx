@@ -22,8 +22,8 @@ const LayoutCategories = ({ items, onSelect, onAdd }: ILayoutCategories) => {
 				items && items.length > 0 ? 'justify-start' : 'justify-center',
 			)}
 		>
-			<Stack className="max-h-full w-full overflow-y-auto">
-				{items ? (
+			<Stack className="max-h-full w-full overflow-y-auto overflow-x-hidden gap-y-2">
+				{items && items.length ? (
 					items.map((el) => (
 						<LayoutCategoryItem
 							el={el}

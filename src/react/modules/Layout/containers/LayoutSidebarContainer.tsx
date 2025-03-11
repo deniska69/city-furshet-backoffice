@@ -24,13 +24,16 @@ const Component = () => {
 			{priceStore.price ? (
 				<Stack className="h-full max-h-[calc(100vh-48px)] justify-between overflow-hidden grow-0">
 					<LayoutCategories
-						items={priceStore.categories}
-						onSelect={handleSelect}
 						onAdd={handleAdd}
+						onSelect={handleSelect}
+						items={priceStore.categories}
 					/>
 
 					<Div className="py-4 mt-4 mx-4 border-t border-border-light dark:border-border-dark flex justify-center">
-						<Button text="Сохранить прайс" />
+						<Button
+							text="Сохранить прайс"
+							disabled={!priceStore.categories || !priceStore.categories.length}
+						/>
 					</Div>
 				</Stack>
 			) : null}

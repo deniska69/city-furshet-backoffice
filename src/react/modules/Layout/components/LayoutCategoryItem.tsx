@@ -1,7 +1,7 @@
 import { EyeSlashIcon } from '@heroicons/react/24/outline';
 
 import { TypePriceCategory } from '@types';
-import { Button, Span } from '@ui';
+import { Button, cn, Div, Span } from '@ui';
 
 interface ILayoutCategoryItem {
 	el: TypePriceCategory;
@@ -10,9 +10,16 @@ interface ILayoutCategoryItem {
 }
 
 const LayoutCategoryItem = ({ el, active, onClick }: ILayoutCategoryItem) => (
-	<Button variant="link" className="px-4 !justify-between" onClick={onClick}>
-		<Span className={active ? '!text-primary' : ''}>{el.category_title}</Span>
-		{el.category_hide ? <EyeSlashIcon className={active ? '!text-primary w-4' : 'w-4'} /> : null}
+	<Button variant="ghost" className="!px-2 !py-1 !justify-between" onClick={onClick}>
+		<Span className={cn('text-nowrap truncate', active ? '!text-primary' : '')}>
+			{el.category_title}
+		</Span>
+
+		{el.category_hide ? (
+			<Div>
+				<EyeSlashIcon className={active ? '!text-primary w-4 h-4' : 'w-4 h-4'} />
+			</Div>
+		) : null}
 	</Button>
 );
 
