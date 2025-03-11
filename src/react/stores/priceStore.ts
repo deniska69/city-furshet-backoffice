@@ -22,8 +22,28 @@ class PriceStore {
 	setError = (e: string) => layoutStore.setError(`[React] [priceStore] ${e}`);
 
 	setPrice = action(async (data?: TypeReturnGetPrice) => {
-		this.price = !!data?.lastMod && !!data.price ? data?.price : undefined;
+		this.price = data?.lastMod && data.price.length ? data?.price : undefined;
 		this.lastMod = data?.lastMod;
+
+		if (this.price) {
+			const mapPrice = new Map();
+
+			this.categories = [];
+
+			this.price.forEach(
+				({ category_id, category_hide, category_title, category_description }) => {
+					mapPrice.set(category_id, {
+						category_id,
+						category_hide,
+						category_title,
+						category_description,
+					});
+				},
+			);
+
+			this.categories = [...mapPrice.values()];
+		}
+
 		return Promise.resolve();
 	});
 

@@ -10,7 +10,7 @@ interface ILayoutCategoryItem {
 }
 
 const LayoutCategoryItem = ({ el, active, onClick }: ILayoutCategoryItem) => (
-	<Button variant="ghost" className="!px-2 !py-1 !justify-between" onClick={onClick}>
+	<Button variant="ghost" className="!px-4 !py-4 !justify-between" onClick={onClick}>
 		<Span className={cn('text-nowrap truncate', active ? '!text-primary' : '')}>
 			{el.category_title}
 		</Span>
