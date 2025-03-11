@@ -7,7 +7,7 @@ import ShortUniqueId from 'short-unique-id';
 
 import { layoutStore, priceStore } from '@stores';
 import { TypePriceCategory } from '@types';
-import { Button, Card, cn, Form, HStack, Input, Switch, Text, Textarea } from '@ui';
+import { Button, Card, cn, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
 
@@ -77,9 +77,9 @@ const Component = () => {
 
 			<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
 				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Text className="min-w-24" variant="muted">
+					<Span className="min-w-24" variant="muted">
 						ID
-					</Text>
+					</Span>
 					<Input
 						disabled
 						isInvalid={!!errors.category_id}
@@ -88,14 +88,14 @@ const Component = () => {
 				</HStack>
 
 				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Text className="min-w-24">Скрыто</Text>
+					<Span className="min-w-24">Скрыто</Span>
 					<Switch value={watch('category_hide')} onChange={handleChangeHide} />
 				</HStack>
 
 				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Text className="min-w-24">
-						Название<Text className="!text-red-500">*</Text>
-					</Text>
+					<Span className="min-w-24">
+						Название<Span className="!text-red-500">*</Span>
+					</Span>
 					<Input
 						autoFocus
 						isInvalid={!!errors.category_title}
@@ -104,9 +104,9 @@ const Component = () => {
 				</HStack>
 
 				<HStack className="max-w-[600px] gap-x-3 items-start">
-					<Text className="min-w-24 mt-1" {...register('category_description')}>
+					<Span className="min-w-24 mt-1" {...register('category_description')}>
 						Описание
-					</Text>
+					</Span>
 					<Textarea />
 				</HStack>
 

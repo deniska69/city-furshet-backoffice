@@ -1,7 +1,7 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router';
 
-import { Button, Divider, HStack, Stack, Text } from '@ui';
+import { Button, Divider, HStack, Span, Stack } from '@ui';
 
 const FormsHeader = ({ isNew }: { isNew: boolean }) => {
 	const navigate = useNavigate();
@@ -10,11 +10,11 @@ const FormsHeader = ({ isNew }: { isNew: boolean }) => {
 		<Stack className="gap-y-3">
 			<HStack className="items-center justify-between">
 				<HStack className="gap-x-1">
-					<Text className="text-bold text-2xl">Редактор категории</Text>
+					<Span className="text-bold text-2xl">Редактор категории</Span>
 					{isNew ? (
-						<Text variant="primary" className="mt-1.5">
+						<Span variant="primary" className="mt-1.5">
 							(new)
-						</Text>
+						</Span>
 					) : null}
 				</HStack>
 				<Button

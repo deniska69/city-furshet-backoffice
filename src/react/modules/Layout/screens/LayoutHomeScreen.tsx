@@ -1,22 +1,22 @@
 import { observer } from 'mobx-react';
 
 import { priceStore } from '@stores';
-import { Div, Text } from '@ui';
+import { Div, Span } from '@ui';
 
 const Component = () => (
 	<Div className="flex h-full w-full items-center justify-center">
 		{!priceStore.isConnect ? (
-			<Text variant="muted">Необходимо покдлючиться к хостингу</Text>
+			<Span variant="muted">Необходимо покдлючиться к хостингу</Span>
 		) : null}
 
 		{priceStore.isConnect && !priceStore.price ? (
-			<Text variant="muted">Программа готова к работе, необходимо получить прайс</Text>
+			<Span variant="muted">Программа готова к работе, необходимо получить прайс</Span>
 		) : null}
 
 		{priceStore.isConnect && priceStore.price ? (
-			<Text variant="muted">
+			<Span variant="muted">
 				Программа готова к работе, для начала работы выберите категорию слева в меню
-			</Text>
+			</Span>
 		) : null}
 	</Div>
 );

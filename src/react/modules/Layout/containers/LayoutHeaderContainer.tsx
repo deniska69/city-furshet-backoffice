@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 
 import { getLastModText, openBackupdDir } from '@helpers';
 import { priceStore } from '@stores';
-import { Button, Card, cn, HStack, Text } from '@ui';
+import { Button, Card, cn, HStack, Span } from '@ui';
 
 import LayoutThemeWidget from './LayoutThemeWidget';
 
@@ -36,7 +36,7 @@ const Component = () => {
 						'border-border-light dark:border-border-dark border',
 					)}
 				>
-					<Text className="text-sm">Последнее изменение прайса: {lastMod}</Text>
+					<Span className="text-sm">Последнее изменение прайса: {lastMod}</Span>
 					<Button
 						variant="ghost"
 						onClick={openBackupdDir}
@@ -63,7 +63,7 @@ const Component = () => {
 					'border-border-light dark:border-border-dark border',
 				)}
 			>
-				<Text className="text-sm">Статус подключения к хостингу:</Text>
+				<Span className="text-sm">Статус подключения к хостингу:</Span>
 				{priceStore.isConnect ? (
 					<CheckCircleIcon className="text-primary !mt-1 w-5" />
 				) : (
