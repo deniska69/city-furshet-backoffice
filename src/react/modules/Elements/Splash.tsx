@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
+
+import logoLime from '@assets/icon.svg';
 import { SPLASH_SCREEN_DURATION } from '@constants';
 import { Div, Image } from '@ui';
-import { useEffect } from 'react';
-import logoLime from '/icon.svg';
+
 import './Splash.css';
 
 interface ISplashScreen {
