@@ -11,7 +11,7 @@ import LayoutLogo from '../components/LayoutLogo';
 const Component = () => {
 	const navigate = useNavigate();
 
-	const handleAdd = () => navigate('/category');
+	const handleAdd = () => navigate('/category', { replace: true });
 
 	const handleSelect = (id: TypePriceCategory['category_id']) => {
 		navigate('/category/' + id, { replace: true });
@@ -32,7 +32,9 @@ const Component = () => {
 					<Div className="py-4 mt-4 mx-4 border-t border-border-light dark:border-border-dark flex justify-center">
 						<Button
 							text="Сохранить прайс"
-							disabled={!priceStore.categories || !priceStore.categories.length}
+							disabled={
+								!priceStore.categories || !priceStore.categories.length
+							}
 						/>
 					</Div>
 				</Stack>

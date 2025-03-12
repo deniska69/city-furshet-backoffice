@@ -88,8 +88,11 @@ const Component = () => {
 		);
 	};
 
-	const handleEditProducts = () =>
-		navigate(`/category/${category?.category_id}/products`);
+	const handleEditProducts = () => {
+		navigate(`/category/${category?.category_id}/products`, {
+			replace: true,
+		});
+	};
 
 	return (
 		<Card className="max-w-xl">

@@ -1,4 +1,4 @@
-import { SyntheticEvent, ImgHTMLAttributes } from 'react';
+import { ImgHTMLAttributes, SyntheticEvent } from 'react';
 
 import { cn } from '../../utils';
 import errorImagePlaceholder from './noimage.svg';
@@ -15,7 +15,7 @@ const getImageError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
 
 export const Image = ({ src, alt, className, ...props }: IImage) => (
 	<img
-		src={src}
+		src={src && src?.length > 0 ? src : errorImagePlaceholder}
 		className={cn('', className)}
 		alt={alt || src}
 		onError={getImageError}
