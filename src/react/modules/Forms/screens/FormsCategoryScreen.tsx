@@ -1,5 +1,9 @@
 import { useEffect } from 'react';
-import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+	ChevronDownIcon,
+	ChevronUpIcon,
+	TrashIcon,
+} from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
@@ -7,7 +11,17 @@ import ShortUniqueId from 'short-unique-id';
 
 import { layoutStore, priceStore } from '@stores';
 import { TypePriceCategory } from '@types';
-import { Button, Card, cn, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
+import {
+	Button,
+	Card,
+	cn,
+	Form,
+	HStack,
+	Input,
+	Span,
+	Switch,
+	Textarea,
+} from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
 
@@ -16,8 +30,9 @@ const Component = () => {
 	const navigate = useNavigate();
 	const uid = new ShortUniqueId();
 
-	const category = id ? priceStore.getCategory(id) : null;
 	const isNew = !id;
+	const category = isNew ? null : priceStore.getCategory(id);
+	const products = isNew ? null : priceStore.getProducts(id);
 
 	const {
 		watch,
@@ -35,7 +50,9 @@ const Component = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [category?.category_id]);
 
-	const handleChangeHide = (value: boolean) => setValue('category_hide', value);
+	const handleChangeHide = (value: boolean) => {
+		setValue('category_hide', value);
+	};
 
 	const handleSave = (values: TypePriceCategory) => {
 		if (category?.category_id) {
@@ -71,6 +88,9 @@ const Component = () => {
 		);
 	};
 
+	const handleEditProducts = () =>
+		navigate(`/category/${category?.category_id}/products`);
+
 	return (
 		<Card className="max-w-xl">
 			<FormsHeader isNew={isNew} />
@@ -89,7 +109,10 @@ const Component = () => {
 
 				<HStack className="max-w-[600px] gap-x-3 items-center">
 					<Span className="min-w-24">Скрыто</Span>
-					<Switch value={watch('category_hide')} onChange={handleChangeHide} />
+					<Switch
+						value={watch('category_hide')}
+						onChange={handleChangeHide}
+					/>
 				</HStack>
 
 				<HStack className="max-w-[600px] gap-x-3 items-center">
@@ -104,13 +127,33 @@ const Component = () => {
 				</HStack>
 
 				<HStack className="max-w-[600px] gap-x-3 items-start">
-					<Span className="min-w-24 mt-1" {...register('category_description')}>
+					<Span
+						className="min-w-24 mt-1"
+						{...register('category_description')}
+					>
 						Описание
 					</Span>
 					<Textarea />
 				</HStack>
 
-				<HStack className={cn('items-center', isNew ? 'justify-end' : 'justify-between')}>
+				<HStack className="max-w-[600px] gap-x-3 items-center">
+					<Span className="min-w-24">Товары</Span>
+					<HStack className="gap-x-3">
+						<Input
+							disabled
+							className="max-w-18"
+							value={`${products?.length || 0} шт.`}
+						/>
+						<Button text="Редактировать" onClick={handleEditProducts} />
+					</HStack>
+				</HStack>
+
+				<HStack
+					className={cn(
+						'items-center',
+						isNew ? 'justify-end' : 'justify-between',
+					)}
+				>
 					{!isNew ? (
 						<HStack className="items-center gap-x-1">
 							<Button
@@ -135,7 +178,11 @@ const Component = () => {
 
 					<HStack className="gap-x-3">
 						{!isNew ? (
-							<Button className="!px-2" variant="error" onClick={handleDelete}>
+							<Button
+								className="!px-2"
+								variant="error"
+								onClick={handleDelete}
+							>
 								<TrashIcon className="w-5" />
 							</Button>
 						) : null}

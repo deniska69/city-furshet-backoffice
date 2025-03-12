@@ -14,8 +14,8 @@ class PriceStore {
 	isConnect: boolean = false;
 	price: TypePrice | undefined;
 	lastMod: Date | undefined;
-	categories: Array<TypePriceCategory> | undefined;
-	products: Map<TypePriceCategory['category_id'], Array<TypePriceProduct>> | undefined;
+	categories: TypePriceCategory[] | undefined;
+	products: Map<string, TypePriceProduct[]> | undefined;
 
 	setConnect = action((value: boolean = true) => (this.isConnect = value));
 
@@ -30,22 +30,64 @@ class PriceStore {
 
 			this.categories = [];
 
-			this.price.forEach(
-				({ category_id, category_hide, category_title, category_description }) => {
-					mapPrice.set(category_id, {
-						category_id,
-						category_hide,
-						category_title,
-						category_description,
-					});
-				},
-			);
+			this.price.forEach((item) => {
+				const {
+					category_id,
+					category_hide,
+					category_title,
+					category_description,
+				} = item;
+
+				mapPrice.set(category_id, {
+					category_id,
+					category_hide,
+					category_title,
+					category_description,
+				});
+
+				const {
+					product_id,
+					product_hide,
+					product_title,
+					product_title_description,
+					product_description,
+					product_note,
+					product_price,
+					product_cover,
+					product_gallery,
+				} = item;
+
+				this.setProduct(category_id, {
+					product_id,
+					product_hide,
+					product_title,
+					product_title_description,
+					product_description,
+					product_note,
+					product_price,
+					product_cover,
+					product_gallery,
+				});
+			});
 
 			this.categories = [...mapPrice.values()];
 		}
 
 		return Promise.resolve();
 	});
+
+	setProduct = action((category_id: string, item: TypePriceProduct) => {
+		if (!this.products) this.products = new Map();
+
+		if (!this.products?.has(category_id)) {
+			this.products?.set(category_id, [item]);
+		} else {
+			const items = toJS(this.products.get(category_id));
+			this.products.set(category_id, [...(items || []), item]);
+		}
+	});
+
+	getProducts = (category_id: string) => this.products?.get(category_id);
 
 	connect = action(async () => {
 		layoutStore.setLoading();
@@ -85,15 +127,19 @@ class PriceStore {
 
 	deleteCategory = action((index: number) => {
 		if (!Array.isArray(this.categories)) this.categories = [];
-		this.categories = toJS(this.categories).filter((el, i) => i !== index && el);
+		this.categories = toJS(this.categories).filter(
+			(el, i) => i !== index && el,
+		);
 	});
 
 	saveCategory = action((index: number, values: TypePriceCategory) => {
 		if (!Array.isArray(this.categories)) this.categories = [];
-		this.categories = toJS(this.categories).map((el, i) => (index === i ? values : el));
+		this.categories = toJS(this.categories).map((el, i) =>
+			index === i ? values : el,
+		);
 	});
 
-	getCategory = (id: TypePriceCategory['category_id']): TypePriceStoreCategory => {
+	getCategory = (id: string): TypePriceStoreCategory => {
 		if (!this.categories) return null;
 
 		const item = this.categories
@@ -111,20 +157,23 @@ class PriceStore {
 		return item || null;
 	};
 
-	changeCategoriesPosition = action((index: number, direction: 'up' | 'down') => {
-		if (!this.categories || this.categories?.length < 2) return;
-		if (direction === 'up' && index === 0) return;
-		if (direction === 'down' && index + 1 === this.categories?.length) return;
+	changeCategoriesPosition = action(
+		(index: number, direction: 'up' | 'down') => {
+			if (!this.categories || this.categories?.length < 2) return;
+			if (direction === 'up' && index === 0) return;
+			if (direction === 'down' && index + 1 === this.categories?.length)
+				return;
 
-		const arr: Array<TypePriceCategory> = toJS(this.categories);
+			const arr: TypePriceCategory[] = toJS(this.categories);
 
-		const from = index;
-		const to = direction === 'up' ? index - 1 : index + 1;
+			const from = index;
+			const to = direction === 'up' ? index - 1 : index + 1;
 
-		[arr[from], arr[to]] = [arr[to], arr[from]];
+			[arr[from], arr[to]] = [arr[to], arr[from]];
 
-		this.categories = arr;
-	});
+			this.categories = arr;
+		},
+	);
 }
 
 export const priceStore = makeAutoObservable(new PriceStore());
