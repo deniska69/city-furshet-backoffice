@@ -1,16 +1,24 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router';
+import { To, useNavigate } from 'react-router';
 
 import { Button, Divider, HStack, Span, Stack } from '@ui';
 
-const FormsHeader = ({ isNew }: { isNew: boolean }) => {
+interface IFormsHeader {
+	isNew: boolean;
+	title: string;
+	backTo: To;
+}
+
+const FormsHeader = ({ isNew, title, backTo }: IFormsHeader) => {
 	const navigate = useNavigate();
+
+	const handleClose = () => navigate(backTo, { replace: true });
 
 	return (
 		<Stack className="gap-y-3">
 			<HStack className="items-center justify-between">
 				<HStack className="gap-x-1">
-					<Span className="text-bold text-2xl">Редактор категории</Span>
+					<Span className="text-bold text-2xl">{title}</Span>
 					{isNew ? (
 						<Span variant="primary" className="mt-1.5">
 							(new)
@@ -19,7 +27,7 @@ const FormsHeader = ({ isNew }: { isNew: boolean }) => {
 				</HStack>
 				<Button
 					variant="ghost"
-					onClick={() => navigate('/', { replace: true })}
+					onClick={handleClose}
 					className="!px-1.5 !py-4 !rounded-full"
 				>
 					<XMarkIcon className="w-5" />

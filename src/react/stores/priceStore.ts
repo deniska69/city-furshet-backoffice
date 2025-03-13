@@ -11,6 +11,8 @@ import {
 import { layoutStore } from './layoutStore';
 
 class PriceStore {
+	//#region Variables & Сhanging variables
+
 	isConnect: boolean = false;
 	price: TypePrice | undefined;
 	lastMod: Date | undefined;
@@ -20,6 +22,10 @@ class PriceStore {
 	setConnect = action((value: boolean = true) => (this.isConnect = value));
 
 	setError = (e: string) => layoutStore.setError(`[React] [priceStore] ${e}`);
+
+	//#endregion
+
+	//#region Price
 
 	setPrice = action(async (data?: TypeReturnGetPrice) => {
 		this.price = data?.lastMod && data.price.length ? data?.price : undefined;
@@ -76,68 +82,9 @@ class PriceStore {
 		return Promise.resolve();
 	});
 
-	setProduct = action((category_id: string, item: TypePriceProduct) => {
-		if (!this.products) this.products = new Map();
+	//#endregion
 
-		if (!this.products?.has(category_id)) {
-			this.products?.set(category_id, [item]);
-		} else {
-			const items = toJS(this.products.get(category_id));
-			this.products.set(category_id, [...(items || []), item]);
-		}
-	});
-
-	getProducts = (category_id: string) => this.products?.get(category_id);
-
-	connect = action(async () => {
-		layoutStore.setLoading();
-
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		await window.electron
-			.connectHosting()
-			.then(() => this.setConnect())
-			.catch((e: string) => {
-				this.setConnect(false);
-				this.setError('connect(): Ошибка подключения к хостингу.\n' + e);
-			})
-			.finally(() => layoutStore.setLoading(false));
-	});
-
-	getPrice = action(async () => {
-		layoutStore.setLoading();
-
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		await window.electron
-			.getPrice()
-			.then(async (data: TypeReturnGetPrice) => await this.setPrice(data))
-			.catch((e: string) => {
-				this.setPrice();
-				this.setConnect(false);
-				this.setError('getPrice(): Ошибка получения прайса.\n' + e);
-			})
-			.finally(() => layoutStore.setLoading(false));
-	});
-
-	addCategory = action((values: TypePriceCategory) => {
-		if (!Array.isArray(this.categories)) this.categories = [];
-		this.categories.push(values);
-	});
-
-	deleteCategory = action((index: number) => {
-		if (!Array.isArray(this.categories)) this.categories = [];
-		this.categories = toJS(this.categories).filter(
-			(el, i) => i !== index && el,
-		);
-	});
-
-	saveCategory = action((index: number, values: TypePriceCategory) => {
-		if (!Array.isArray(this.categories)) this.categories = [];
-		this.categories = toJS(this.categories).map((el, i) =>
-			index === i ? values : el,
-		);
-	});
+	//#region Categories
 
 	getCategory = (id: string): TypePriceStoreCategory => {
 		if (!this.categories) return null;
@@ -157,6 +104,18 @@ class PriceStore {
 		return item || null;
 	};
 
+	addCategory = action((values: TypePriceCategory) => {
+		if (!Array.isArray(this.categories)) this.categories = [];
+		this.categories.push(values);
+	});
+
+	deleteCategory = action((index: number) => {
+		if (!Array.isArray(this.categories)) this.categories = [];
+		this.categories = toJS(this.categories).filter(
+			(el, i) => i !== index && el,
+		);
+	});
+
 	changeCategoriesPosition = action(
 		(index: number, direction: 'up' | 'down') => {
 			if (!this.categories || this.categories?.length < 2) return;
@@ -174,6 +133,76 @@ class PriceStore {
 			this.categories = arr;
 		},
 	);
+
+	saveCategory = action((index: number, values: TypePriceCategory) => {
+		if (!Array.isArray(this.categories)) this.categories = [];
+		this.categories = toJS(this.categories).map((el, i) =>
+			index === i ? values : el,
+		);
+	});
+
+	//#endregion
+
+	//#region Products
+
+	getProducts = (category_id: string) => this.products?.get(category_id);
+
+	getProduct = (category_id: string, product_id: string) => {
+		const items = this.getProducts(category_id);
+		if (!items) return undefined;
+		const item = items
+			.map((el) => el.product_id === product_id && el)
+			.filter((el) => el)[0];
+		return item || undefined;
+	};
+
+	setProduct = action((category_id: string, item: TypePriceProduct) => {
+		if (!this.products) this.products = new Map();
+
+		if (!this.products?.has(category_id)) {
+			this.products?.set(category_id, [item]);
+		} else {
+			const items = toJS(this.products.get(category_id));
+			this.products.set(category_id, [...(items || []), item]);
+		}
+	});
+
+	//#endregion
+
+	//#region Electron
+
+	electronConnect = action(async () => {
+		layoutStore.setLoading();
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		await window.electron
+			.connectHosting()
+			.then(() => this.setConnect())
+			.catch((e: string) => {
+				this.setConnect(false);
+				this.setError('connect(): Ошибка подключения к хостингу.\n' + e);
+			})
+			.finally(() => layoutStore.setLoading(false));
+	});
+
+	electronGetPrice = action(async () => {
+		layoutStore.setLoading();
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		await window.electron
+			.getPrice()
+			.then(async (data: TypeReturnGetPrice) => await this.setPrice(data))
+			.catch((e: string) => {
+				this.setPrice();
+				this.setConnect(false);
+				this.setError('getPrice(): Ошибка получения прайса.\n' + e);
+			})
+			.finally(() => layoutStore.setLoading(false));
+	});
+
+	//#endregion
 }
 
 export const priceStore = makeAutoObservable(new PriceStore());

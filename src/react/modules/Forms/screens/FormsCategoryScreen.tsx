@@ -26,13 +26,13 @@ import {
 import FormsHeader from '../components/FormsHeader';
 
 const Component = () => {
-	const { id } = useParams();
 	const navigate = useNavigate();
 	const uid = new ShortUniqueId();
+	const { categoryId } = useParams();
 
-	const isNew = !id;
-	const category = isNew ? null : priceStore.getCategory(id);
-	const products = isNew ? null : priceStore.getProducts(id);
+	const isNew = !categoryId;
+	const category = isNew ? null : priceStore.getCategory(categoryId);
+	const products = isNew ? null : priceStore.getProducts(categoryId);
 
 	const {
 		watch,
@@ -44,9 +44,9 @@ const Component = () => {
 
 	useEffect(() => {
 		setValue('category_id', category?.category_id || uid.rnd());
+		setValue('category_hide', !!category?.category_hide);
 		setValue('category_title', category?.category_title || '');
 		setValue('category_description', category?.category_description || '');
-		setValue('category_hide', !!category?.category_hide);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [category?.category_id]);
 
@@ -96,20 +96,16 @@ const Component = () => {
 
 	return (
 		<Card className="max-w-xl">
-			<FormsHeader isNew={isNew} />
+			<FormsHeader isNew={isNew} title="Редактор категории" backTo="/" />
 
 			<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
+				{/* category_id */}
 				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Span className="min-w-24" variant="muted">
-						ID
-					</Span>
-					<Input
-						disabled
-						isInvalid={!!errors.category_id}
-						{...register('category_id', { required: true })}
-					/>
+					<Span className="min-w-24" variant="muted" text="ID" />
+					<Input disabled {...register('category_id')} />
 				</HStack>
 
+				{/* category_hide */}
 				<HStack className="max-w-[600px] gap-x-3 items-center">
 					<Span className="min-w-24">Скрыто</Span>
 					<Switch
@@ -118,6 +114,7 @@ const Component = () => {
 					/>
 				</HStack>
 
+				{/* category_title */}
 				<HStack className="max-w-[600px] gap-x-3 items-center">
 					<Span className="min-w-24">
 						Название<Span className="!text-red-500">*</Span>
@@ -129,16 +126,13 @@ const Component = () => {
 					/>
 				</HStack>
 
+				{/* category_description */}
 				<HStack className="max-w-[600px] gap-x-3 items-start">
-					<Span
-						className="min-w-24 mt-1"
-						{...register('category_description')}
-					>
-						Описание
-					</Span>
-					<Textarea />
+					<Span className="min-w-24 mt-1">Описание</Span>
+					<Textarea {...register('category_description')} />
 				</HStack>
 
+				{/* products */}
 				<HStack className="max-w-[600px] gap-x-3 items-center">
 					<Span className="min-w-24">Товары</Span>
 					<HStack className="gap-x-3">
@@ -151,6 +145,7 @@ const Component = () => {
 					</HStack>
 				</HStack>
 
+				{/* butons */}
 				<HStack
 					className={cn(
 						'items-center',

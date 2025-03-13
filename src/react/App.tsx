@@ -5,8 +5,9 @@ import './index.css';
 
 import { ErrorScreen, NotFoundScreen } from '@modules/Error';
 import {
-	FormsCategoryProductsScreen,
 	FormsCategoryScreen,
+	FormsProductScreen,
+	FormsProductsListScreen,
 } from '@modules/Forms';
 import { LayoutHomeScreen, LayoutScreen } from '@modules/Layout';
 import * as stores from '@stores';
@@ -23,12 +24,16 @@ const router = createBrowserRouter([
 				Component: LayoutHomeScreen,
 			},
 			{
-				path: '/category/:id?',
+				path: '/category/:categoryId',
 				Component: FormsCategoryScreen,
 			},
 			{
-				path: '/category/:id/products',
-				Component: FormsCategoryProductsScreen,
+				path: '/category/:categoryId/products',
+				Component: FormsProductsListScreen,
+			},
+			{
+				path: '/category/:categoryId/products/:productId',
+				Component: FormsProductScreen,
 			},
 		],
 	},

@@ -29,7 +29,9 @@ const LayoutCategories = ({ items, onSelect, onAdd }: ILayoutCategories) => {
 							el={el}
 							key={el.category_id}
 							onClick={() => onSelect(el.category_id)}
-							active={alias === 'category' && aliasSecond === el.category_id}
+							active={
+								alias === 'category' && aliasSecond === el.category_id
+							}
 						/>
 					))
 				) : (

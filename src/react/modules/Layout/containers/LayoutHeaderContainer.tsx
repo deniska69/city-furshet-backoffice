@@ -16,9 +16,9 @@ const Component = () => {
 
 	const lastMod = getLastModText(priceStore.lastMod);
 
-	const handleConnect = () => priceStore.connect();
+	const handleConnect = () => priceStore.electronConnect();
 
-	const handleGetPice = () => priceStore.getPrice();
+	const handleGetPice = () => priceStore.electronGetPrice();
 
 	return (
 		<Card
@@ -36,7 +36,9 @@ const Component = () => {
 						'border-border-light dark:border-border-dark border',
 					)}
 				>
-					<Span className="text-sm">Последнее изменение прайса: {lastMod}</Span>
+					<Span className="text-sm">
+						Последнее изменение прайса: {lastMod}
+					</Span>
 					<Button
 						variant="ghost"
 						onClick={openBackupdDir}
