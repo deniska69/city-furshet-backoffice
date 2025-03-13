@@ -24,7 +24,7 @@ const router = createBrowserRouter([
 				Component: LayoutHomeScreen,
 			},
 			{
-				path: '/category/:categoryId',
+				path: '/category/:categoryId?',
 				Component: FormsCategoryScreen,
 			},
 			{
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 				Component: FormsProductsListScreen,
 			},
 			{
-				path: '/category/:categoryId/products/:productId',
+				path: '/category/:categoryId/product/:productId?',
 				Component: FormsProductScreen,
 			},
 		],

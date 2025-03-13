@@ -1,10 +1,11 @@
-import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
+import { PencilIcon } from '@heroicons/react/24/solid';
 
 import { TypePriceProduct } from '@types';
 import { Button, Card, Div, Image, Span, Stack } from '@ui';
 
 interface IFormsProductCard extends TypePriceProduct {
-	onEdit: (id: string) => void;
+	onClick: (id: string) => void;
 }
 
 const FormsProductCard = (props: IFormsProductCard) => {
@@ -14,13 +15,13 @@ const FormsProductCard = (props: IFormsProductCard) => {
 		product_title_description,
 		product_price,
 		product_cover,
-		onEdit,
+		onClick,
 	} = props;
 
-	const handleEdit = () => onEdit(product_id);
+	const handleEdit = () => onClick(product_id);
 
 	return (
-		<Card className="relative group flex flex-col h-full items-start max-w-[234px] justify-between">
+		<Card className="relative group flex flex-col  h-auto items-start max-w-[234px] justify-between">
 			<Stack>
 				<Image
 					src={product_cover}
@@ -39,11 +40,10 @@ const FormsProductCard = (props: IFormsProductCard) => {
 				onClick={handleEdit}
 				className="hidden group-hover:flex ml-[calc(-1rem-1px)] mt-[calc(-1rem-1px)] rounded-xl absolute flex-col gap-y-3 h-full min-w-full items-center justify-center bg-white/10 backdrop-blur-xs z-50 cursor-pointer"
 			>
-				<PencilIcon className="w-8 text-text-light" />
-				<Button
-					variant="link"
+				<PencilIcon className="w-18 fill-primary" />
+				<Span
+					className="!text-primary font-bold text-xl"
 					text="Редактировать"
-					className="dark:!text-text-light"
 				/>
 			</Div>
 		</Card>

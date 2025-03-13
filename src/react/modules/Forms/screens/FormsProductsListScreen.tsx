@@ -5,6 +5,7 @@ import { priceStore } from '@stores';
 import { Button, HStack, Stack } from '@ui';
 
 import FormsProductCard from '../components/FormsProductCard';
+import FormsProductNewCard from '../components/FormsProductNewCard';
 
 const Component = () => {
 	const { categoryId } = useParams();
@@ -12,13 +13,19 @@ const Component = () => {
 
 	const items = categoryId ? priceStore.getProducts(categoryId) : undefined;
 
-	const handleBack = () =>
+	const handleBack = () => {
 		navigate(`/category/${categoryId}`, { replace: true });
+	};
 
-	const handleEdit = (productId: string) => {
-		navigate(`/category/${categoryId}/products/${productId}`, {
-			replace: true,
-		});
+	const handleEdit = (productId?: string) => {
+		navigate(
+			`/category/${categoryId}/product${productId ? '/' + productId : ''}`,
+			{ replace: true },
+		);
+	};
+
+	const handleAdd = () => {
+		navigate(`/category/${categoryId}/product`, { replace: true });
 	};
 
 	return (
@@ -32,8 +39,13 @@ const Component = () => {
 			<HStack className="gap-6 flex-wrap">
 				{items &&
 					items.map((item, index) => (
-						<FormsProductCard key={index} {...item} onEdit={handleEdit} />
+						<FormsProductCard
+							{...item}
+							key={index}
+							onClick={handleEdit}
+						/>
 					))}
+				<FormsProductNewCard onClick={handleAdd} />
 			</HStack>
 		</Stack>
 	);

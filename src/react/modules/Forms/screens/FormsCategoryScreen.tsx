@@ -148,7 +148,7 @@ const Component = () => {
 				{/* butons */}
 				<HStack
 					className={cn(
-						'items-center',
+						'items-center mt-8',
 						isNew ? 'justify-end' : 'justify-between',
 					)}
 				>
