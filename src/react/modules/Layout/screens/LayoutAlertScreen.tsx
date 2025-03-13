@@ -15,14 +15,14 @@ const Component = () => {
 
 	return (
 		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-50 flex h-screen w-full items-center justify-center">
-			<InformationCircleIcon className="w-32" />
+			<InformationCircleIcon className="w-32 text-white" />
 
 			<Span className="block text-center text-4xl font-bold text-white">
 				Внимание
 			</Span>
 
-			<Div className="bg-red-600/20 !p-4 !mt-6 rounded-xl border border-red-900 max-w-[60%] text-center">
-				<Span className="!mt-6 text-neutral-400 whitespace-pre-line text-center">
+			<Div className="bg-red-600/60 dark:bg-red-600/20 !p-4 !mt-6 rounded-xl border border-red-700 dark:border-red-900 max-w-[60%] text-center">
+				<Span className="!mt-6 text-white whitespace-pre-line text-center">
 					{layoutStore.alertText}
 				</Span>
 			</Div>
