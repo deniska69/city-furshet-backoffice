@@ -18,5 +18,8 @@ export const FTP_CLIENT_CONFIG = {
 };
 
 export const FTP_PRICE_FILE_NAME = process.env.FTP_PRICE_FILE_NAME || '';
-export const FTP_PRICE_FULL_NAME = FTP_HOME_DIR + FTP_PRICE_FILE_NAME;
-export const BUCKUP_DIR = path.join(process.env.APPDATA || '', PROJECT_TITLE, 'Backups');
+export const BUCKUP_DIR = path.join(
+	process.env.APPDATA || '',
+	PROJECT_TITLE,
+	'Backups',
+);

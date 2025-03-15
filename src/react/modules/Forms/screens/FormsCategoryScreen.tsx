@@ -54,7 +54,7 @@ const Component = () => {
 
 		electron.showNotification(
 			'Успешно!',
-			'Данные категории обновлены, не забудьте сохранить прайс.',
+			`Данные категории "${values.category_title}" обновлены, не забудьте сохранить прайс.`,
 		);
 
 		navigate('/', { replace: true });

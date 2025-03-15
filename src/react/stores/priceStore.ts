@@ -180,7 +180,9 @@ class PriceStore {
 			.then(() => this.setConnect())
 			.catch((e: string) => {
 				this.setConnect(false);
-				this.setError('connect(): Ошибка подключения к хостингу.\n' + e);
+				this.setError(
+					'electronConnect(): Ошибка подключения к хостингу.\n' + e,
+				);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	});
@@ -194,7 +196,7 @@ class PriceStore {
 			.catch((e: string) => {
 				this.setPrice();
 				this.setConnect(false);
-				this.setError('getPrice(): Ошибка получения прайса.\n' + e);
+				this.setError('electronGetPrice(): Ошибка получения прайса.\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	});

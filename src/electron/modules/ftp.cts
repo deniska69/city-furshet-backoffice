@@ -8,7 +8,7 @@ import {
 	BUCKUP_DIR,
 	FTP_CLIENT_CONFIG,
 	FTP_HOME_DIR,
-	FTP_PRICE_FULL_NAME,
+	FTP_PRICE_FILE_NAME,
 } from '../utils/constants.cjs';
 import { TypePriceModel } from '../utils/types.cjs';
 import { getPriceBackupFileName } from '../utils/utils.cjs';
@@ -54,11 +54,13 @@ class FTP {
 		console.log('[Electron] [FTP] downloadAndWriteBackup()');
 
 		if (this.client?.closed || !this.client) {
-			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.');
+			return Promise.reject(
+				'[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.',
+			);
 		}
 
 		try {
-			this.lastModPrice = await this.client.lastMod(FTP_PRICE_FULL_NAME);
+			this.lastModPrice = await this.client.lastMod(FTP_PRICE_FILE_NAME);
 
 			if (!this.lastModPrice) {
 				return Promise.reject(
@@ -66,13 +68,21 @@ class FTP {
 				);
 			}
 
-			this.lastBackPriceFile = path.join(BUCKUP_DIR, getPriceBackupFileName(this.lastModPrice));
+			this.lastBackPriceFile = path.join(
+				BUCKUP_DIR,
+				getPriceBackupFileName(this.lastModPrice),
+			);
 
 			if (!fs.existsSync(BUCKUP_DIR)) fs.mkdirSync(BUCKUP_DIR);
 
-			return await this.client.downloadTo(this.lastBackPriceFile, FTP_PRICE_FULL_NAME);
+			return await this.client.downloadTo(
+				this.lastBackPriceFile,
+				FTP_PRICE_FILE_NAME,
+			);
 		} catch (e) {
-			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка.\n' + e);
+			return Promise.reject(
+				'[Electron] [FTP] downloadAndWriteBackup(): Ошибка.\n' + e,
+			);
 		}
 	};
 
@@ -86,7 +96,9 @@ class FTP {
 		}
 
 		if (!fs.existsSync(this.lastBackPriceFile)) {
-			return Promise.reject('[Electron] [FTP] readLastBackup(): Не найден файл бэкапа прайса.');
+			return Promise.reject(
+				'[Electron] [FTP] readLastBackup(): Не найден файл бэкапа прайса.',
+			);
 		}
 
 		try {
@@ -94,15 +106,20 @@ class FTP {
 
 			let dataString = iconv.decode(buffer, 'windows-1251');
 
-			const parsedOutput: Papa.ParseResult<TypePriceModel> = Papa.parse(dataString, {
-				header: true,
-			});
+			const parsedOutput: Papa.ParseResult<TypePriceModel> = Papa.parse(
+				dataString,
+				{
+					header: true,
+				},
+			);
 
 			const price = parsedOutput.data.filter((el) => !!el.category_id);
 
 			return Promise.resolve(price);
 		} catch (e) {
-			return Promise.reject('[Electron] [FTP] readLastBackup(): Ошибка.\n' + e);
+			return Promise.reject(
+				'[Electron] [FTP] readLastBackup(): Ошибка.\n' + e,
+			);
 		}
 	};
 }
