@@ -1,7 +1,6 @@
 import { contextBridge, shell } from 'electron';
 
-import { BUCKUP_DIR } from '../utils/constants.cjs';
-import { ftp } from './ftp.cjs';
+import { BUCKUP_DIR, ftp } from './ftp.cjs';
 
 const connectHosting = async () => ftp.connect();
 

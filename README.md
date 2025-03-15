@@ -101,9 +101,6 @@ yarn add -D electron electron-builder npm-run-all cross-env basic-ftp dotenv
 11. Add `.env` file
 
 ```env
-PORT_LOCAL_DEV_SERVER_REACT=5123
-URL_LOCAL_DEV_SERVER_REACT=http://localhost:
-PROJECT_TITLE=Title
 FTP_HOST=myftpserver.com
 FTP_USER=username
 FTP_PASSWORD=password

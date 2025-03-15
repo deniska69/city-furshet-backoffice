@@ -2,9 +2,9 @@
 	"appId": "com.gostev-dev.city-furshet-backoffice",
 	"files": ["dist-electron", "dist-react"],
 	"extraResources": [
-		"src/assets/**",
 		"dist-electron/modules/**",
-		"dist-electron/utils/**"
+		"dist-electron/utils/**",
+		"src/assets/**"
 	],
 	"icon": "./desktopIcon.png",
 	"win": {

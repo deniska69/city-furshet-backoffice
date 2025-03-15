@@ -1,11 +1,11 @@
-export type TypePriceCategory = {
+type TypePriceCategory = {
 	category_id: string;
 	category_hide: string;
 	category_title: string;
 	category_description: string;
 };
 
-export type TypePriceProduct = {
+type TypePriceProduct = {
 	product_id: string;
 	product_hide: string;
 	product_title: string;
@@ -17,4 +17,4 @@ export type TypePriceProduct = {
 	product_gallery: string;
 };
 
-export type TypePriceModel = TypePriceCategory & TypePriceProduct;
+type TypePriceModel = TypePriceCategory & TypePriceProduct;

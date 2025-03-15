@@ -1,7 +1,10 @@
 import path from 'path';
+import dotenv from 'dotenv';
 import { app } from 'electron';
 
 import { FTP_PRICE_FILE_NAME } from './constants.cjs';
+
+dotenv.config();
 
 export const isDev = () => process.env.NODE_ENV === 'development';
 

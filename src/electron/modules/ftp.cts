@@ -1,17 +1,33 @@
 import * as fs from 'fs';
 import path from 'path';
 import { Client } from 'basic-ftp';
+import dotenv from 'dotenv';
 import * as iconv from 'iconv-lite';
 import * as Papa from 'papaparse';
 
 import {
-	BUCKUP_DIR,
-	FTP_CLIENT_CONFIG,
 	FTP_HOME_DIR,
 	FTP_PRICE_FILE_NAME,
+	PROJECT_TITLE,
 } from '../utils/constants.cjs';
-import { TypePriceModel } from '../utils/types.cjs';
-import { getPriceBackupFileName } from '../utils/utils.cjs';
+import { getPriceBackupFileName } from '../utils/helpers.cjs';
+
+dotenv.config();
+
+export const BUCKUP_DIR = path.join(
+	process.env.APPDATA || '',
+	PROJECT_TITLE,
+	'Backups',
+);
+
+const FTP_CLIENT_CONFIG = {
+	host: process.env.FTP_HOST || '',
+	user: process.env.FTP_USER || '',
+	password: process.env.FTP_PASSWORD || '',
+	secure: true,
+	port: 21,
+	secureOptions: { rejectUnauthorized: false },
+};
 
 class FTP {
 	client: undefined | Client;
@@ -103,8 +119,7 @@ class FTP {
 
 		try {
 			const buffer = fs.readFileSync(this.lastBackPriceFile);
-
-			let dataString = iconv.decode(buffer, 'windows-1251');
+			const dataString = iconv.decode(buffer, 'windows-1251');
 
 			const parsedOutput: Papa.ParseResult<TypePriceModel> = Papa.parse(
 				dataString,

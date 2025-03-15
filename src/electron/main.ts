@@ -7,7 +7,7 @@ import {
 	getPreloadPath,
 	getReactPath,
 	isDev,
-} from './utils/utils.cjs';
+} from './utils/helpers.cjs';
 
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({
@@ -15,6 +15,7 @@ app.on('ready', () => {
 		webPreferences: {
 			preload: getPreloadPath(),
 			nodeIntegration: true,
+			sandbox: false,
 		},
 	});
 
@@ -22,9 +23,10 @@ app.on('ready', () => {
 	mainWindow.setMenuBarVisibility(false);
 	mainWindow.setTitle(PROJECT_TITLE);
 
+	mainWindow.maximize();
+	mainWindow.webContents.openDevTools();
+
 	if (isDev()) {
-		mainWindow.maximize();
-		mainWindow.webContents.openDevTools();
 		mainWindow.loadURL(URL + PORT);
 	} else {
 		mainWindow.loadFile(getReactPath());

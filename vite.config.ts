@@ -1,17 +1,11 @@
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import dotenv from 'dotenv';
 import { defineConfig } from 'vite';
 
-dotenv.config();
-
-const PORT = process.env.PORT_LOCAL_DEV_SERVER_REACT || '3000';
-
-// https://vite.dev/config/
 export default defineConfig({
 	server: {
-		port: parseInt(PORT),
+		port: 5123,
 		strictPort: true,
 	},
 	plugins: [react(), tailwindcss()],
