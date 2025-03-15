@@ -7,6 +7,15 @@ const connectHosting = async () => ftp.connect();
 
 const getPrice = async () => ftp.getPrice();
 
-const openBackupdDir = () => shell.openPath(BUCKUP_DIR);
+const openBackupdDir = async () => shell.openPath(BUCKUP_DIR);
 
-contextBridge.exposeInMainWorld('electron', { connectHosting, getPrice, openBackupdDir });
+const showNotification = async (title: string, body?: string) => {
+	new window.Notification(title, { body });
+};
+
+contextBridge.exposeInMainWorld('electron', {
+	connectHosting,
+	getPrice,
+	openBackupdDir,
+	showNotification,
+});

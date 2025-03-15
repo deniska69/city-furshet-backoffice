@@ -10,9 +10,3 @@ export const getLastModText = (lastMod?: Date) => {
 	const lastModTime = lastMod.toLocaleTimeString();
 	return `${lastModDate} ${lastModTime}`;
 };
-
-export const openBackupdDir = () => {
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	window.electron.openBackupdDir();
-};

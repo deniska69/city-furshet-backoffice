@@ -3,7 +3,8 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/16/solid';
 import { FolderOpenIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 
-import { getLastModText, openBackupdDir } from '@helpers';
+import { getLastModText } from '@helpers';
+import { electron } from '@services';
 import { priceStore } from '@stores';
 import { Button, Card, cn, HStack, Span } from '@ui';
 
@@ -19,6 +20,8 @@ const Component = () => {
 	const handleConnect = () => priceStore.electronConnect();
 
 	const handleGetPice = () => priceStore.electronGetPrice();
+
+	const handleOpenBackupDir = () => electron.openBackupdDir();
 
 	return (
 		<Card
@@ -41,7 +44,7 @@ const Component = () => {
 					</Span>
 					<Button
 						variant="ghost"
-						onClick={openBackupdDir}
+						onClick={handleOpenBackupDir}
 						className="!px-1.5 !py-4 !rounded-full"
 					>
 						<FolderOpenIcon className="w-5" />

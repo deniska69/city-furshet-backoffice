@@ -1,5 +1,6 @@
 import { action, makeAutoObservable, toJS } from 'mobx';
 
+import { electron } from '@services';
 import {
 	TypePrice,
 	TypePriceCategory,
@@ -174,9 +175,7 @@ class PriceStore {
 	electronConnect = action(async () => {
 		layoutStore.setLoading();
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		await window.electron
+		await electron
 			.connectHosting()
 			.then(() => this.setConnect())
 			.catch((e: string) => {
@@ -189,9 +188,7 @@ class PriceStore {
 	electronGetPrice = action(async () => {
 		layoutStore.setLoading();
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		await window.electron
+		await electron
 			.getPrice()
 			.then(async (data: TypeReturnGetPrice) => await this.setPrice(data))
 			.catch((e: string) => {

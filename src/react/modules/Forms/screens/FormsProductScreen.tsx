@@ -84,13 +84,17 @@ const Component = () => {
 				<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
 					{/* product_id */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span className="min-w-42" variant="muted" text="ID" />
+						<Span
+							className="min-w-24 max-w-24"
+							variant="muted"
+							text="ID"
+						/>
 						<Input disabled {...register('product_id')} />
 					</HStack>
 
 					{/* product_hide */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span className="min-w-42">Скрыто</Span>
+						<Span className="min-w-24 max-w-24">Скрыто</Span>
 						<Switch
 							onChange={handleChangeHide}
 							value={watch('product_hide')}
@@ -99,7 +103,7 @@ const Component = () => {
 
 					{/* product_title */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span className="min-w-42">
+						<Span className="min-w-24 max-w-24">
 							Название<Span className="!text-red-500">*</Span>
 						</Span>
 						<Input
@@ -111,25 +115,25 @@ const Component = () => {
 
 					{/* product_title_description */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span className="min-w-42">Описание названия</Span>
+						<Span className="min-w-24 max-w-24">Описание названия</Span>
 						<Input {...register('product_title_description')} />
 					</HStack>
 
 					{/* product_description */}
 					<HStack className="max-w-[1100px] gap-x-3 items-start">
-						<Span className="min-w-42 mt-1">Описание</Span>
+						<Span className="min-w-24 max-w-24 mt-1">Описание</Span>
 						<Textarea {...register('product_description')} />
 					</HStack>
 
 					{/* product_note */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span className="min-w-42">Примечание</Span>
+						<Span className="min-w-24 max-w-24">Примечание</Span>
 						<Input {...register('product_note')} />
 					</HStack>
 
 					{/* product_price */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span className="min-w-42">
+						<Span className="min-w-24 max-w-24">
 							Цена<Span className="!text-red-500">*</Span>
 						</Span>
 						<Input

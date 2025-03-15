@@ -9,19 +9,10 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import ShortUniqueId from 'short-unique-id';
 
+import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
 import { TypePriceCategory } from '@types';
-import {
-	Button,
-	Card,
-	cn,
-	Form,
-	HStack,
-	Input,
-	Span,
-	Switch,
-	Textarea,
-} from '@ui';
+import { Button, Card, Form, HStack, Input, Span, Switch } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
 
@@ -61,6 +52,11 @@ const Component = () => {
 			priceStore.addCategory(values);
 		}
 
+		electron.showNotification(
+			'Успешно!',
+			'Данные категории обновлены, не забудьте сохранить прайс.',
+		);
+
 		navigate('/', { replace: true });
 	};
 
@@ -94,20 +90,22 @@ const Component = () => {
 		});
 	};
 
+	const classNameTitleCol = 'min-w-38 mt-1';
+
 	return (
 		<Card className="max-w-xl">
 			<FormsHeader isNew={isNew} title="Редактор категории" backTo="/" />
 
 			<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
 				{/* category_id */}
-				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Span className="min-w-24" variant="muted" text="ID" />
+				<HStack className="max-w-[1100px] gap-x-3 items-center">
+					<Span className={classNameTitleCol} variant="muted" text="ID" />
 					<Input disabled {...register('category_id')} />
 				</HStack>
 
 				{/* category_hide */}
-				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Span className="min-w-24">Скрыто</Span>
+				<HStack className="max-w-[1100px] gap-x-3 items-center">
+					<Span className={classNameTitleCol}>Скрыто</Span>
 					<Switch
 						value={watch('category_hide')}
 						onChange={handleChangeHide}
@@ -115,8 +113,8 @@ const Component = () => {
 				</HStack>
 
 				{/* category_title */}
-				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Span className="min-w-24">
+				<HStack className="max-w-[1100px] gap-x-3 items-center">
+					<Span className={classNameTitleCol}>
 						Название<Span className="!text-red-500">*</Span>
 					</Span>
 					<Input
@@ -127,33 +125,38 @@ const Component = () => {
 				</HStack>
 
 				{/* category_description */}
-				<HStack className="max-w-[600px] gap-x-3 items-start">
-					<Span className="min-w-24 mt-1">Описание</Span>
-					<Textarea {...register('category_description')} />
+				<HStack className="max-w-[1100px] gap-x-3 items-start">
+					<Span className={classNameTitleCol}>Краткое описание</Span>
+					<Input {...register('category_description')} />
 				</HStack>
 
 				{/* products */}
-				<HStack className="max-w-[600px] gap-x-3 items-center">
-					<Span className="min-w-24">Товары</Span>
+				<HStack className="max-w-[1100px] gap-x-3 items-center">
+					<Span className={classNameTitleCol}>Товары</Span>
 					<HStack className="gap-x-3">
 						<Input
 							disabled
 							className="max-w-18"
 							value={`${products?.length || 0} шт.`}
 						/>
-						<Button text="Редактировать" onClick={handleEditProducts} />
+						<Button
+							variant="muted"
+							text="Редактировать"
+							onClick={handleEditProducts}
+						/>
 					</HStack>
 				</HStack>
 
-				{/* butons */}
-				<HStack
-					className={cn(
-						'items-center mt-8',
-						isNew ? 'justify-end' : 'justify-between',
-					)}
-				>
-					{!isNew ? (
-						<HStack className="items-center gap-x-1">
+				{/* ordinal number */}
+				{!isNew ? (
+					<HStack className="max-w-[1100px] gap-x-3 items-center">
+						<Span className={classNameTitleCol}>Порядковый номер</Span>
+						<HStack className="gap-x-3">
+							<Input
+								disabled
+								className="max-w-18"
+								value={(category?.index || 0) + 1}
+							/>
 							<Button
 								onClick={handleUp}
 								disabled={category?.first}
@@ -172,21 +175,22 @@ const Component = () => {
 								<ChevronDownIcon className="w-5" />
 							</Button>
 						</HStack>
+					</HStack>
+				) : null}
+
+				{/* butons */}
+				<HStack className="items-center mt-2 justify-end gap-x-3">
+					{!isNew ? (
+						<Button
+							className="!px-2"
+							variant="error"
+							onClick={handleDelete}
+						>
+							<TrashIcon className="w-5" />
+						</Button>
 					) : null}
 
-					<HStack className="gap-x-3">
-						{!isNew ? (
-							<Button
-								className="!px-2"
-								variant="error"
-								onClick={handleDelete}
-							>
-								<TrashIcon className="w-5" />
-							</Button>
-						) : null}
-
-						<Button type="submit" text="Сохранить" />
-					</HStack>
+					<Button type="submit" text="Сохранить" />
 				</HStack>
 			</Form>
 		</Card>
