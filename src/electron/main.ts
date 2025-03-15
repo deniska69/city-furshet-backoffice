@@ -2,7 +2,12 @@ import path from 'path';
 import { app, BrowserWindow } from 'electron';
 
 import { PORT, PROJECT_TITLE, URL } from './utils/constants.cjs';
-import { getAssetPath, getPreloadPath, isDev } from './utils/utils.cjs';
+import {
+	getAssetPath,
+	getPreloadPath,
+	getReactPath,
+	isDev,
+} from './utils/utils.cjs';
 
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({
@@ -22,6 +27,6 @@ app.on('ready', () => {
 		mainWindow.webContents.openDevTools();
 		mainWindow.loadURL(URL + PORT);
 	} else {
-		mainWindow.loadFile(path.join(app.getAppPath(), 'dist-react/index.html'));
+		mainWindow.loadFile(getReactPath());
 	}
 });

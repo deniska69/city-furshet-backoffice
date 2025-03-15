@@ -13,9 +13,9 @@
 		"build:r": "tsc -b && vite build",
 		"build:r:ts": "tsc -b && vite build && rm -rf dist-react",
 		"preview:r": "vite preview",
-		"dev:e": "npm run transpile:e && cross-env NODE_ENV=development electron .",
+		"dev:e": "yarn transpile:e && cross-env NODE_ENV=development electron .",
 		"transpile:e": "tsc --project src/electron/tsconfig.json",
-		"build:e:win": "npm run transpile:e && npm run build:r && electron-builder --win --x64"
+		"build:e:win": "yarn transpile:e && yarn build:r && electron-builder --win --x64"
 	},
 	"author": {
 		"name": "deniska69",
