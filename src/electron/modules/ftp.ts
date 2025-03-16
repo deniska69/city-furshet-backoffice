@@ -9,8 +9,8 @@ import {
 	FTP_HOME_DIR,
 	FTP_PRICE_FILE_NAME,
 	PROJECT_TITLE,
-} from '../utils/constants.cjs';
-import { getPriceBackupFileName } from '../utils/helpers.cjs';
+} from '../utils/constants.js';
+import { getPriceBackupFileName } from '../utils/helpers.js';
 
 dotenv.config();
 

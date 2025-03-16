@@ -1,20 +1,22 @@
-import { contextBridge, shell } from 'electron';
+const electron = require('electron');
 
-import { BUCKUP_DIR, ftp } from './ftp.cjs';
+// import { contextBridge, shell } from 'electron';
 
-const connectHosting = async () => ftp.connect();
+// import { BUCKUP_DIR, ftp } from './ftp.cjs';
 
-const getPrice = async () => ftp.getPrice();
+// const connectHosting = async () => ftp.connect();
 
-const openBackupdDir = async () => shell.openPath(BUCKUP_DIR);
+// const getPrice = async () => ftp.getPrice();
 
-const showNotification = async (title: string, body?: string) => {
-	new window.Notification(title, { body });
-};
+// const openBackupdDir = async () => shell.openPath(BUCKUP_DIR);
 
-contextBridge.exposeInMainWorld('electron', {
-	connectHosting,
-	getPrice,
-	openBackupdDir,
-	showNotification,
+// const showNotification = async (title: string, body?: string) => {
+// 	new window.Notification(title, { body });
+// };
+
+electron.contextBridge.exposeInMainWorld('electron', {
+	// connectHosting,
+	// getPrice,
+	// openBackupdDir,
+	// showNotification,
 });

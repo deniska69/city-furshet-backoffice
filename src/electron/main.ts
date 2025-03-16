@@ -1,13 +1,13 @@
 import path from 'path';
 import { app, BrowserWindow } from 'electron';
 
-import { PORT, PROJECT_TITLE, URL } from './utils/constants.cjs';
+import { PORT, PROJECT_TITLE, URL } from './utils/constants.js';
 import {
 	getAssetPath,
 	getPreloadPath,
 	getReactPath,
 	isDev,
-} from './utils/helpers.cjs';
+} from './utils/helpers.js';
 
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({
@@ -29,6 +29,8 @@ app.on('ready', () => {
 	if (isDev()) {
 		mainWindow.loadURL(URL + PORT);
 	} else {
-		mainWindow.loadFile(getReactPath());
+		mainWindow
+			.loadFile(getReactPath())
+			.then(() => mainWindow.loadURL('/home'));
 	}
 });

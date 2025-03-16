@@ -1,6 +1,6 @@
 import { Suspense, useLayoutEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 
 import { useTheme } from '@hooks';
 import { Loader, Splash } from '@modules/Elements';
@@ -15,6 +15,10 @@ import { LayoutAlertScreen } from './LayoutAlertScreen';
 const Component = () => {
 	useTheme();
 	const navigate = useNavigate();
+
+	const location = useLocation();
+
+	console.log(location);
 
 	const [isShowSplash, setIsShowSplash] = useState(true);
 

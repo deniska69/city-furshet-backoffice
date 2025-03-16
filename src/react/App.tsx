@@ -1,9 +1,9 @@
 import { Provider } from 'mobx-react';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 
 import './index.css';
 
-import { ErrorScreen, NotFoundScreen } from '@modules/Error';
+import { ErrorScreen } from '@modules/Error';
 import {
 	FormsCategoryScreen,
 	FormsProductScreen,
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '*',
-		Component: NotFoundScreen,
+		element: <Navigate to="/" />,
 	},
 ]);
 
