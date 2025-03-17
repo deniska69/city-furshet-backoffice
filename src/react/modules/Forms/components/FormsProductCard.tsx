@@ -1,7 +1,6 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { PencilIcon } from '@heroicons/react/24/solid';
 
-import { TypePriceProduct } from '@types';
 import { Button, Card, Div, Image, Span, Stack } from '@ui';
 
 interface IFormsProductCard extends TypePriceProduct {
@@ -23,10 +22,7 @@ const FormsProductCard = (props: IFormsProductCard) => {
 	return (
 		<Card className="relative group flex flex-col  h-auto items-start max-w-[234px] justify-between">
 			<Stack>
-				<Image
-					src={product_cover}
-					className="w-[200px] h-[200px] rounded-lg"
-				/>
+				<Image src={product_cover} className="w-[200px] h-[200px] rounded-lg" />
 				<Span className="font-semibold mt-1" text={product_title} />
 				<Span variant="muted" text={product_title_description} />
 			</Stack>
@@ -41,10 +37,7 @@ const FormsProductCard = (props: IFormsProductCard) => {
 				className="hidden group-hover:flex ml-[calc(-1rem-1px)] mt-[calc(-1rem-1px)] rounded-xl absolute flex-col gap-y-3 h-full min-w-full items-center bg-white/10 backdrop-blur-xs z-50 cursor-pointer pt-16"
 			>
 				<PencilIcon className="w-18 fill-primary" />
-				<Span
-					className="!text-primary font-bold text-xl"
-					text="Редактировать"
-				/>
+				<Span className="!text-primary font-bold text-xl" text="Редактировать" />
 			</Div>
 		</Card>
 	);

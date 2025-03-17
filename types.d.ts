@@ -18,3 +18,23 @@ type TypePriceProduct = {
 };
 
 type TypePriceModel = TypePriceCategory & TypePriceProduct;
+
+interface Window {
+	electron: {
+		connectHosting: () => Promise<unknown>;
+	};
+}
+
+type TypePriceRow = TypePriceCategory & TypePriceProduct;
+
+type TypePrice = Array<TypePriceRow>;
+
+type TypeReturnGetPrice = { price: TypePrice; lastMod: Date };
+
+type TypePriceStoreCategory =
+	| (TypePriceCategory & {
+			index: number;
+			first: boolean;
+			last: boolean;
+	  })
+	| null;

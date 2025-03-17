@@ -10,13 +10,13 @@ const electron = require('electron');
 
 // const openBackupdDir = async () => shell.openPath(BUCKUP_DIR);
 
-// const showNotification = async (title: string, body?: string) => {
-// 	new window.Notification(title, { body });
-// };
+// electron.contextBridge.exposeInMainWorld('electron', {
+// 	connectHosting,
+// 	getPrice,
+// 	openBackupdDir,
+// 	showNotification,
+// });
 
 electron.contextBridge.exposeInMainWorld('electron', {
-	// connectHosting,
-	// getPrice,
-	// openBackupdDir,
-	// showNotification,
-});
+	connectHosting: () => electron.ipcRenderer.invoke('connectHosting'),
+} satisfies Window['electron']);

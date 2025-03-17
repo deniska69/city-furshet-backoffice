@@ -32,10 +32,9 @@
 			"@modules/*": ["src/react/modules/*"],
 			"@services": ["src/react/services"],
 			"@stores": ["src/react/stores"],
-			"@types": ["src/react/types"],
 			"@ui": ["src/react/ui"]
 		}
 	},
-	"include": ["src"],
+	"include": ["src", "types.d.ts"],
 	"exclude": ["src/electron"]
 }

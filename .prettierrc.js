@@ -7,7 +7,7 @@ export default {
 		'^react$',
 		'<THIRD_PARTY_MODULES>',
 		'',
-		'^@assets|@constants|@helpers|@hooks|@modules|@navigation|@services|@stores|@types|@ui$',
+		'^@assets|@constants|@helpers|@hooks|@modules|@navigation|@services|@stores|@ui$',
 		'',
 		'^[.]',
 	],

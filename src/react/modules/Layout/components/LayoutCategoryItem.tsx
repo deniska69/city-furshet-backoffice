@@ -1,6 +1,5 @@
 import { EyeSlashIcon } from '@heroicons/react/24/outline';
 
-import { TypePriceCategory } from '@types';
 import { Button, cn, Div, Span } from '@ui';
 
 interface ILayoutCategoryItem {

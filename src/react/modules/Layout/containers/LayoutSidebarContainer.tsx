@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router';
 
 import { priceStore } from '@stores';
-import { TypePriceCategory } from '@types';
 import { Button, Card, Div, Stack } from '@ui';
 
 import LayoutCategories from '../components/LayoutCategories';
@@ -32,9 +31,7 @@ const Component = () => {
 					<Div className="py-4 mt-4 mx-4 border-t border-border-light dark:border-border-dark flex justify-center">
 						<Button
 							text="Сохранить прайс"
-							disabled={
-								!priceStore.categories || !priceStore.categories.length
-							}
+							disabled={!priceStore.categories || !priceStore.categories.length}
 						/>
 					</Div>
 				</Stack>

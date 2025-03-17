@@ -1,13 +1,9 @@
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 
+import { ftp } from './modules/ftp.js';
 import { PORT, PROJECT_TITLE, URL } from './utils/constants.js';
-import {
-	getAssetPath,
-	getPreloadPath,
-	getReactPath,
-	isDev,
-} from './utils/helpers.js';
+import { getAssetPath, getPreloadPath, getReactPath, isDev } from './utils/helpers.js';
 
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({
@@ -29,8 +25,8 @@ app.on('ready', () => {
 	if (isDev()) {
 		mainWindow.loadURL(URL + PORT);
 	} else {
-		mainWindow
-			.loadFile(getReactPath())
-			.then(() => mainWindow.loadURL('/home'));
+		mainWindow.loadFile(getReactPath()).then(() => mainWindow.loadURL('/home'));
 	}
+
+	ipcMain.handle('connectHosting', () => ftp.connect());
 });

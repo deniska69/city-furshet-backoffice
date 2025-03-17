@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router';
 
-import { TypePriceCategory } from '@types';
 import { Button, cn, Span, Stack } from '@ui';
 
 import LayoutCategoryItem from './LayoutCategoryItem';
@@ -29,9 +28,7 @@ const LayoutCategories = ({ items, onSelect, onAdd }: ILayoutCategories) => {
 							el={el}
 							key={el.category_id}
 							onClick={() => onSelect(el.category_id)}
-							active={
-								alias === 'category' && aliasSecond === el.category_id
-							}
+							active={alias === 'category' && aliasSecond === el.category_id}
 						/>
 					))
 				) : (

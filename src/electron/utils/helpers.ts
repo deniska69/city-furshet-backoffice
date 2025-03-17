@@ -6,11 +6,7 @@ import { FTP_PRICE_FILE_NAME } from './constants.js';
 export const isDev = () => process.env.NODE_ENV === 'development';
 
 export const getPreloadPath = () => {
-	return path.join(
-		app.getAppPath(),
-		isDev() ? '.' : '..',
-		'/dist-electron/modules/preload.cjs',
-	);
+	return path.join(app.getAppPath(), isDev() ? '.' : '..', '/dist-electron/modules/preload.cjs');
 };
 
 export const getAssetPath = () => {

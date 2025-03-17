@@ -5,18 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import ShortUniqueId from 'short-unique-id';
 
 import { priceStore } from '@stores';
-import { TypePriceProduct } from '@types';
-import {
-	Button,
-	Card,
-	Form,
-	HStack,
-	Input,
-	Span,
-	Stack,
-	Switch,
-	Textarea,
-} from '@ui';
+import { Button, Card, Form, HStack, Input, Span, Stack, Switch, Textarea } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
 
@@ -28,10 +17,7 @@ const Component = () => {
 	const isNew = !productId;
 	const backTo = `/category/${categoryId}/products`;
 
-	const product =
-		!isNew && categoryId
-			? priceStore.getProduct(categoryId, productId)
-			: undefined;
+	const product = !isNew && categoryId ? priceStore.getProduct(categoryId, productId) : undefined;
 
 	const handleBack = () => navigate(backTo, { replace: true });
 
@@ -45,12 +31,9 @@ const Component = () => {
 
 	useEffect(() => {
 		setValue('product_id', product?.product_id || uid.rnd());
-		setValue('product_hide', !!product?.product_hide);
+		setValue('product_hide', product?.product_hide === 'true' ? 'true' : 'false');
 		setValue('product_title', product?.product_title || '');
-		setValue(
-			'product_title_description',
-			product?.product_title_description || '',
-		);
+		setValue('product_title_description', product?.product_title_description || '');
 		setValue('product_description', product?.product_description || '');
 		setValue('product_note', product?.product_note || '');
 		setValue('product_price', product?.product_price || '');
@@ -60,7 +43,7 @@ const Component = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [product?.product_id]);
 
-	const handleChangeHide = (value: boolean) => setValue('product_hide', value);
+	const handleChangeHide = (value: boolean) => setValue('product_hide', value ? 'true' : 'false');
 
 	const handleSave = (values: TypePriceProduct) => {
 		console.log(values);
@@ -68,37 +51,22 @@ const Component = () => {
 
 	return (
 		<Stack className="items-start gap-y-3">
-			<Button
-				variant="link"
-				onClick={handleBack}
-				text="<< Вернуться к списку товаров"
-			/>
+			<Button variant="link" onClick={handleBack} text="<< Вернуться к списку товаров" />
 
 			<Card className="!min-w-xl max-w-xl">
-				<FormsHeader
-					isNew={isNew}
-					backTo={backTo}
-					title="Редактор товара"
-				/>
+				<FormsHeader isNew={isNew} backTo={backTo} title="Редактор товара" />
 
 				<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
 					{/* product_id */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span
-							className="min-w-24 max-w-24"
-							variant="muted"
-							text="ID"
-						/>
+						<Span className="min-w-24 max-w-24" variant="muted" text="ID" />
 						<Input disabled {...register('product_id')} />
 					</HStack>
 
 					{/* product_hide */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
 						<Span className="min-w-24 max-w-24">Скрыто</Span>
-						<Switch
-							onChange={handleChangeHide}
-							value={watch('product_hide')}
-						/>
+						<Switch onChange={handleChangeHide} value={watch('product_hide') === 'true'} />
 					</HStack>
 
 					{/* product_title */}

@@ -39,9 +39,7 @@ const Component = () => {
 						'border-border-light dark:border-border-dark border',
 					)}
 				>
-					<Span className="text-sm">
-						Последнее изменение прайса: {lastMod}
-					</Span>
+					<Span className="text-sm">Последнее изменение прайса: {lastMod}</Span>
 					<Button
 						variant="ghost"
 						onClick={handleOpenBackupDir}
