@@ -22,6 +22,8 @@ type TypePriceModel = TypePriceCategory & TypePriceProduct;
 interface Window {
 	electron: {
 		connectHosting: () => Promise<unknown>;
+		getPrice: () => Promise<unknown>;
+		openBackupdDir: () => Promise<unknown>;
 	};
 }
 

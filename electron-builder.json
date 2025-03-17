@@ -4,7 +4,8 @@
 	"extraResources": [
 		"dist-electron/modules/**",
 		"dist-electron/utils/**",
-		"src/assets/**"
+		"src/assets/**",
+		".env"
 	],
 	"icon": "./desktopIcon.png",
 	"win": {

@@ -159,7 +159,7 @@ class PriceStore {
 			.then(() => this.setConnect())
 			.catch((e: string) => {
 				this.setConnect(false);
-				this.setError('electronConnect(): Ошибка подключения к хостингу.\n' + e);
+				this.setError('electronConnect(): Ошибка подключения к хостингу.\n\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	});

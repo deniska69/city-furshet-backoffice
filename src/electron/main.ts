@@ -1,8 +1,8 @@
 import path from 'path';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 
 import { ftp } from './modules/ftp.js';
-import { PORT, PROJECT_TITLE, URL } from './utils/constants.js';
+import { BUCKUP_DIR, PORT, PROJECT_TITLE, URL } from './utils/constants.js';
 import { getAssetPath, getPreloadPath, getReactPath, isDev } from './utils/helpers.js';
 
 app.on('ready', () => {
@@ -29,4 +29,6 @@ app.on('ready', () => {
 	}
 
 	ipcMain.handle('connectHosting', () => ftp.connect());
+	ipcMain.handle('getPrice', () => ftp.getPrice());
+	ipcMain.handle('openBackupdDir', () => shell.openPath(BUCKUP_DIR));
 });

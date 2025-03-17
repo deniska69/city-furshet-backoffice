@@ -5,20 +5,12 @@ import dotenv from 'dotenv';
 import * as iconv from 'iconv-lite';
 import * as Papa from 'papaparse';
 
-import {
-	FTP_HOME_DIR,
-	FTP_PRICE_FILE_NAME,
-	PROJECT_TITLE,
-} from '../utils/constants.js';
-import { getPriceBackupFileName } from '../utils/helpers.js';
+import { BUCKUP_DIR, FTP_HOME_DIR, FTP_PRICE_FILE_NAME } from '../utils/constants.js';
+import { getPriceBackupFileName, isDev } from '../utils/helpers.js';
 
-dotenv.config();
-
-export const BUCKUP_DIR = path.join(
-	process.env.APPDATA || '',
-	PROJECT_TITLE,
-	'Backups',
-);
+dotenv.config({
+	path: isDev() ? path.resolve(process.cwd(), '.env') : path.join(process.resourcesPath, '.env'),
+});
 
 const FTP_CLIENT_CONFIG = {
 	host: process.env.FTP_HOST || '',
@@ -30,9 +22,9 @@ const FTP_CLIENT_CONFIG = {
 };
 
 class FTP {
-	client: undefined | Client;
-	lastBackPriceFile: string | undefined;
-	lastModPrice: Date | undefined;
+	private client: undefined | Client;
+	private lastBackPriceFile: string | undefined;
+	private lastModPrice: Date | undefined;
 
 	connect = async () => {
 		console.log('[Electron] [FTP] connect()');
@@ -41,12 +33,21 @@ class FTP {
 			if (!this.client) this.client = new Client();
 			if (!this.client.closed) return Promise.resolve();
 
+			if (!FTP_CLIENT_CONFIG.host || !FTP_CLIENT_CONFIG.user || !FTP_CLIENT_CONFIG.password) {
+				return Promise.reject(
+					'[Electron] [FTP] connnect(): Ошибка учётных данных для подключения к хостингу.\n\n' +
+						JSON.stringify(FTP_CLIENT_CONFIG),
+				);
+			}
+
 			await this.client.access(FTP_CLIENT_CONFIG);
 			await this.client.cd(FTP_HOME_DIR || '/');
 
 			return Promise.resolve();
 		} catch (e) {
-			return Promise.reject('[Electron] [FTP] connnect(): Ошибка.\n' + e);
+			return Promise.reject(
+				'[Electron] [FTP] connnect(): Ошибка.\n\n' + e + '\n\n' + JSON.stringify(e),
+			);
 		}
 	};
 
@@ -66,13 +67,11 @@ class FTP {
 		}
 	};
 
-	downloadAndWriteBackup = async () => {
+	private downloadAndWriteBackup = async () => {
 		console.log('[Electron] [FTP] downloadAndWriteBackup()');
 
 		if (this.client?.closed || !this.client) {
-			return Promise.reject(
-				'[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.',
-			);
+			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.');
 		}
 
 		try {
@@ -84,25 +83,17 @@ class FTP {
 				);
 			}
 
-			this.lastBackPriceFile = path.join(
-				BUCKUP_DIR,
-				getPriceBackupFileName(this.lastModPrice),
-			);
+			this.lastBackPriceFile = path.join(BUCKUP_DIR, getPriceBackupFileName(this.lastModPrice));
 
 			if (!fs.existsSync(BUCKUP_DIR)) fs.mkdirSync(BUCKUP_DIR);
 
-			return await this.client.downloadTo(
-				this.lastBackPriceFile,
-				FTP_PRICE_FILE_NAME,
-			);
+			return await this.client.downloadTo(this.lastBackPriceFile, FTP_PRICE_FILE_NAME);
 		} catch (e) {
-			return Promise.reject(
-				'[Electron] [FTP] downloadAndWriteBackup(): Ошибка.\n' + e,
-			);
+			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка.\n' + e);
 		}
 	};
 
-	readLastBackup = async () => {
+	private readLastBackup = async () => {
 		console.log('[Electron] [FTP] readLastBackup()');
 
 		if (!this.lastBackPriceFile) {
@@ -112,29 +103,22 @@ class FTP {
 		}
 
 		if (!fs.existsSync(this.lastBackPriceFile)) {
-			return Promise.reject(
-				'[Electron] [FTP] readLastBackup(): Не найден файл бэкапа прайса.',
-			);
+			return Promise.reject('[Electron] [FTP] readLastBackup(): Не найден файл бэкапа прайса.');
 		}
 
 		try {
 			const buffer = fs.readFileSync(this.lastBackPriceFile);
 			const dataString = iconv.decode(buffer, 'windows-1251');
 
-			const parsedOutput: Papa.ParseResult<TypePriceModel> = Papa.parse(
-				dataString,
-				{
-					header: true,
-				},
-			);
+			const parsedOutput: Papa.ParseResult<TypePriceModel> = Papa.parse(dataString, {
+				header: true,
+			});
 
 			const price = parsedOutput.data.filter((el) => !!el.category_id);
 
 			return Promise.resolve(price);
 		} catch (e) {
-			return Promise.reject(
-				'[Electron] [FTP] readLastBackup(): Ошибка.\n' + e,
-			);
+			return Promise.reject('[Electron] [FTP] readLastBackup(): Ошибка.\n' + e);
 		}
 	};
 }
