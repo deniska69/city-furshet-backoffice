@@ -587,6 +587,11 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@parabit/prettier@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@parabit/prettier/-/prettier-0.0.5.tgz#d9bd92a8ae379927514b98d99c5f73bc72ed3da7"
+  integrity sha512-6xGG+mGZsdlUIEy59hJiDBanf/L91O8O0zg/RzDtGU6iwS9wA0gw7SwmwyTaonvjXvMwTI/sDuyVcIL4KdeOQg==
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"

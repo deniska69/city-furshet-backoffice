@@ -4,11 +4,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 import './index.css';
 
 import { ErrorScreen } from '@modules/Error';
-import {
-	FormsCategoryScreen,
-	FormsProductScreen,
-	FormsProductsListScreen,
-} from '@modules/Forms';
+import { FormsCategoryScreen, FormsProductScreen, FormsProductsListScreen } from '@modules/Forms';
 import { LayoutHomeScreen, LayoutScreen } from '@modules/Layout';
 import * as stores from '@stores';
 
