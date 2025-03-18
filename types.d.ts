@@ -22,7 +22,7 @@ type TypePriceModel = TypePriceCategory & TypePriceProduct;
 interface Window {
 	electron: {
 		connectHosting: () => Promise<unknown>;
-		getPrice: () => Promise<unknown>;
+		getPrice: () => Promise<TypeReturnGetPrice>;
 		openBackupdDir: () => Promise<unknown>;
 	};
 }
@@ -40,3 +40,5 @@ type TypePriceStoreCategory =
 			last: boolean;
 	  })
 	| null;
+
+declare module 'text-decoding';

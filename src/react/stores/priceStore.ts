@@ -159,7 +159,7 @@ class PriceStore {
 			.then(() => this.setConnect())
 			.catch((e: string) => {
 				this.setConnect(false);
-				this.setError('electronConnect(): Ошибка подключения к хостингу.\n\n' + e);
+				this.setError('electronConnect(): Ошибка подключения к хостингу.\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	});
@@ -169,7 +169,7 @@ class PriceStore {
 
 		await electron
 			.getPrice()
-			.then(async (data: TypeReturnGetPrice) => await this.setPrice(data))
+			.then((data: TypeReturnGetPrice) => this.setPrice(data))
 			.catch((e: string) => {
 				this.setPrice();
 				this.setConnect(false);

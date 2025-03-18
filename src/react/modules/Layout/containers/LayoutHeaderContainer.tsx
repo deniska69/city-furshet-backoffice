@@ -12,7 +12,7 @@ import LayoutThemeWidget from './LayoutThemeWidget';
 
 const Component = () => {
 	useEffect(() => {
-		// handleConnect();
+		handleConnect();
 	}, []);
 
 	const lastMod = getLastModText(priceStore.lastMod);

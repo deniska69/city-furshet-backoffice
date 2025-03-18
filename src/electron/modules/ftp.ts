@@ -2,8 +2,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { Client } from 'basic-ftp';
 import dotenv from 'dotenv';
-import * as iconv from 'iconv-lite';
-import * as Papa from 'papaparse';
+import { inferSchema, initParser } from 'udsv';
 
 import { BUCKUP_DIR, FTP_HOME_DIR, FTP_PRICE_FILE_NAME } from '../utils/constants.js';
 import { getPriceBackupFileName, isDev } from '../utils/helpers.js';
@@ -23,7 +22,7 @@ const FTP_CLIENT_CONFIG = {
 
 class FTP {
 	private client: undefined | Client;
-	private lastBackPriceFile: string | undefined;
+	private lastBackupPriceFile: string | undefined;
 	private lastModPrice: Date | undefined;
 
 	connect = async () => {
@@ -35,7 +34,7 @@ class FTP {
 
 			if (!FTP_CLIENT_CONFIG.host || !FTP_CLIENT_CONFIG.user || !FTP_CLIENT_CONFIG.password) {
 				return Promise.reject(
-					'[Electron] [FTP] connnect(): Ошибка учётных данных для подключения к хостингу.\n\n' +
+					'[Electron] [FTP] connnect(): Ошибка учётных данных для подключения к хостингу.\n' +
 						JSON.stringify(FTP_CLIENT_CONFIG),
 				);
 			}
@@ -46,7 +45,7 @@ class FTP {
 			return Promise.resolve();
 		} catch (e) {
 			return Promise.reject(
-				'[Electron] [FTP] connnect(): Ошибка.\n\n' + e + '\n\n' + JSON.stringify(e),
+				'[Electron] [FTP] connnect(): Ошибка.\n' + e + '\n' + JSON.stringify(e),
 			);
 		}
 	};
@@ -83,11 +82,14 @@ class FTP {
 				);
 			}
 
-			this.lastBackPriceFile = path.join(BUCKUP_DIR, getPriceBackupFileName(this.lastModPrice));
+			this.lastBackupPriceFile = path.join(
+				BUCKUP_DIR,
+				getPriceBackupFileName(this.lastModPrice),
+			);
 
 			if (!fs.existsSync(BUCKUP_DIR)) fs.mkdirSync(BUCKUP_DIR);
 
-			return await this.client.downloadTo(this.lastBackPriceFile, FTP_PRICE_FILE_NAME);
+			return await this.client.downloadTo(this.lastBackupPriceFile, FTP_PRICE_FILE_NAME);
 		} catch (e) {
 			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка.\n' + e);
 		}
@@ -96,27 +98,23 @@ class FTP {
 	private readLastBackup = async () => {
 		console.log('[Electron] [FTP] readLastBackup()');
 
-		if (!this.lastBackPriceFile) {
+		if (!this.lastBackupPriceFile) {
 			return Promise.reject(
 				'[Electron] [FTP] readLastBackup(): Не найдена запись о последнм бэкапе прайса.',
 			);
 		}
 
-		if (!fs.existsSync(this.lastBackPriceFile)) {
+		if (!fs.existsSync(this.lastBackupPriceFile)) {
 			return Promise.reject('[Electron] [FTP] readLastBackup(): Не найден файл бэкапа прайса.');
 		}
 
 		try {
-			const buffer = fs.readFileSync(this.lastBackPriceFile);
-			const dataString = iconv.decode(buffer, 'windows-1251');
+			const readedFile = fs.readFileSync(this.lastBackupPriceFile);
+			const decodedFile = new TextDecoder('windows-1251').decode(readedFile);
+			const parser = initParser(inferSchema(decodedFile));
+			const parsedPrice = parser.typedObjs(decodedFile);
 
-			const parsedOutput: Papa.ParseResult<TypePriceModel> = Papa.parse(dataString, {
-				header: true,
-			});
-
-			const price = parsedOutput.data.filter((el) => !!el.category_id);
-
-			return Promise.resolve(price);
+			return Promise.resolve(parsedPrice);
 		} catch (e) {
 			return Promise.reject('[Electron] [FTP] readLastBackup(): Ошибка.\n' + e);
 		}
