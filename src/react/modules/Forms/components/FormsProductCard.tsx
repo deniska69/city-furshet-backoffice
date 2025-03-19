@@ -1,10 +1,11 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { PencilIcon } from '@heroicons/react/24/solid';
 
-import { Button, Card, Div, Image, Span, Stack } from '@ui';
+import { Button, Card, cn, Div, Image, Span, Stack } from '@ui';
 
 interface IFormsProductCard extends TypePriceProduct {
 	onClick: (id: string) => void;
+	active?: boolean;
 }
 
 const FormsProductCard = (props: IFormsProductCard) => {
@@ -15,12 +16,18 @@ const FormsProductCard = (props: IFormsProductCard) => {
 		product_price,
 		product_cover,
 		onClick,
+		active,
 	} = props;
 
 	const handleEdit = () => onClick(product_id);
 
 	return (
-		<Card className="relative group flex flex-col  h-auto items-start max-w-[234px] justify-between">
+		<Card
+			className={cn(
+				'relative group flex flex-col  h-auto items-start max-w-[234px] justify-between',
+				active && '!border-primary',
+			)}
+		>
 			<Stack>
 				<Image src={product_cover} className="w-[200px] h-[200px] rounded-lg" />
 				<Span className="font-semibold mt-1" text={product_title} />
@@ -34,7 +41,7 @@ const FormsProductCard = (props: IFormsProductCard) => {
 
 			<Div
 				onClick={handleEdit}
-				className="hidden group-hover:flex ml-[calc(-1rem-1px)] mt-[calc(-1rem-1px)] rounded-xl absolute flex-col gap-y-3 h-full min-w-full items-center bg-white/10 backdrop-blur-xs z-50 cursor-pointer pt-16"
+				className="hidden group-hover:flex ml-[calc(-1rem)] mt-[calc(-1rem)] rounded-xl absolute flex-col gap-y-3 h-full min-w-full items-center bg-white/10 backdrop-blur-xs z-50 cursor-pointer pt-16"
 			>
 				<PencilIcon className="w-18 fill-primary" />
 				<Span className="!text-primary font-bold text-xl" text="Редактировать" />

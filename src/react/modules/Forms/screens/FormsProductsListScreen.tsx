@@ -1,51 +1,43 @@
+import { useState } from 'react';
 import { observer } from 'mobx-react';
 import { useNavigate, useParams } from 'react-router';
 
-import { priceStore } from '@stores';
 import { Button, HStack, Stack } from '@ui';
 
-import FormsProductCard from '../components/FormsProductCard';
-import FormsProductNewCard from '../components/FormsProductNewCard';
+import { FormsProductEditContainer } from '../containers/FormsProductEditContainer';
+import { FormsProductsListContainer } from '../containers/FormsProductsListContainer';
 
 const Component = () => {
-	const { categoryId } = useParams();
 	const navigate = useNavigate();
+	const { categoryId } = useParams();
+	const [item, setItem] = useState<string | undefined>(undefined);
 
-	const items = categoryId ? priceStore.getProducts(categoryId) : undefined;
+	const handleBack = () => navigate(`/category/${categoryId}`, { replace: true });
 
-	const handleBack = () => {
-		navigate(`/category/${categoryId}`, { replace: true });
-	};
+	const handleEdit = (id: string) => setItem(id);
 
-	const handleEdit = (productId?: string) => {
-		navigate(
-			`/category/${categoryId}/product${productId ? '/' + productId : ''}`,
-			{ replace: true },
-		);
-	};
+	const handleAdd = () => setItem('new');
 
-	const handleAdd = () => {
-		navigate(`/category/${categoryId}/product`, { replace: true });
-	};
+	const handleClose = () => setItem(undefined);
 
 	return (
 		<Stack className="items-start gap-y-3">
-			<Button
-				variant="link"
-				onClick={handleBack}
-				text="<< Вернуться в редактор категории"
-			/>
+			<Button variant="link" onClick={handleBack} text="<< Вернуться в редактор категории" />
 
-			<HStack className="gap-6 flex-wrap">
-				{items &&
-					items.map((item, index) => (
-						<FormsProductCard
-							{...item}
-							key={index}
-							onClick={handleEdit}
-						/>
-					))}
-				<FormsProductNewCard onClick={handleAdd} />
+			<HStack className="items-start gap-x-6">
+				<FormsProductsListContainer
+					activeProductId={item}
+					categoryId={categoryId}
+					onEdit={handleEdit}
+					onAdd={handleAdd}
+				/>
+				{item ? (
+					<FormsProductEditContainer
+						categoryId={categoryId}
+						productId={item}
+						onClose={handleClose}
+					/>
+				) : null}
 			</HStack>
 		</Stack>
 	);

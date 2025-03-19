@@ -7,12 +7,13 @@ interface IFormsHeader {
 	isNew: boolean;
 	title: string;
 	backTo: To;
+	onClose?: () => void;
 }
 
-const FormsHeader = ({ isNew, title, backTo }: IFormsHeader) => {
+const FormsHeader = ({ isNew, title, backTo, onClose }: IFormsHeader) => {
 	const navigate = useNavigate();
 
-	const handleClose = () => navigate(backTo, { replace: true });
+	const handleClose = () => (onClose ? onClose() : navigate(backTo, { replace: true }));
 
 	return (
 		<Stack className="gap-y-3">
@@ -25,11 +26,7 @@ const FormsHeader = ({ isNew, title, backTo }: IFormsHeader) => {
 						</Span>
 					) : null}
 				</HStack>
-				<Button
-					variant="ghost"
-					onClick={handleClose}
-					className="!px-1.5 !py-4 !rounded-full"
-				>
+				<Button variant="ghost" onClick={handleClose} className="!px-1.5 !py-4 !rounded-full">
 					<XMarkIcon className="w-5" />
 				</Button>
 			</HStack>

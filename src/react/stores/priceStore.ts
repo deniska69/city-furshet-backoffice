@@ -132,7 +132,17 @@ class PriceStore {
 	getProduct = (category_id: string, product_id: string) => {
 		const items = this.getProducts(category_id);
 		if (!items) return undefined;
-		const item = items.map((el) => el.product_id === product_id && el).filter((el) => el)[0];
+		const item = items
+			.map(
+				(el, index) =>
+					el.product_id === product_id && {
+						...el,
+						index,
+						first: index === 0,
+						last: index + 1 === items.length,
+					},
+			)
+			.filter((el) => el)[0];
 		return item || undefined;
 	};
 

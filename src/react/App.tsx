@@ -1,10 +1,8 @@
 import { Provider } from 'mobx-react';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 
-import './index.css';
-
 import { ErrorScreen } from '@modules/Error';
-import { FormsCategoryScreen, FormsProductScreen, FormsProductsListScreen } from '@modules/Forms';
+import { FormsCategoryScreen, FormsProductsListScreen } from '@modules/Forms';
 import { LayoutHomeScreen, LayoutScreen } from '@modules/Layout';
 import * as stores from '@stores';
 
@@ -26,10 +24,6 @@ const router = createBrowserRouter([
 			{
 				path: '/category/:categoryId/products',
 				Component: FormsProductsListScreen,
-			},
-			{
-				path: '/category/:categoryId/product/:productId?',
-				Component: FormsProductScreen,
 			},
 		],
 	},
