@@ -52,7 +52,7 @@ class PriceStore {
 					product_gallery,
 				} = item;
 
-				this.setProduct(category_id, {
+				this.addProduct(category_id, {
 					product_id,
 					product_hide,
 					product_title,
@@ -146,7 +146,7 @@ class PriceStore {
 		return item || undefined;
 	};
 
-	setProduct = action((category_id: string, item: TypePriceProduct) => {
+	addProduct = action((category_id: string, item: TypePriceProduct) => {
 		if (!this.products) this.products = new Map();
 
 		if (!this.products?.has(category_id)) {
@@ -155,6 +155,42 @@ class PriceStore {
 			const items = toJS(this.products.get(category_id));
 			this.products.set(category_id, [...(items || []), item]);
 		}
+	});
+
+	saveProduct = action((category_id: string, item: TypePriceProduct) => {
+		if (!this.products) this.products = new Map();
+		if (!this.products.get(category_id)) this.products.set(category_id, [item]);
+
+		const items = toJS(this.products.get(category_id)) || [];
+		const itemsUpdated = items.map((el) => (el.product_id === item.product_id ? item : el));
+
+		this.products.set(category_id, itemsUpdated);
+	});
+
+	changeProductPosition = action(
+		(category_id: string, index: number, direction: 'up' | 'down') => {
+			if (!this.products || !this.products.has(category_id)) return;
+			if (direction === 'up' && index === 0) return;
+			if (direction === 'down' && index + 1 === this.products.get(category_id)?.length) return;
+
+			const arr: TypePriceProduct[] = toJS(this.products.get(category_id)) || [];
+
+			const from = index;
+			const to = direction === 'up' ? index - 1 : index + 1;
+
+			[arr[from], arr[to]] = [arr[to], arr[from]];
+
+			this.products.set(category_id, arr);
+		},
+	);
+
+	deleteProduct = action((category_id: string, product_id: string) => {
+		if (!this.products || !this.products.has(category_id)) return;
+
+		const items = toJS(this.products.get(category_id)) || [];
+		const itemsUpdated = items.filter((el) => el.product_id !== product_id && el);
+
+		this.products.set(category_id, itemsUpdated);
 	});
 
 	//#endregion

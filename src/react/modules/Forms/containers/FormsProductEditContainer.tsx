@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
 
+import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
 
@@ -48,29 +49,46 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 	const handleChangeHide = (value: boolean) => setValue('product_hide', value ? 'true' : 'false');
 
 	const handleSave = (values: TypePriceProduct) => {
-		console.log(values);
+		if (!categoryId) {
+			return layoutStore.setError('Отсутствует обязательный параметр "categoryId"');
+		}
+
+		if (product?.product_id) {
+			priceStore.saveProduct(categoryId, values);
+		} else {
+			priceStore.addProduct(categoryId, values);
+		}
+
+		electron.showNotification(
+			'Успешно!',
+			`Данные товара "${values.product_title}" обновлены, не забудьте сохранить прайс.`,
+		);
+
+		onClose();
 	};
 
 	const handleDelete = () => {
-		if (typeof product?.index !== 'number') return;
+		if (typeof product?.index !== 'number' || !categoryId) return;
 
 		layoutStore.alert(
 			`Вы действительно хотите удалить товар "${product.product_title}" ?`,
 			() => {
-				// priceStore.deleteCategory(product?.index);
+				priceStore.deleteProduct(categoryId, product.product_id);
 			},
 		);
+
+		onClose();
 	};
 
 	const handleUp = () => {
-		if (product?.index !== undefined) {
-			priceStore.changeCategoriesPosition(product?.index, 'up');
+		if (product?.index !== undefined && categoryId) {
+			priceStore.changeProductPosition(categoryId, product?.index, 'up');
 		}
 	};
 
 	const handleDown = () => {
-		if (product?.index !== undefined) {
-			priceStore.changeCategoriesPosition(product?.index, 'down');
+		if (product?.index !== undefined && categoryId) {
+			priceStore.changeProductPosition(categoryId, product?.index, 'down');
 		}
 	};
 
