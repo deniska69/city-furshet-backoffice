@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { Client } from 'basic-ftp';
 import dotenv from 'dotenv';
+import { IpcMainInvokeEvent } from 'electron';
 import { inferSchema, initParser } from 'udsv';
 
 import { BUCKUP_DIR, FTP_HOME_DIR, FTP_PRICE_FILE_NAME } from '../utils/constants.js';
@@ -118,6 +119,10 @@ class FTP {
 		} catch (e) {
 			return Promise.reject('[Electron] [FTP] readLastBackup(): Ошибка.\n' + e);
 		}
+	};
+
+	sendPrice = async (e: IpcMainInvokeEvent) => {
+		console.log(e);
 	};
 }
 
