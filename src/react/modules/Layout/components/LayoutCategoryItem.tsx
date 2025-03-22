@@ -14,7 +14,7 @@ const LayoutCategoryItem = ({ el, active, onClick }: ILayoutCategoryItem) => (
 			{el.category_title}
 		</Span>
 
-		{el.category_hide ? (
+		{el.category_hide === 'true' ? (
 			<Div>
 				<EyeSlashIcon className={active ? '!text-primary w-4 h-4' : 'w-4 h-4'} />
 			</Div>
