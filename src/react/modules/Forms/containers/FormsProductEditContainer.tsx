@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
 
-import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
 
@@ -58,11 +57,6 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 		} else {
 			priceStore.addProduct(categoryId, values);
 		}
-
-		electron.showNotification(
-			'Успешно!',
-			`Данные товара "${values.product_title}" обновлены, не забудьте сохранить прайс.`,
-		);
 
 		onClose();
 	};

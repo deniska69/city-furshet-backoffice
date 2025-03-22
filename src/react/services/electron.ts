@@ -14,14 +14,6 @@ class Electron {
 			layoutStore.setError(`[React] [openBackupdDir] #2: ${e}`);
 		}
 	};
-
-	showNotification = async (title: string, body?: string) => {
-		try {
-			new window.Notification(title, { body });
-		} catch (e) {
-			layoutStore.setError(`[React] [showNotification]: ${e}`);
-		}
-	};
 }
 
 export const electron = new Electron();

@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import ShortUniqueId from 'short-unique-id';
 
-import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Form, HStack, Input, Span, Switch } from '@ui';
 
@@ -46,11 +45,6 @@ const Component = () => {
 		} else {
 			priceStore.addCategory(values);
 		}
-
-		electron.showNotification(
-			'Успешно!',
-			`Данные категории "${values.category_title}" обновлены, не забудьте сохранить прайс.`,
-		);
 
 		navigate('/', { replace: true });
 	};
