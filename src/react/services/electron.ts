@@ -14,6 +14,8 @@ class Electron {
 			layoutStore.setError(`[React] [openBackupdDir] #2: ${e}`);
 		}
 	};
+
+	sendPrice = async (price: string) => await window.electron.sendPrice(price);
 }
 
 export const electron = new Electron();

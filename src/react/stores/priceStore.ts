@@ -71,6 +71,36 @@ class PriceStore {
 		return Promise.resolve();
 	});
 
+	savePrice = () => {
+		if (!this.categories || !this.products) {
+			return this.setError(
+				'savePrice(): Отсутствует priceStore.categories или priceStore.products.',
+			);
+		}
+
+		layoutStore.setLoading();
+
+		try {
+			let price = `category_id;category_hide;category_title;category_description;product_id;product_hide;product_title;product_title_description;roduct_description;product_note;product_price;product_cover;product_gallery;\n`;
+
+			this.categories.forEach((cat) => {
+				const prods =
+					(priceStore.products?.has(cat.category_id) &&
+						priceStore.products.get(cat.category_id)) ||
+					[];
+
+				prods.forEach((prod) => {
+					price += `${cat.category_id};${cat.category_hide === 'true' ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${prod.product_hide === 'true' ? 'true' : ''};${prod.product_title || ''};${prod.product_title_description || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};\n`;
+				});
+			});
+
+			this.electronSendPrice(price);
+		} catch (e) {
+			layoutStore.setLoading(false);
+			this.setError('savePrice(): Ошибка формирования прайса.\n' + e);
+		}
+	};
+
 	//#endregion
 
 	//#region Categories
@@ -197,7 +227,7 @@ class PriceStore {
 
 	//#region Electron
 
-	electronConnect = action(async () => {
+	electronConnect = async () => {
 		layoutStore.setLoading();
 
 		await electron
@@ -208,9 +238,9 @@ class PriceStore {
 				this.setError('electronConnect(): Ошибка подключения к хостингу.\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
-	});
+	};
 
-	electronGetPrice = action(async () => {
+	electronGetPrice = async () => {
 		layoutStore.setLoading();
 
 		await electron
@@ -222,7 +252,19 @@ class PriceStore {
 				this.setError('electronGetPrice(): Ошибка получения прайса.\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
-	});
+	};
+
+	private electronSendPrice = async (price: string) => {
+		layoutStore.setLoading();
+
+		await electron
+			.sendPrice(price)
+			.then(() => {})
+			.catch((e: string) => {
+				this.setError('electronSendPrice(): Ошибка сохранения прайса.\n' + e);
+			})
+			.finally(() => layoutStore.setLoading(false));
+	};
 
 	//#endregion
 }

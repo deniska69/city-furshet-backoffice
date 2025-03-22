@@ -16,6 +16,8 @@ const Component = () => {
 		navigate('/category/' + id, { replace: true });
 	};
 
+	const handleSave = () => priceStore.savePrice();
+
 	return (
 		<Card className="h-screen !max-h-screen max-w-64 min-w-64 !p-0 border-y-0 border-r border-l-0 flex flex-col !rounded-none justify-between">
 			<LayoutLogo />
@@ -30,6 +32,7 @@ const Component = () => {
 
 					<Div className="py-4 mt-4 mx-4 border-t border-border-light dark:border-border-dark flex justify-center">
 						<Button
+							onClick={handleSave}
 							text="Сохранить прайс"
 							disabled={!priceStore.categories || !priceStore.categories.length}
 						/>

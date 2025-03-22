@@ -24,6 +24,7 @@ interface Window {
 		connectHosting: () => Promise<unknown>;
 		getPrice: () => Promise<TypeReturnGetPrice>;
 		openBackupdDir: () => Promise<unknown>;
+		sendPrice: (price: string) => Promise<unknown>;
 	};
 }
 
