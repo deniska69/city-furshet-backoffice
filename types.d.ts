@@ -42,4 +42,4 @@ type TypePriceStoreCategory =
 	  })
 	| null;
 
-declare module 'text-decoding';
+declare module 'windows-1251';

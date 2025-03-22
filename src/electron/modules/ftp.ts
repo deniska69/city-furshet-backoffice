@@ -2,10 +2,15 @@ import * as fs from 'fs';
 import path from 'path';
 import { Client } from 'basic-ftp';
 import dotenv from 'dotenv';
-import { IpcMainInvokeEvent } from 'electron';
 import { inferSchema, initParser } from 'udsv';
+import { encode } from 'windows-1251';
 
-import { BUCKUP_DIR, FTP_HOME_DIR, FTP_PRICE_FILE_NAME } from '../utils/constants.js';
+import {
+	BUCKUP_DIR,
+	BUCKUP_SEND_DIR,
+	FTP_HOME_DIR,
+	FTP_PRICE_FILE_NAME,
+} from '../utils/constants.js';
 import { getPriceBackupFileName, isDev } from '../utils/helpers.js';
 
 dotenv.config({
@@ -27,8 +32,6 @@ class FTP {
 	private lastModPrice: Date | undefined;
 
 	connect = async () => {
-		console.log('[Electron] [FTP] connect()');
-
 		try {
 			if (!this.client) this.client = new Client();
 			if (!this.client.closed) return Promise.resolve();
@@ -52,8 +55,6 @@ class FTP {
 	};
 
 	getPrice = async () => {
-		console.log('[Electron] [FTP] getPrice()');
-
 		if (this.client?.closed || !this.client) await this.connect();
 
 		try {
@@ -68,8 +69,6 @@ class FTP {
 	};
 
 	private downloadAndWriteBackup = async () => {
-		console.log('[Electron] [FTP] downloadAndWriteBackup()');
-
 		if (this.client?.closed || !this.client) {
 			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.');
 		}
@@ -97,8 +96,6 @@ class FTP {
 	};
 
 	private readLastBackup = async () => {
-		console.log('[Electron] [FTP] readLastBackup()');
-
 		if (!this.lastBackupPriceFile) {
 			return Promise.reject(
 				'[Electron] [FTP] readLastBackup(): Не найдена запись о последнм бэкапе прайса.',
@@ -121,8 +118,28 @@ class FTP {
 		}
 	};
 
-	sendPrice = async (e: IpcMainInvokeEvent) => {
-		console.log(e);
+	sendPrice = async (price: string) => {
+		if (this.client?.closed || !this.client) {
+			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.');
+		}
+
+		if (!price) return Promise.reject('[Electron] [FTP] sendPrice(): Отсутствует прайс.');
+
+		try {
+			if (!fs.existsSync(BUCKUP_SEND_DIR)) fs.mkdirSync(BUCKUP_SEND_DIR);
+
+			const priceEncoded = encode(price);
+			const fileName = 'Price_v2';
+			const fullFileName = `${BUCKUP_SEND_DIR}/${fileName}.csv`;
+
+			fs.writeFile(fullFileName, priceEncoded, function as(e) {
+				if (e) return Promise.reject('[Electron] [FTP] sendPrice(): Ошибка #2.\n' + e);
+			});
+
+			return await this.client.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME);
+		} catch (e) {
+			return Promise.reject('[Electron] [FTP] sendPrice(): Ошибка #1.\n' + e);
+		}
 	};
 }
 

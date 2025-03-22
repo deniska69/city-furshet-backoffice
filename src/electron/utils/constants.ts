@@ -6,6 +6,8 @@ export const PROJECT_TITLE = 'City Furshet Backoffice';
 
 export const BUCKUP_DIR = path.join(process.env.APPDATA || '', PROJECT_TITLE, 'Backups');
 
+export const BUCKUP_SEND_DIR = path.join(process.env.APPDATA || '', PROJECT_TITLE, 'Backups_Send');
+
 export const FTP_HOME_DIR = 'city-furshet.ru/htdocs/www/';
 
 export const FTP_PRICE_FILE_NAME = 'Price_v2.csv';
