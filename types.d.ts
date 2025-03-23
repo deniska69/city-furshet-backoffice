@@ -19,12 +19,17 @@ type TypePriceProduct = {
 
 type TypePriceModel = TypePriceCategory & TypePriceProduct;
 
+type TypeOnError = (callback: (e: string) => void) => Promise<unknown>;
+
 interface Window {
 	electron: {
 		connectHosting: () => Promise<unknown>;
 		getPrice: () => Promise<TypeReturnGetPrice>;
 		openBackupdDir: () => Promise<unknown>;
 		sendPrice: (price: string) => Promise<unknown>;
+	};
+	electronAPI: {
+		onError: TypeOnError;
 	};
 }
 

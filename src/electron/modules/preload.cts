@@ -6,3 +6,9 @@ electron.contextBridge.exposeInMainWorld('electron', {
 	openBackupdDir: () => electron.ipcRenderer.invoke('openBackupdDir'),
 	sendPrice: (price: string) => electron.ipcRenderer.send('sendPrice', price),
 } satisfies Window['electron']);
+
+electron.contextBridge.exposeInMainWorld('electronAPI', {
+	onError: (callback) => {
+		return electron.ipcRenderer.on('onError', (e: any, value: string) => callback(value));
+	},
+} satisfies Window['electronAPI']);

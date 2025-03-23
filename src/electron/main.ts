@@ -31,5 +31,5 @@ app.on('ready', () => {
 	ipcMain.handle('connectHosting', () => ftp.connect());
 	ipcMain.handle('getPrice', () => ftp.getPrice());
 	ipcMain.handle('openBackupdDir', () => shell.openPath(BUCKUP_DIR));
-	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(text));
+	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(mainWindow, text));
 });

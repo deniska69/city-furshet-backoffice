@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { Client } from 'basic-ftp';
 import dotenv from 'dotenv';
+import { BrowserWindow } from 'electron';
 import { inferSchema, initParser } from 'udsv';
 import { encode } from 'windows-1251';
 
@@ -108,7 +109,9 @@ class FTP {
 
 		try {
 			const readedFile = fs.readFileSync(this.lastBackupPriceFile);
-			const decodedFile = new TextDecoder('windows-1251').decode(readedFile);
+			const decodedFile = new TextDecoder('windows-1251')
+				.decode(readedFile)
+				.replaceAll('/', ''.replaceAll('\\', ''));
 			const parser = initParser(inferSchema(decodedFile));
 			const parsedPrice = parser.typedObjs(decodedFile);
 
@@ -118,7 +121,12 @@ class FTP {
 		}
 	};
 
-	sendPrice = async (price: string) => {
+	sendPrice = async (mainWindow: BrowserWindow, price: string) => {
+		return mainWindow.webContents.send(
+			'onError',
+			'[Electron] [FTP] downloadAndWriteBackup(): Ошибка.',
+		);
+
 		if (this.client?.closed || !this.client) {
 			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.');
 		}
@@ -136,7 +144,7 @@ class FTP {
 				if (e) return Promise.reject('[Electron] [FTP] sendPrice(): Ошибка #2.\n' + e);
 			});
 
-			return await this.client.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME);
+			// return await this.client.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME);
 		} catch (e) {
 			return Promise.reject('[Electron] [FTP] sendPrice(): Ошибка #1.\n' + e);
 		}

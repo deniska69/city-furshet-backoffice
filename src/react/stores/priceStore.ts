@@ -90,7 +90,9 @@ class PriceStore {
 					[];
 
 				prods.forEach((prod) => {
-					price += `${cat.category_id};${cat.category_hide === 'true' ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${prod.product_hide === 'true' ? 'true' : ''};${prod.product_title || ''};${prod.product_title_description || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};\n`;
+					const s = `${cat.category_id};${cat.category_hide === 'true' ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${prod.product_hide === 'true' ? 'true' : ''};${prod.product_title || ''};${prod.product_title_description || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};`;
+
+					price += s.replaceAll('/', ''.replaceAll('\\', '')) + '\n';
 				});
 			});
 

@@ -26,6 +26,12 @@ const Component = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [priceStore.price, isShowSplash]);
 
+	useLayoutEffect(() => {
+		window.electronAPI.onError((e: string) => {
+			console.log(e);
+		});
+	}, []);
+
 	const handleHideSplash = () => setIsShowSplash(false);
 
 	return (
