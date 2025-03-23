@@ -28,8 +28,10 @@ app.on('ready', () => {
 		mainWindow.loadFile(getReactPath()).then(() => mainWindow.loadURL('/home'));
 	}
 
+	ftp.setMainWindow(mainWindow);
+
 	ipcMain.handle('connectHosting', () => ftp.connect());
 	ipcMain.handle('getPrice', () => ftp.getPrice());
 	ipcMain.handle('openBackupdDir', () => shell.openPath(BUCKUP_DIR));
-	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(mainWindow, text));
+	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(text));
 });

@@ -31,6 +31,9 @@ class FTP {
 	private client: undefined | Client;
 	private lastBackupPriceFile: string | undefined;
 	private lastModPrice: Date | undefined;
+	mainWindow: BrowserWindow | undefined;
+
+	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
 
 	connect = async () => {
 		try {
@@ -121,17 +124,17 @@ class FTP {
 		}
 	};
 
-	sendPrice = async (mainWindow: BrowserWindow, price: string) => {
-		return mainWindow.webContents.send(
-			'onError',
-			'[Electron] [FTP] downloadAndWriteBackup(): Ошибка.',
-		);
+	sendError = (e: string) => {
+		if (!this.mainWindow) return;
+		this.mainWindow.webContents.send('error', '[Electron] [FTP] ' + e);
+	};
 
+	sendPrice = async (price: string) => {
 		if (this.client?.closed || !this.client) {
-			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.');
+			return this.sendError('downloadAndWriteBackup(): Ошибка подключения.');
 		}
 
-		if (!price) return Promise.reject('[Electron] [FTP] sendPrice(): Отсутствует прайс.');
+		if (!price) return this.sendError('sendPrice(): Отсутствует прайс.');
 
 		try {
 			if (!fs.existsSync(BUCKUP_SEND_DIR)) fs.mkdirSync(BUCKUP_SEND_DIR);
@@ -140,13 +143,18 @@ class FTP {
 			const fileName = 'Price_v2';
 			const fullFileName = `${BUCKUP_SEND_DIR}/${fileName}.csv`;
 
-			fs.writeFile(fullFileName, priceEncoded, function as(e) {
-				if (e) return Promise.reject('[Electron] [FTP] sendPrice(): Ошибка #2.\n' + e);
+			fs.writeFile(fullFileName, priceEncoded, (e) => {
+				if (e) return this.sendError('sendPrice(): Ошибка #2.\n' + e);
 			});
 
-			// return await this.client.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME);
+			await this.client
+				.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME)
+				.then(() => Promise.resolve())
+				.catch((e) => {
+					return this.sendError('sendPrice(): Ошибка загрузки прайса на хостинг.\n' + e);
+				});
 		} catch (e) {
-			return Promise.reject('[Electron] [FTP] sendPrice(): Ошибка #1.\n' + e);
+			return this.sendError('sendPrice(): Ошибка #1.\n' + e);
 		}
 	};
 }

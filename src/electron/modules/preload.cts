@@ -9,6 +9,6 @@ electron.contextBridge.exposeInMainWorld('electron', {
 
 electron.contextBridge.exposeInMainWorld('electronAPI', {
 	onError: (callback) => {
-		return electron.ipcRenderer.on('onError', (e: any, value: string) => callback(value));
+		return electron.ipcRenderer.on('error', (e: any, value: string) => callback(value));
 	},
 } satisfies Window['electronAPI']);
