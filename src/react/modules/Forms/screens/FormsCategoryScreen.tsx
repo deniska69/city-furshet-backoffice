@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import ShortUniqueId from 'short-unique-id';
 
+import { CATEGORY_FIELDS } from '@constants';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Form, HStack, Input, Span, Switch } from '@ui';
 
@@ -23,6 +24,7 @@ const Component = () => {
 		watch,
 		register,
 		setValue,
+		setError,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<TypePriceCategory>();
@@ -35,11 +37,25 @@ const Component = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [category?.category_id]);
 
+	const handleValidate = (name: keyof TypePriceCategory) => {
+		if (!watch(name).length) return;
+
+		if (watch(name).includes('\\') || watch(name).includes(';')) {
+			const message = `Поле "${CATEGORY_FIELDS[name]}" содержит запрещённый символ "\\" или ";"`;
+			setError(name, { type: 'manual', message });
+			layoutStore.setError(message);
+			throw new Error(message);
+		}
+	};
+
 	const handleChangeHide = (value: boolean) => {
 		setValue('category_hide', value ? 'true' : 'false');
 	};
 
 	const handleSave = (values: TypePriceCategory) => {
+		handleValidate('category_title');
+		handleValidate('category_description');
+
 		if (category?.category_id) {
 			priceStore.saveCategory(category.index, values);
 		} else {
@@ -113,7 +129,10 @@ const Component = () => {
 				{/* category_description */}
 				<HStack className="max-w-[1100px] gap-x-3 items-start">
 					<Span className={classNameTitleCol}>Краткое описание</Span>
-					<Input {...register('category_description')} />
+					<Input
+						{...register('category_description')}
+						isInvalid={!!errors.category_description}
+					/>
 				</HStack>
 
 				{/* products */}

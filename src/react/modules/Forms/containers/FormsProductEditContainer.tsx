@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
 
+import { PRICE_FIELDS } from '@constants';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
 
@@ -27,6 +28,7 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 		watch,
 		register,
 		setValue,
+		setError,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<TypePriceProduct>();
@@ -47,7 +49,24 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 
 	const handleChangeHide = (value: boolean) => setValue('product_hide', value ? 'true' : 'false');
 
+	const handleValidate = (name: keyof TypePriceProduct) => {
+		if (!watch(name).length) return;
+
+		if (watch(name).includes('\\') || watch(name).includes(';')) {
+			const message = `Поле "${PRICE_FIELDS[name]}" содержит запрещённый символ "\\" или ";"`;
+			setError(name, { type: 'manual', message });
+			layoutStore.setError(message);
+			throw new Error(message);
+		}
+	};
+
 	const handleSave = (values: TypePriceProduct) => {
+		handleValidate('product_title');
+		handleValidate('product_title_description');
+		handleValidate('product_description');
+		handleValidate('product_note');
+		handleValidate('product_price');
+
 		if (!categoryId) {
 			return layoutStore.setError('Отсутствует обязательный параметр "categoryId"');
 		}
@@ -121,25 +140,31 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 					{/* product_title_description */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
 						<Span className={classNameTitleCol}>Описание названия</Span>
-						<Input {...register('product_title_description')} />
+						<Input
+							{...register('product_title_description')}
+							isInvalid={!!errors.product_title_description}
+						/>
 					</HStack>
 
 					{/* product_description */}
 					<HStack className="max-w-[1100px] gap-x-3 items-start">
 						<Span className={classNameTitleCol}>Описание</Span>
-						<Textarea {...register('product_description')} />
+						<Textarea
+							{...register('product_description')}
+							isInvalid={!!errors.product_description}
+						/>
 					</HStack>
 
 					{/* product_note */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
 						<Span className={classNameTitleCol} text="Примечание" />
-						<Input {...register('product_note')} />
+						<Input {...register('product_note')} isInvalid={!!errors.product_note} />
 					</HStack>
 
 					{/* product_price */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
 						<Span className={classNameTitleCol} text="Цена" />
-						<Input {...register('product_price')} />
+						<Input {...register('product_price')} isInvalid={!!errors.product_price} />
 					</HStack>
 
 					{/* product_cover */}
