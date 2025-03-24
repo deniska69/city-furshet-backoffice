@@ -10,3 +10,8 @@ export const getLastModText = (lastMod?: Date) => {
 	const lastModTime = lastMod.toLocaleTimeString();
 	return `${lastModDate} ${lastModTime}`;
 };
+
+export const isHide = (hide: string | boolean) => {
+	if (typeof hide === 'string') return hide === 'true';
+	return !!hide;
+};

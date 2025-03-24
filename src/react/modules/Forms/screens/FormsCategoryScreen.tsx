@@ -6,10 +6,13 @@ import { useNavigate, useParams } from 'react-router';
 import ShortUniqueId from 'short-unique-id';
 
 import { CATEGORY_FIELDS } from '@constants';
+import { isHide } from '@helpers';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Form, HStack, Input, Span, Switch } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
+
+type TypeHandleValidate = 'category_title' | 'category_description';
 
 const Component = () => {
 	const navigate = useNavigate();
@@ -31,13 +34,13 @@ const Component = () => {
 
 	useEffect(() => {
 		setValue('category_id', category?.category_id || uid.rnd());
-		setValue('category_hide', category?.category_hide === 'true' ? 'true' : 'false');
+		setValue('category_hide', category?.category_hide ? isHide(category?.category_hide) : false);
 		setValue('category_title', category?.category_title || '');
 		setValue('category_description', category?.category_description || '');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [category?.category_id]);
 
-	const handleValidate = (name: keyof TypePriceCategory) => {
+	const handleValidate = (name: TypeHandleValidate) => {
 		if (!watch(name).length) return;
 
 		if (watch(name).includes('\\') || watch(name).includes(';')) {
@@ -48,9 +51,7 @@ const Component = () => {
 		}
 	};
 
-	const handleChangeHide = (value: boolean) => {
-		setValue('category_hide', value ? 'true' : 'false');
-	};
+	const handleChangeHide = (value: boolean) => setValue('category_hide', value);
 
 	const handleSave = (values: TypePriceCategory) => {
 		handleValidate('category_title');
@@ -82,10 +83,16 @@ const Component = () => {
 
 		layoutStore.alert(
 			`Вы действительно хотите удалить категорию "${category.category_title}" ?`,
-			() => {
-				priceStore.deleteCategory(category?.index);
-				navigate('/', { replace: true });
-			},
+			[
+				{
+					title: '',
+					onClick: () => {
+						priceStore.deleteCategory(category?.index);
+						navigate('/', { replace: true });
+					},
+				},
+				{ title: 'Отмена' },
+			],
 		);
 	};
 
@@ -111,7 +118,7 @@ const Component = () => {
 				{/* category_hide */}
 				<HStack className="max-w-[1100px] gap-x-3 items-center">
 					<Span className={classNameTitleCol}>Скрыто</Span>
-					<Switch value={watch('category_hide') === 'true'} onChange={handleChangeHide} />
+					<Switch value={watch('category_hide')} onChange={handleChangeHide} />
 				</HStack>
 
 				{/* category_title */}

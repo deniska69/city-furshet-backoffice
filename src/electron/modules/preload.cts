@@ -11,4 +11,7 @@ electron.contextBridge.exposeInMainWorld('electronAPI', {
 	onError: (callback) => {
 		return electron.ipcRenderer.on('error', (e: any, value: string) => callback(value));
 	},
+	onSendPriceFinally: (callback) => {
+		return electron.ipcRenderer.on('onSendPriceFinally', () => callback());
+	},
 } satisfies Window['electronAPI']);

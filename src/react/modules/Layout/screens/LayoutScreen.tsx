@@ -28,6 +28,7 @@ const Component = () => {
 
 	useLayoutEffect(() => {
 		window.electronAPI.onError((e: string) => layoutStore.setError(e));
+		window.electronAPI.onSendPriceFinally(() => priceStore.onSendPriceFinally());
 	}, []);
 
 	const handleHideSplash = () => setIsShowSplash(false);

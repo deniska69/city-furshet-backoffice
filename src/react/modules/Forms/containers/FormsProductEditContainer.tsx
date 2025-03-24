@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
 
 import { PRICE_FIELDS } from '@constants';
+import { isHide } from '@helpers';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
 
@@ -15,6 +16,13 @@ interface IComponent {
 	productId?: string;
 	onClose: () => void;
 }
+
+type TypeHandleValidate =
+	| 'product_title'
+	| 'product_title_description'
+	| 'product_description'
+	| 'product_note'
+	| 'product_price';
 
 const Component = ({ categoryId, productId, onClose }: IComponent) => {
 	const uid = new ShortUniqueId();
@@ -35,7 +43,7 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 
 	useEffect(() => {
 		setValue('product_id', product?.product_id || uid.rnd());
-		setValue('product_hide', product?.product_hide === 'true' ? 'true' : 'false');
+		setValue('product_hide', product?.product_hide ? isHide(product?.product_hide) : false);
 		setValue('product_title', product?.product_title || '');
 		setValue('product_title_description', product?.product_title_description || '');
 		setValue('product_description', product?.product_description || '');
@@ -47,9 +55,9 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [product?.product_id]);
 
-	const handleChangeHide = (value: boolean) => setValue('product_hide', value ? 'true' : 'false');
+	const handleChangeHide = (value: boolean) => setValue('product_hide', value);
 
-	const handleValidate = (name: keyof TypePriceProduct) => {
+	const handleValidate = (name: TypeHandleValidate) => {
 		if (!watch(name).length) return;
 
 		if (watch(name).includes('\\') || watch(name).includes(';')) {
@@ -83,12 +91,13 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 	const handleDelete = () => {
 		if (typeof product?.index !== 'number' || !categoryId) return;
 
-		layoutStore.alert(
-			`Вы действительно хотите удалить товар "${product.product_title}" ?`,
-			() => {
-				priceStore.deleteProduct(categoryId, product.product_id);
+		layoutStore.alert(`Вы действительно хотите удалить товар "${product.product_title}" ?`, [
+			{
+				title: '',
+				onClick: () => priceStore.deleteProduct(categoryId, product.product_id),
 			},
-		);
+			{ title: 'Отмена' },
+		]);
 
 		onClose();
 	};
@@ -122,7 +131,7 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 					{/* product_hide */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
 						<Span className={classNameTitleCol}>Скрыто</Span>
-						<Switch onChange={handleChangeHide} value={watch('product_hide') === 'true'} />
+						<Switch onChange={handleChangeHide} value={watch('product_hide')} />
 					</HStack>
 
 					{/* product_title */}

@@ -1,10 +1,15 @@
 import { action, makeAutoObservable } from 'mobx';
 
+type TypeAlertButtons = {
+	title: string;
+	onClick?: () => void;
+}[];
+
 class LayoutStore {
 	loading: boolean = false;
 	error: string | undefined;
 	alertText: string | undefined;
-	alertSubmit: (() => void | undefined) | undefined;
+	alertButtons: TypeAlertButtons | undefined;
 
 	setLoading = action((value: boolean = true) => (this.loading = value));
 
@@ -12,12 +17,16 @@ class LayoutStore {
 
 	clearError = action(() => (this.error = undefined));
 
-	alert = action(async (text: string, onSubmit: () => void) => {
+	alert = action(async (text: string, buttons: TypeAlertButtons) => {
 		this.alertText = text;
-		this.alertSubmit = () => {
-			onSubmit();
-			this.alertText = undefined;
-		};
+
+		this.alertButtons = buttons.map((el) => ({
+			title: el.title,
+			onClick: async () => {
+				if (el.onClick) el.onClick();
+				this.hideAlert();
+			},
+		}));
 	});
 
 	hideAlert = action(() => (this.alertText = undefined));

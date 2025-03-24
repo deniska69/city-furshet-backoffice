@@ -1,13 +1,13 @@
 type TypePriceCategory = {
 	category_id: string;
-	category_hide: string;
+	category_hide: boolean;
 	category_title: string;
 	category_description: string;
 };
 
 type TypePriceProduct = {
 	product_id: string;
-	product_hide: string;
+	product_hide: boolean;
 	product_title: string;
 	product_title_description: string;
 	product_description: string;
@@ -19,8 +19,6 @@ type TypePriceProduct = {
 
 type TypePriceModel = TypePriceCategory & TypePriceProduct;
 
-type TypeOnError = (callback: (e: string) => void) => Promise<unknown>;
-
 interface Window {
 	electron: {
 		connectHosting: () => Promise<unknown>;
@@ -29,7 +27,8 @@ interface Window {
 		sendPrice: (price: string) => Promise<unknown>;
 	};
 	electronAPI: {
-		onError: TypeOnError;
+		onError: (callback: (e: string) => void) => Promise<unknown>;
+		onSendPriceFinally: (callback: () => void) => Promise<unknown>;
 	};
 }
 
@@ -48,3 +47,4 @@ type TypePriceStoreCategory =
 	| null;
 
 declare module 'windows-1251';
+declare module 'windows-1252';

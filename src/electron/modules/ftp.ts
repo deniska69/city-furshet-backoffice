@@ -3,8 +3,8 @@ import path from 'path';
 import { Client } from 'basic-ftp';
 import dotenv from 'dotenv';
 import { BrowserWindow } from 'electron';
+import iconv from 'iconv-lite';
 import { inferSchema, initParser } from 'udsv';
-import { encode } from 'windows-1251';
 
 import {
 	BUCKUP_DIR,
@@ -111,12 +111,14 @@ class FTP {
 		}
 
 		try {
-			const readedFile = fs.readFileSync(this.lastBackupPriceFile);
-			const decodedFile = new TextDecoder('windows-1251')
-				.decode(readedFile)
-				.replaceAll('/', ''.replaceAll('\\', ''));
-			const parser = initParser(inferSchema(decodedFile));
-			const parsedPrice = parser.typedObjs(decodedFile);
+			const file = fs.readFileSync(this.lastBackupPriceFile);
+
+			const decodedString = new TextDecoder('windows-1251').decode(file);
+
+			const clearedString = decodedString;
+
+			const parser = initParser(inferSchema(clearedString));
+			const parsedPrice = parser.typedObjs(clearedString);
 
 			return Promise.resolve(parsedPrice);
 		} catch (e) {
@@ -127,6 +129,7 @@ class FTP {
 	sendError = (e: string) => {
 		if (!this.mainWindow) return;
 		this.mainWindow.webContents.send('error', '[Electron] [FTP] ' + e);
+		this.mainWindow.webContents.send('onSendPriceFinally');
 	};
 
 	sendPrice = async (price: string) => {
@@ -139,7 +142,8 @@ class FTP {
 		try {
 			if (!fs.existsSync(BUCKUP_SEND_DIR)) fs.mkdirSync(BUCKUP_SEND_DIR);
 
-			const priceEncoded = encode(price);
+			const priceEncoded = iconv.encode(price, 'windows1251');
+
 			const fileName = 'Price_v2';
 			const fullFileName = `${BUCKUP_SEND_DIR}/${fileName}.csv`;
 
@@ -149,7 +153,10 @@ class FTP {
 
 			await this.client
 				.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME)
-				.then(() => Promise.resolve())
+				.then(() => {
+					if (!this.mainWindow) return;
+					this.mainWindow.webContents.send('onSendPriceFinally');
+				})
 				.catch((e) => {
 					return this.sendError('sendPrice(): Ошибка загрузки прайса на хостинг.\n' + e);
 				});

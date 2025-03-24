@@ -92,7 +92,7 @@ class PriceStore {
 				prods.forEach((prod) => {
 					const s = `${cat.category_id};${cat.category_hide === 'true' ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${prod.product_hide === 'true' ? 'true' : ''};${prod.product_title || ''};${prod.product_title_description || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};`;
 
-					price += s.replaceAll('/', ''.replaceAll('\\', '')) + '\n';
+					price += s + '\n';
 				});
 			});
 
@@ -101,6 +101,16 @@ class PriceStore {
 			layoutStore.setLoading(false);
 			this.setError('savePrice(): Ошибка формирования прайса.\n' + e);
 		}
+	};
+
+	onSendPriceFinally = () => {
+		layoutStore.setLoading(false);
+		layoutStore.alert('Прайс успешно обновлён на хостинге!', [
+			{
+				title: 'ОК',
+				onClick: this.electronGetPrice,
+			},
+		]);
 	};
 
 	//#endregion
@@ -258,14 +268,7 @@ class PriceStore {
 
 	private electronSendPrice = async (price: string) => {
 		layoutStore.setLoading();
-
-		await electron
-			.sendPrice(price)
-			.then(() => {})
-			.catch((e: string) => {
-				this.setError('electronSendPrice(): Ошибка сохранения прайса.\n' + e);
-			})
-			.finally(() => layoutStore.setLoading(false));
+		await electron.sendPrice(price);
 	};
 
 	//#endregion

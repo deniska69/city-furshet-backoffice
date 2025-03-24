@@ -1,5 +1,6 @@
 import { EyeSlashIcon } from '@heroicons/react/24/outline';
 
+import { isHide } from '@helpers';
 import { Button, cn, Div, Span } from '@ui';
 
 interface ILayoutCategoryItem {
@@ -14,7 +15,7 @@ const LayoutCategoryItem = ({ el, active, onClick }: ILayoutCategoryItem) => (
 			{el.category_title}
 		</Span>
 
-		{el.category_hide === 'true' ? (
+		{isHide(el.category_hide) ? (
 			<Div>
 				<EyeSlashIcon className={active ? '!text-primary w-4 h-4' : 'w-4 h-4'} />
 			</Div>
