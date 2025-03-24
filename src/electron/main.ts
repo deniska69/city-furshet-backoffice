@@ -17,8 +17,6 @@ app.on('ready', () => {
 
 	mainWindow.setMinimumSize(1280, 720);
 	mainWindow.setMenuBarVisibility(false);
-	mainWindow.setTitle(PROJECT_TITLE);
-
 	mainWindow.maximize();
 	mainWindow.webContents.openDevTools();
 
@@ -27,6 +25,8 @@ app.on('ready', () => {
 	} else {
 		mainWindow.loadFile(getReactPath()).then(() => mainWindow.loadURL('/home'));
 	}
+
+	mainWindow.setTitle(`${PROJECT_TITLE} v.${app.getVersion()}`);
 
 	ftp.setMainWindow(mainWindow);
 
