@@ -91,13 +91,17 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 	const handleDelete = () => {
 		if (typeof product?.index !== 'number' || !categoryId) return;
 
-		layoutStore.alert(`Вы действительно хотите удалить товар "${product.product_title}" ?`, [
-			{
-				title: '',
-				onClick: () => priceStore.deleteProduct(categoryId, product.product_id),
-			},
-			{ title: 'Отмена' },
-		]);
+		layoutStore.alert(
+			`Вы действительно хотите удалить товар "${product.product_title}" ?`,
+			[
+				{
+					title: '',
+					onClick: () => priceStore.deleteProduct(categoryId, product.product_id),
+				},
+				{ title: 'Отмена' },
+			],
+			'warning',
+		);
 
 		onClose();
 	};

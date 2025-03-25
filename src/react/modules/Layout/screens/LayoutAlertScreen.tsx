@@ -1,21 +1,35 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import { CheckBadgeIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 
 import { layoutStore } from '@stores';
-import { Button, Div, HStack, Span, Stack } from '@ui';
+import { Button, cn, Div, HStack, Span, Stack } from '@ui';
+
+const variants = {
+	success: 'bg-green-600/60 dark:bg-green-600/20 border-green-700 dark:border-green-900',
+	warning: 'bg-red-600/60 dark:bg-red-600/20 border-red-700 dark:border-red-900',
+};
 
 const Component = () => {
-	if (!layoutStore.alertText) return null;
+	if (!layoutStore.alertText || !layoutStore.alertType) return null;
 
 	const buttons = layoutStore.alertButtons || [];
 
 	return (
 		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-50 flex h-screen w-full items-center justify-center">
-			<InformationCircleIcon className="w-32 text-white" />
+			{layoutStore.alertType === 'success' ? (
+				<CheckBadgeIcon className="w-32 text-white" />
+			) : (
+				<InformationCircleIcon className="w-32 text-white" />
+			)}
 
 			<Span className="block text-center text-4xl font-bold text-white">Внимание</Span>
 
-			<Div className="bg-red-600/60 dark:bg-red-600/20 !p-4 !mt-6 rounded-xl border border-red-700 dark:border-red-900 max-w-[60%] text-center">
+			<Div
+				className={cn(
+					'!p-4 !mt-6 rounded-xl border max-w-[60%] text-center',
+					variants[layoutStore.alertType],
+				)}
+			>
 				<Span className="!mt-6 text-white whitespace-pre-line text-center">
 					{layoutStore.alertText}
 				</Span>

@@ -93,6 +93,7 @@ const Component = () => {
 				},
 				{ title: 'Отмена' },
 			],
+			'warning',
 		);
 	};
 

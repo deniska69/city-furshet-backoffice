@@ -10,6 +10,7 @@ class LayoutStore {
 	error: string | undefined;
 	alertText: string | undefined;
 	alertButtons: TypeAlertButtons | undefined;
+	alertType: 'warning' | 'success' | undefined;
 
 	setLoading = action((value: boolean = true) => (this.loading = value));
 
@@ -17,8 +18,9 @@ class LayoutStore {
 
 	clearError = action(() => (this.error = undefined));
 
-	alert = action(async (text: string, buttons: TypeAlertButtons) => {
+	alert = action(async (text: string, buttons: TypeAlertButtons, type: 'warning' | 'success') => {
 		this.alertText = text;
+		this.alertType = type;
 
 		this.alertButtons = buttons.map((el) => ({
 			title: el.title,
@@ -29,7 +31,11 @@ class LayoutStore {
 		}));
 	});
 
-	hideAlert = action(() => (this.alertText = undefined));
+	hideAlert = action(() => {
+		this.alertText = undefined;
+		this.alertType = undefined;
+		this.alertButtons = undefined;
+	});
 }
 
 export const layoutStore = makeAutoObservable(new LayoutStore());

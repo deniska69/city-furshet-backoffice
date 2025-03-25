@@ -1,5 +1,6 @@
 import { action, makeAutoObservable, toJS } from 'mobx';
 
+import { isHide } from '@helpers';
 import { electron } from '@services';
 
 import { layoutStore } from './layoutStore';
@@ -90,7 +91,7 @@ class PriceStore {
 					[];
 
 				prods.forEach((prod) => {
-					const s = `${cat.category_id};${cat.category_hide === 'true' ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${prod.product_hide === 'true' ? 'true' : ''};${prod.product_title || ''};${prod.product_title_description || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};`;
+					const s = `${cat.category_id};${isHide(cat.category_hide) ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${isHide(prod.product_hide) ? 'true' : ''};${prod.product_title || ''};${prod.product_title_description || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};`;
 
 					price += s + '\n';
 				});
@@ -105,12 +106,16 @@ class PriceStore {
 
 	onSendPriceFinally = () => {
 		layoutStore.setLoading(false);
-		layoutStore.alert('Прайс успешно обновлён на хостинге!', [
-			{
-				title: 'ОК',
-				onClick: this.electronGetPrice,
-			},
-		]);
+		layoutStore.alert(
+			'Прайс успешно обновлён на хостинге!',
+			[
+				{
+					title: 'ОК',
+					onClick: this.electronGetPrice,
+				},
+			],
+			'success',
+		);
 	};
 
 	//#endregion
