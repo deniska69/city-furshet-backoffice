@@ -258,6 +258,11 @@ class PriceStore {
 	};
 
 	electronGetPrice = async () => {
+		this.price = undefined;
+		this.lastMod = undefined;
+		this.categories = undefined;
+		this.products = undefined;
+
 		layoutStore.setLoading();
 
 		await electron
