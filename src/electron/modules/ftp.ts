@@ -129,7 +129,6 @@ class FTP {
 	sendError = (e: string) => {
 		if (!this.mainWindow) return;
 		this.mainWindow.webContents.send('error', '[Electron] [FTP] ' + e);
-		this.mainWindow.webContents.send('onSendPriceFinally');
 	};
 
 	sendPrice = async (price: string) => {

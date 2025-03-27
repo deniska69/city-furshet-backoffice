@@ -16,6 +16,8 @@ class Electron {
 	};
 
 	sendPrice = async (price: string) => await window.electron.sendPrice(price);
+
+	openImage = async () => await window.electron.openImage();
 }
 
 export const electron = new Electron();

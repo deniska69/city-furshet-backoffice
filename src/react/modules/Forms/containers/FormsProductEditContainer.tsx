@@ -1,5 +1,12 @@
 import { useEffect } from 'react';
-import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+	ChevronDownIcon,
+	ChevronUpIcon,
+	EyeIcon,
+	PencilIcon,
+	PlusIcon,
+	TrashIcon,
+} from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
@@ -7,7 +14,7 @@ import ShortUniqueId from 'short-unique-id';
 import { PRICE_FIELDS } from '@constants';
 import { isHide } from '@helpers';
 import { layoutStore, priceStore } from '@stores';
-import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
+import { Button, Card, Div, Form, HStack, Image, Input, Span, Stack, Switch, Textarea } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
 
@@ -23,6 +30,8 @@ type TypeHandleValidate =
 	| 'product_description'
 	| 'product_note'
 	| 'product_price';
+
+const classNameTitleCol = 'min-w-38 mt-1';
 
 const Component = ({ categoryId, productId, onClose }: IComponent) => {
 	const uid = new ShortUniqueId();
@@ -50,7 +59,7 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 		setValue('product_note', product?.product_note || '');
 		setValue('product_price', product?.product_price || '');
 		setValue('product_cover', product?.product_cover || '');
-		setValue('product_cover', product?.product_cover || '');
+		setValue('product_gallery', product?.product_gallery || '');
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [product?.product_id]);
@@ -118,7 +127,7 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 		}
 	};
 
-	const classNameTitleCol = 'min-w-38 mt-1';
+	const handleChangeCover = () => priceStore.electronOpenImage();
 
 	return (
 		<Div className="border-border-light dark:border-border-dark border-l pl-6">
@@ -180,9 +189,6 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 						<Input {...register('product_price')} isInvalid={!!errors.product_price} />
 					</HStack>
 
-					{/* product_cover */}
-					{/* product_gallery */}
-
 					{/* ordinal number */}
 					{!isNew ? (
 						<HStack className="max-w-[1100px] gap-x-3 items-center">
@@ -210,6 +216,11 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 						</HStack>
 					) : null}
 
+					{/* product_cover */}
+					<CoverEditor src={watch('product_cover')} onChange={handleChangeCover} />
+
+					{/* product_gallery */}
+
 					{/* butons */}
 					<HStack className="items-center mt-2 justify-end gap-x-3">
 						{!isNew ? (
@@ -227,3 +238,42 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 };
 
 export const FormsProductEditContainer = observer(Component);
+
+interface ICoverEditor {
+	src?: string;
+	onChange: () => void;
+}
+
+const CoverEditor = (props: ICoverEditor) => {
+	return (
+		<HStack className="max-w-[1100px] gap-x-3 items-start group">
+			<Span className={classNameTitleCol} text="Обложка" />
+
+			<Div className="relative">
+				<Image className="w-24 h-24 rounded-lg" />
+
+				<Stack className="hidden group-hover:flex backdrop-blur-[2px] absolute h-full w-full top-0 rounded-lg p-1 gap-y-1 justify-center">
+					{props.src ? (
+						<Button variant="solid" className="!py-1">
+							<EyeIcon className="w-4" />
+						</Button>
+					) : null}
+					{props.src ? (
+						<Button variant="muted" className="!py-1">
+							<PencilIcon className="w-4" />
+						</Button>
+					) : (
+						<Button variant="solid" className="!py-1" onClick={props.onChange}>
+							<PlusIcon className="w-4" />
+						</Button>
+					)}
+					{props.src ? (
+						<Button variant="error" className="!py-1">
+							<TrashIcon className="w-4" />
+						</Button>
+					) : null}
+				</Stack>
+			</Div>
+		</HStack>
+	);
+};

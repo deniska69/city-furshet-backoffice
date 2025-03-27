@@ -25,6 +25,8 @@ interface Window {
 		getPrice: () => Promise<TypeReturnGetPrice>;
 		openBackupdDir: () => Promise<unknown>;
 		sendPrice: (price: string) => Promise<unknown>;
+
+		openImage: () => Promise<unknown>;
 	};
 	electronAPI: {
 		onError: (callback: (e: string) => void) => Promise<unknown>;

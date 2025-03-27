@@ -281,6 +281,20 @@ class PriceStore {
 		await electron.sendPrice(price);
 	};
 
+	electronOpenImage = async () => {
+		layoutStore.setLoading();
+
+		await electron
+			.openImage()
+			.then((data) => {
+				console.log(data);
+			})
+			.catch((e: string) => {
+				this.setError('electronOpenImage(): Ошибка открытия изображения.\n' + e);
+			})
+			.finally(() => layoutStore.setLoading(false));
+	};
+
 	//#endregion
 }
 
