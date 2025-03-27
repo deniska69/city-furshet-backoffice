@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import {
 	ChevronDownIcon,
 	ChevronUpIcon,
@@ -14,7 +14,20 @@ import ShortUniqueId from 'short-unique-id';
 import { PRICE_FIELDS } from '@constants';
 import { isHide } from '@helpers';
 import { layoutStore, priceStore } from '@stores';
-import { Button, Card, Div, Form, HStack, Image, Input, Span, Stack, Switch, Textarea } from '@ui';
+import {
+	Button,
+	Card,
+	cn,
+	Div,
+	Form,
+	HStack,
+	Image,
+	Input,
+	Span,
+	Stack,
+	Switch,
+	Textarea,
+} from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
 
@@ -252,26 +265,28 @@ const CoverEditor = (props: ICoverEditor) => {
 			<Div className="relative">
 				<Image className="w-24 h-24 rounded-lg" />
 
-				<Stack className="hidden group-hover:flex backdrop-blur-[2px] absolute h-full w-full top-0 rounded-lg p-1 gap-y-1 justify-center">
-					{props.src ? (
-						<Button variant="solid" className="!py-1">
-							<EyeIcon className="w-4" />
-						</Button>
-					) : null}
-					{props.src ? (
-						<Button variant="muted" className="!py-1">
-							<PencilIcon className="w-4" />
-						</Button>
-					) : (
-						<Button variant="solid" className="!py-1" onClick={props.onChange}>
-							<PlusIcon className="w-4" />
-						</Button>
+				<Stack
+					className={cn(
+						'hidden group-hover:flex backdrop-blur-[2px] absolute h-full w-full top-0 rounded-lg p-1 gap-y-1 justify-center',
+						props.src ? '' : 'hover:cursor-pointer items-center',
 					)}
+					onClick={props.src ? undefined : props.onChange}
+				>
 					{props.src ? (
-						<Button variant="error" className="!py-1">
-							<TrashIcon className="w-4" />
-						</Button>
-					) : null}
+						<Fragment>
+							<Button variant="solid" className="!py-1">
+								<EyeIcon className="w-4" />
+							</Button>
+							<Button variant="muted" className="!py-1">
+								<PencilIcon className="w-4" />
+							</Button>
+							<Button variant="error" className="!py-1">
+								<TrashIcon className="w-4" />
+							</Button>
+						</Fragment>
+					) : (
+						<PlusIcon className="w-18 text-primary stroke-2" />
+					)}
 				</Stack>
 			</Div>
 		</HStack>

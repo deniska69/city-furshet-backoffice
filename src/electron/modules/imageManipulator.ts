@@ -1,4 +1,7 @@
+import * as fs from 'fs';
 import { BrowserWindow, dialog } from 'electron';
+
+import { ALLOWED_IMAGE_EXTENSIONS } from '../utils/constants.js';
 
 class ImageManipulator {
 	mainWindow: BrowserWindow | undefined;
@@ -10,22 +13,40 @@ class ImageManipulator {
 		this.mainWindow.webContents.send('error', '[Electron] [ImageManipulator] ' + e);
 	};
 
-	open = () => {
-		if (!this.mainWindow) return this.sendError('open(): Отсутствует this.mainWindow');
+	open = async () => {
+		if (!this.mainWindow)
+			return Promise.reject('[Electron] [ImageManipulator] open(): Отсутствует this.mainWindow');
 
 		try {
 			const result = dialog.showOpenDialogSync(this.mainWindow, {
 				properties: ['openFile'],
-				filters: [{ name: 'Изображения', extensions: ['jpg', 'jpeg', 'png', 'heic'] }],
+				filters: [{ name: 'Изображения', extensions: ALLOWED_IMAGE_EXTENSIONS }],
 			});
+
+			if (!result || !result.length) {
+				return Promise.reject(
+					'[Electron] [ImageManipulator] open(): Не было выбранно изображение',
+				);
+			}
+
+			const arr = result[0].split('.');
+			const extension = arr[arr.length - 1];
+
+			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension.toLowerCase())) {
+				return Promise.reject(
+					`[Electron] [ImageManipulator] open(): Расширение выбранного изображения: "${extension}" не подходит в данной версии программы`,
+				);
+			}
+
+			const file = fs.readFileSync(result[0]);
 
 			console.log('');
 			console.log('---------------------------------');
-			console.log(result);
+			console.log(file);
 
-			return Promise.resolve(result);
+			return Promise.resolve(file);
 		} catch (e) {
-			return this.sendError('open(): Ошибка.\n' + e);
+			return Promise.reject('[Electron] [ImageManipulator] open(): Ошибка.\n' + e);
 		}
 	};
 }
