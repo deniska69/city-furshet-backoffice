@@ -28,6 +28,7 @@
 		"class-variance-authority": "^0.7.1",
 		"classnames": "^2.5.1",
 		"dotenv": "^16.4.7",
+		"heic-convert": "^2.1.0",
 		"iconv-lite": "^0.6.3",
 		"mobx": "^6.13.6",
 		"mobx-react": "^9.2.0",

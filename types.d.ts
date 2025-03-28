@@ -48,5 +48,4 @@ type TypePriceStoreCategory =
 	  })
 	| null;
 
-declare module 'windows-1251';
-declare module 'windows-1252';
+declare module 'heic-convert';

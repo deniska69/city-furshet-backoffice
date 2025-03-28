@@ -1,7 +1,9 @@
 import * as fs from 'fs';
+import path from 'path';
 import { BrowserWindow, dialog } from 'electron';
+import heicConvert from 'heic-convert';
 
-import { ALLOWED_IMAGE_EXTENSIONS } from '../utils/constants.js';
+import { ALLOWED_IMAGE_EXTENSIONS, TEMP_DIR, TEMP_IMAGE_FILE_NAME } from '../utils/constants.js';
 
 class ImageManipulator {
 	mainWindow: BrowserWindow | undefined;
@@ -30,9 +32,9 @@ class ImageManipulator {
 			}
 
 			const arr = result[0].split('.');
-			const extension = arr[arr.length - 1];
+			const extension = arr[arr.length - 1].toLowerCase();
 
-			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension.toLowerCase())) {
+			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension)) {
 				return Promise.reject(
 					`[Electron] [ImageManipulator] open(): Расширение выбранного изображения: "${extension}" не подходит в данной версии программы`,
 				);
@@ -40,8 +42,17 @@ class ImageManipulator {
 
 			const file = fs.readFileSync(result[0]);
 
+			if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
+
+			if (extension === 'heic') {
+				const buffer = fs.readFileSync(result[0]);
+				const outputBuffer = await heicConvert({ buffer, format: 'JPEG', quality: 1 });
+				fs.writeFileSync(path.join(TEMP_DIR, TEMP_IMAGE_FILE_NAME), outputBuffer);
+			}
+
 			console.log('');
 			console.log('---------------------------------');
+			console.log({ extension });
 			console.log(file);
 
 			return Promise.resolve(file);
