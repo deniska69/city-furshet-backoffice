@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import path from 'path';
 import { BrowserWindow, dialog } from 'electron';
 import heicConvert from 'heic-convert';
+import { imageSize } from 'image-size';
+import sharp from 'sharp';
 
 import { ALLOWED_IMAGE_EXTENSIONS, TEMP_DIR, TEMP_IMAGE_FILE_NAME } from '../utils/constants.js';
 
@@ -40,22 +42,24 @@ class ImageManipulator {
 				);
 			}
 
-			const file = fs.readFileSync(result[0]);
+			const sourceFile = fs.readFileSync(result[0]);
 
 			if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
 
+			const tempFileFullName = path.join(TEMP_DIR, TEMP_IMAGE_FILE_NAME);
+
+			let readyBuffer = undefined;
+
 			if (extension === 'heic') {
 				const buffer = fs.readFileSync(result[0]);
-				const outputBuffer = await heicConvert({ buffer, format: 'JPEG', quality: 1 });
-				fs.writeFileSync(path.join(TEMP_DIR, TEMP_IMAGE_FILE_NAME), outputBuffer);
+				readyBuffer = await heicConvert({ buffer, format: 'JPEG', quality: 1 });
+				fs.writeFileSync(tempFileFullName, readyBuffer);
 			}
 
-			console.log('');
-			console.log('---------------------------------');
-			console.log({ extension });
-			console.log(file);
+			const dimensions = imageSize(readyBuffer);
+			console.log(dimensions);
 
-			return Promise.resolve(file);
+			return Promise.resolve(sourceFile);
 		} catch (e) {
 			return Promise.reject('[Electron] [ImageManipulator] open(): Ошибка.\n' + e);
 		}
