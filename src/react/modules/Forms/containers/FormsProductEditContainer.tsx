@@ -13,6 +13,7 @@ import ShortUniqueId from 'short-unique-id';
 
 import { PRICE_FIELDS } from '@constants';
 import { isHide } from '@helpers';
+import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
 import {
 	Button,
@@ -140,7 +141,10 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 		}
 	};
 
-	const handleChangeCover = () => priceStore.electronOpenImage();
+	const handleChangeCover = () => {
+		if (!categoryId) return layoutStore.setError('categoryId:' + categoryId);
+		electron.openImage(categoryId, watch('product_id'));
+	};
 
 	return (
 		<Div className="border-border-light dark:border-border-dark border-l pl-6">

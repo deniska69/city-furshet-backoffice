@@ -11,12 +11,7 @@ interface IErrorScreen {
 }
 
 export const ErrorScreen = (props: IErrorScreen) => {
-	const {
-		title = 'Произошла критическая ошибка',
-		text,
-		onClose,
-		closeButtonText,
-	} = props;
+	const { title = 'Произошла критическая ошибка', text, onClose, closeButtonText } = props;
 
 	const navigate = useNavigate();
 	const errorRoute = useRouteError();
@@ -30,12 +25,10 @@ export const ErrorScreen = (props: IErrorScreen) => {
 	};
 
 	return (
-		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-50 flex h-screen w-full items-center justify-center">
+		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-51 flex h-screen w-full items-center justify-center">
 			<ExclamationTriangleIcon className="w-32 text-white" />
 
-			<Span className="block text-center text-4xl font-bold text-white">
-				{title}
-			</Span>
+			<Span className="block text-center text-4xl font-bold text-white">{title}</Span>
 
 			{text || errorMessage ? (
 				<Div className="bg-red-500/60 dark:bg-red-600/20 !p-4 !mt-6 rounded-xl border border-red-900 max-w-[60%] text-center">

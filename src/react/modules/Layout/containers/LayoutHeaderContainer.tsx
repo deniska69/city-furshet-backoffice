@@ -8,7 +8,7 @@ import { electron } from '@services';
 import { priceStore } from '@stores';
 import { Button, Card, cn, HStack, Span } from '@ui';
 
-import LayoutThemeWidget from './LayoutThemeWidget';
+import LayoutThemeWidget from '../components/LayoutThemeWidget';
 
 const Component = () => {
 	useEffect(() => {
@@ -17,9 +17,9 @@ const Component = () => {
 
 	const lastMod = getLastModText(priceStore.lastMod);
 
-	const handleConnect = () => priceStore.electronConnect();
+	const handleConnect = () => priceStore.connect();
 
-	const handleGetPice = () => priceStore.electronGetPrice();
+	const handleGetPice = () => priceStore.getPrice();
 
 	const handleOpenBackupDir = () => electron.openBackupdDir();
 

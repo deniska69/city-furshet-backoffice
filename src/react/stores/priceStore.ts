@@ -72,7 +72,7 @@ class PriceStore {
 		return Promise.resolve();
 	});
 
-	savePrice = () => {
+	savePrice = async () => {
 		if (!this.categories || !this.products) {
 			return this.setError(
 				'savePrice(): Отсутствует priceStore.categories или priceStore.products.',
@@ -97,7 +97,7 @@ class PriceStore {
 				});
 			});
 
-			this.electronSendPrice(price);
+			await electron.sendPrice(price);
 		} catch (e) {
 			layoutStore.setLoading(false);
 			this.setError('savePrice(): Ошибка формирования прайса.\n' + e);
@@ -111,7 +111,20 @@ class PriceStore {
 			[
 				{
 					title: 'ОК',
-					onClick: this.electronGetPrice,
+					onClick: this.getPrice,
+				},
+			],
+			'success',
+		);
+	};
+
+	onAddImageFinally = () => {
+		layoutStore.setLoading(false);
+		layoutStore.alert(
+			'Изображение успешно добавлено! Не забудьте сохранить прайс',
+			[
+				{
+					title: 'ОК',
 				},
 			],
 			'success',
@@ -122,8 +135,8 @@ class PriceStore {
 
 	//#region Categories
 
-	getCategory = (id: string): TypePriceStoreCategory => {
-		if (!this.categories) return null;
+	getCategory = (id?: string): TypePriceStoreCategory => {
+		if (!id || !this.categories) return null;
 
 		const item = this.categories
 			.map(
@@ -174,7 +187,10 @@ class PriceStore {
 
 	//#region Products
 
-	getProducts = (category_id: string) => this.products?.get(category_id);
+	getProducts = (category_id?: string) => {
+		if (!category_id) return null;
+		return this.products?.get(category_id);
+	};
 
 	getProduct = (category_id: string, product_id: string) => {
 		const items = this.getProducts(category_id);
@@ -244,7 +260,7 @@ class PriceStore {
 
 	//#region Electron
 
-	electronConnect = async () => {
+	connect = async () => {
 		layoutStore.setLoading();
 
 		await electron
@@ -257,7 +273,7 @@ class PriceStore {
 			.finally(() => layoutStore.setLoading(false));
 	};
 
-	electronGetPrice = async () => {
+	getPrice = async () => {
 		this.price = undefined;
 		this.lastMod = undefined;
 		this.categories = undefined;
@@ -271,26 +287,7 @@ class PriceStore {
 			.catch((e: string) => {
 				this.setPrice();
 				this.setConnect(false);
-				this.setError('electronGetPrice(): Ошибка получения прайса.\n' + e);
-			})
-			.finally(() => layoutStore.setLoading(false));
-	};
-
-	private electronSendPrice = async (price: string) => {
-		layoutStore.setLoading();
-		await electron.sendPrice(price);
-	};
-
-	electronOpenImage = async () => {
-		layoutStore.setLoading();
-
-		await electron
-			.openImage()
-			.then((data) => {
-				console.log(data);
-			})
-			.catch((e: string) => {
-				this.setError('electronOpenImage(): Ошибка открытия изображения.\n' + e);
+				this.setError('getPrice(): Ошибка получения прайса.\n' + e);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	};

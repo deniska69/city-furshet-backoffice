@@ -19,16 +19,17 @@ const Component = () => {
 	const [isShowSplash, setIsShowSplash] = useState(true);
 
 	useLayoutEffect(() => {
-		if (!priceStore.price && !isShowSplash) {
-			navigate('/home', { replace: true });
-		}
-
+		if (!priceStore.price && !isShowSplash) navigate('/home', { replace: true });
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [priceStore.price, isShowSplash]);
 
 	useLayoutEffect(() => {
-		window.electronAPI.onError((e: string) => layoutStore.setError(e));
+		window.electronAPI.onError((e: string) => {
+			layoutStore.setLoading(false);
+			layoutStore.setError(e);
+		});
 		window.electronAPI.onSendPriceFinally(() => priceStore.onSendPriceFinally());
+		window.electronAPI.onAddImageFinally(() => priceStore.onAddImageFinally());
 	}, []);
 
 	const handleHideSplash = () => setIsShowSplash(false);

@@ -2,7 +2,7 @@ import { Provider } from 'mobx-react';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 
 import { ErrorScreen } from '@modules/Error';
-import { FormsCategoryScreen, FormsProductsListScreen } from '@modules/Forms';
+import { FormsCategoryEditScreen, FormsProductsListScreen } from '@modules/Forms';
 import { LayoutHomeScreen, LayoutScreen } from '@modules/Layout';
 import * as stores from '@stores';
 
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: '/category/:categoryId?',
-				Component: FormsCategoryScreen,
+				Component: FormsCategoryEditScreen,
 			},
 			{
 				path: '/category/:categoryId/products',

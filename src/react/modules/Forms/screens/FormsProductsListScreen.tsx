@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { observer } from 'mobx-react';
 import { useNavigate, useParams } from 'react-router';
 
 import { Button, HStack, Stack } from '@ui';
@@ -7,7 +6,7 @@ import { Button, HStack, Stack } from '@ui';
 import { FormsProductEditContainer } from '../containers/FormsProductEditContainer';
 import { FormsProductsListContainer } from '../containers/FormsProductsListContainer';
 
-const Component = () => {
+export const FormsProductsListScreen = () => {
 	const navigate = useNavigate();
 	const { categoryId } = useParams();
 	const [item, setItem] = useState<string | undefined>(undefined);
@@ -42,5 +41,3 @@ const Component = () => {
 		</Stack>
 	);
 };
-
-export const FormsProductsListScreen = observer(Component);

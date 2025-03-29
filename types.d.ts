@@ -25,12 +25,12 @@ interface Window {
 		getPrice: () => Promise<TypeReturnGetPrice>;
 		openBackupdDir: () => Promise<unknown>;
 		sendPrice: (price: string) => Promise<unknown>;
-
-		openImage: () => Promise<unknown>;
+		openImage: (category_id: string, product_id: string) => Promise<unknown>;
 	};
 	electronAPI: {
 		onError: (callback: (e: string) => void) => Promise<unknown>;
 		onSendPriceFinally: (callback: () => void) => Promise<unknown>;
+		onAddImageFinally: (callback: () => void) => Promise<unknown>;
 	};
 }
 

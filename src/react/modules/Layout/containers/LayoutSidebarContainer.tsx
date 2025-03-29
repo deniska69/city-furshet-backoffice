@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router';
 
+import logoFull from '@assets/logo_full.png';
 import { priceStore } from '@stores';
-import { Button, Card, Div, Stack } from '@ui';
+import { Button, Card, Div, Image, Stack } from '@ui';
 
 import LayoutCategories from '../components/LayoutCategories';
-import LayoutLogo from '../components/LayoutLogo';
 
 const Component = () => {
 	const navigate = useNavigate();
@@ -20,7 +20,9 @@ const Component = () => {
 
 	return (
 		<Card className="h-screen !max-h-screen max-w-64 min-w-64 !p-0 border-y-0 border-r border-l-0 flex flex-col !rounded-none justify-between">
-			<LayoutLogo />
+			<Div className="flex min-h-16 items-center justify-center">
+				<Image src={logoFull} className="max-h-12" />
+			</Div>
 
 			{priceStore.price ? (
 				<Stack className="h-full max-h-[calc(100vh-90px)] justify-between overflow-hidden grow-0">

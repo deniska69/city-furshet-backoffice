@@ -37,5 +37,7 @@ app.on('ready', () => {
 	ipcMain.handle('openBackupdDir', () => shell.openPath(BUCKUP_DIR));
 	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(text));
 
-	ipcMain.handle('openImage', () => imageManipulator.open());
+	ipcMain.handle('openImage', (e, category_id, product_id) =>
+		imageManipulator.open(category_id, product_id),
+	);
 });
