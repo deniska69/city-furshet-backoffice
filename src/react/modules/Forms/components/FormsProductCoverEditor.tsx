@@ -9,11 +9,11 @@ interface IFormsProductCoverEditor {
 }
 
 const FormsProductCoverEditor = (props: IFormsProductCoverEditor) => (
-	<HStack className="max-w-[1100px] gap-x-3 items-start group">
+	<HStack className="max-w-[1100px] gap-x-3 items-start">
 		<Span className="min-w-38 mt-1" text="Обложка" />
 
-		<Div className="relative">
-			<Image src={props.src} className="w-24 h-24 rounded-lg" />
+		<Div className="relative group">
+			<Image src={props.src} className="w-24 h-24 rounded-lg object-cover" />
 
 			<Stack
 				className={cn(

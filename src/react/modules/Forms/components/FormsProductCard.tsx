@@ -32,7 +32,7 @@ const FormsProductCard = (props: IFormsProductCard) => {
 		>
 			<Stack>
 				<Div className="relative">
-					<Image src={product_cover} className="w-[200px] h-[200px] rounded-lg" />
+					<Image src={product_cover} className="w-[200px] h-[200px] rounded-lg object-cover" />
 					{isHide(product_hide) ? (
 						<Div className="bg-black/20 dark:bg-black/30 absolute w-full top-0 h-full rounded-lg flex items-center justify-center backdrop-blur-[3px]">
 							<EyeSlashIcon className="w-24 text-text-dark dark:text-text-light" />
