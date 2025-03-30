@@ -11,6 +11,7 @@ import {
 	BUCKUP_SEND_DIR,
 	FTP_HOME_DIR,
 	FTP_PRICE_FILE_NAME,
+	TEMP_DIR,
 } from '../utils/constants.js';
 import { getPriceBackupFileName, isDev } from '../utils/helpers.js';
 
@@ -35,6 +36,25 @@ class FTP {
 
 	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
 
+	cdDir = async (...args: string[]) => {
+		if (this.client?.closed || !this.client) {
+			return this.sendError('cdDir(): Ошибка подключения.');
+		}
+
+		try {
+			const currentDir = await this.client.pwd();
+			const isHome = currentDir === FTP_HOME_DIR;
+
+			if (isHome && !args.length) return Promise.resolve();
+
+			const cd = path.join(FTP_HOME_DIR || '/', ...args);
+
+			return await this.client.cd(cd.replaceAll('\\', '/'));
+		} catch (e) {
+			return this.sendError('cdDir(): Ошибка.\n' + e);
+		}
+	};
+
 	connect = async () => {
 		try {
 			if (!this.client) this.client = new Client();
@@ -48,7 +68,7 @@ class FTP {
 			}
 
 			await this.client.access(FTP_CLIENT_CONFIG);
-			await this.client.cd(FTP_HOME_DIR || '/');
+			await this.cdDir();
 
 			return Promise.resolve();
 		} catch (e) {
@@ -63,9 +83,7 @@ class FTP {
 
 		try {
 			await this.downloadAndWriteBackup();
-
 			const price = await this.readLastBackup();
-
 			return Promise.resolve({ price, lastMod: this.lastModPrice });
 		} catch (e) {
 			return Promise.reject('[Electron] [FTP] getPrice(): Ошибка.\n' + e);
@@ -78,6 +96,7 @@ class FTP {
 		}
 
 		try {
+			await this.cdDir();
 			this.lastModPrice = await this.client.lastMod(FTP_PRICE_FILE_NAME);
 
 			if (!this.lastModPrice) {
@@ -150,6 +169,7 @@ class FTP {
 				if (e) return this.sendError('sendPrice(): Ошибка #2.\n' + e);
 			});
 
+			await this.cdDir();
 			await this.client
 				.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME)
 				.then(() => {
@@ -161,6 +181,26 @@ class FTP {
 				});
 		} catch (e) {
 			return this.sendError('sendPrice(): Ошибка #1.\n' + e);
+		}
+	};
+
+	uploadImage = async (category_id: string, product_id: string, image_name: string) => {
+		if (this.client?.closed || !this.client) {
+			return this.sendError('uploadImage(): Ошибка подключения.');
+		}
+
+		try {
+			await this.cdDir('images');
+
+			await this.client.ensureDir(category_id);
+			await this.cdDir('images', category_id);
+
+			await this.client.ensureDir(product_id);
+			await this.cdDir('images', category_id, product_id);
+
+			return await this.client.uploadFrom(path.join(TEMP_DIR, image_name), image_name);
+		} catch (e) {
+			return this.sendError('uploadImage(): Ошибка.\n' + e);
 		}
 	};
 }

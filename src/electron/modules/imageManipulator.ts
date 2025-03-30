@@ -5,6 +5,7 @@ import heicConvert from 'heic-convert';
 import sharp from 'sharp';
 
 import { ALLOWED_IMAGE_EXTENSIONS, MAX_WIDTH_IMAGE, TEMP_DIR } from '../utils/constants.js';
+import { ftp } from './ftp.js';
 
 class ImageManipulator {
 	mainWindow: BrowserWindow | undefined;
@@ -16,7 +17,7 @@ class ImageManipulator {
 		this.mainWindow.webContents.send('error', '[Electron] [ImageManipulator] ' + e);
 	};
 
-	open = async (category_id: string, product_id: string) => {
+	open = async (category_id: string, product_id: string, image_name: string) => {
 		if (!this.mainWindow) return this.sendError('open(): Отсутствует this.mainWindow');
 
 		try {
@@ -42,7 +43,8 @@ class ImageManipulator {
 
 			if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
 
-			const tempFileFullName = path.join(TEMP_DIR, product_id + '.jpg');
+			const fileName = image_name + '.jpg';
+			const fileFullName = path.join(TEMP_DIR, fileName);
 
 			let readyBuffer = undefined;
 
@@ -54,10 +56,14 @@ class ImageManipulator {
 
 			await sharp(readyBuffer)
 				.resize(MAX_WIDTH_IMAGE)
-				.jpeg({ quality: 100 })
-				.toFile(tempFileFullName);
+				.jpeg({ quality: 95 })
+				.toFile(fileFullName);
+
+			await ftp.uploadImage(category_id, product_id, fileName);
 
 			this.mainWindow.webContents.send('onAddImageFinally');
+
+			return Promise.resolve();
 		} catch (e) {
 			return this.sendError('open(): Ошибка.\n' + e);
 		}

@@ -17,9 +17,9 @@ class Electron {
 
 	sendPrice = async (price: string) => await window.electron.sendPrice(price);
 
-	openImage = async (category_id: string, product_id: string) => {
+	openImage = async (category_id: string, product_id: string, image_name: string) => {
 		layoutStore.setLoading();
-		await window.electron.openImage(category_id, product_id);
+		return await window.electron.openImage(category_id, product_id, image_name);
 	};
 }
 

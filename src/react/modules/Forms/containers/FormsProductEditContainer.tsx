@@ -1,12 +1,5 @@
-import { Fragment, useEffect } from 'react';
-import {
-	ChevronDownIcon,
-	ChevronUpIcon,
-	EyeIcon,
-	PencilIcon,
-	PlusIcon,
-	TrashIcon,
-} from '@heroicons/react/24/outline';
+import { useEffect } from 'react';
+import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
@@ -15,22 +8,10 @@ import { PRICE_FIELDS } from '@constants';
 import { isHide } from '@helpers';
 import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
-import {
-	Button,
-	Card,
-	cn,
-	Div,
-	Form,
-	HStack,
-	Image,
-	Input,
-	Span,
-	Stack,
-	Switch,
-	Textarea,
-} from '@ui';
+import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
+import FormsProductCoverEditor from '../components/FormsProductCoverEditor';
 
 interface IComponent {
 	categoryId?: string;
@@ -141,9 +122,15 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 		}
 	};
 
-	const handleChangeCover = () => {
+	const handleChangeCover = async () => {
 		if (!categoryId) return layoutStore.setError('categoryId:' + categoryId);
-		electron.openImage(categoryId, watch('product_id'));
+
+		await electron.openImage(categoryId, watch('product_id'), 'cover').then(() => {
+			setValue(
+				'product_cover',
+				`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/cover.jpg`,
+			);
+		});
 	};
 
 	return (
@@ -234,7 +221,7 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 					) : null}
 
 					{/* product_cover */}
-					<CoverEditor src={watch('product_cover')} onChange={handleChangeCover} />
+					<FormsProductCoverEditor src={watch('product_cover')} onChange={handleChangeCover} />
 
 					{/* product_gallery */}
 
@@ -255,44 +242,3 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 };
 
 export const FormsProductEditContainer = observer(Component);
-
-interface ICoverEditor {
-	src?: string;
-	onChange: () => void;
-}
-
-const CoverEditor = (props: ICoverEditor) => {
-	return (
-		<HStack className="max-w-[1100px] gap-x-3 items-start group">
-			<Span className={classNameTitleCol} text="Обложка" />
-
-			<Div className="relative">
-				<Image className="w-24 h-24 rounded-lg" />
-
-				<Stack
-					className={cn(
-						'hidden group-hover:flex backdrop-blur-[2px] absolute h-full w-full top-0 rounded-lg p-1 gap-y-1 justify-center',
-						props.src ? '' : 'hover:cursor-pointer items-center',
-					)}
-					onClick={props.src ? undefined : props.onChange}
-				>
-					{props.src ? (
-						<Fragment>
-							<Button variant="solid" className="!py-1">
-								<EyeIcon className="w-4" />
-							</Button>
-							<Button variant="muted" className="!py-1">
-								<PencilIcon className="w-4" />
-							</Button>
-							<Button variant="error" className="!py-1">
-								<TrashIcon className="w-4" />
-							</Button>
-						</Fragment>
-					) : (
-						<PlusIcon className="w-18 text-primary stroke-2" />
-					)}
-				</Stack>
-			</Div>
-		</HStack>
-	);
-};
