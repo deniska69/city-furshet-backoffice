@@ -27,7 +27,7 @@ const FormsProductCoverEditor = (props: IFormsProductCoverEditor) => (
 						<Button variant="solid" className="!py-1">
 							<EyeIcon className="w-4" />
 						</Button>
-						<Button variant="muted" className="!py-1">
+						<Button variant="muted" className="!py-1" onClick={props.onChange}>
 							<PencilIcon className="w-4" />
 						</Button>
 						<Button variant="error" className="!py-1">

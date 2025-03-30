@@ -13,22 +13,9 @@ import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '
 import FormsHeader from '../components/FormsHeader';
 import FormsProductCoverEditor from '../components/FormsProductCoverEditor';
 
-interface IComponent {
-	categoryId?: string;
-	productId?: string;
-	onClose: () => void;
-}
-
-type TypeHandleValidate =
-	| 'product_title'
-	| 'product_title_description'
-	| 'product_description'
-	| 'product_note'
-	| 'product_price';
-
 const classNameTitleCol = 'min-w-38 mt-1';
 
-const Component = ({ categoryId, productId, onClose }: IComponent) => {
+const Component = ({ categoryId, productId, onClose }: IFormsProductEditContainer) => {
 	const uid = new ShortUniqueId();
 
 	const isNew = !productId || productId === 'new';
@@ -61,7 +48,7 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 
 	const handleChangeHide = (value: boolean) => setValue('product_hide', value);
 
-	const handleValidate = (name: TypeHandleValidate) => {
+	const handleValidate = (name: TypeHandleValidateProduct) => {
 		if (!watch(name).length) return;
 
 		if (watch(name).includes('\\') || watch(name).includes(';')) {
@@ -125,10 +112,12 @@ const Component = ({ categoryId, productId, onClose }: IComponent) => {
 	const handleChangeCover = async () => {
 		if (!categoryId) return layoutStore.setError('categoryId:' + categoryId);
 
-		await electron.openImage(categoryId, watch('product_id'), 'cover').then(() => {
+		const coverId = uid.rnd();
+
+		await electron.openImage(categoryId, watch('product_id'), coverId).then(() => {
 			setValue(
 				'product_cover',
-				`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/cover.jpg`,
+				`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${coverId}.jpg`,
 			);
 		});
 	};

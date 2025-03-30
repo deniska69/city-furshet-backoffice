@@ -10,8 +10,6 @@ import { isHide } from '@helpers';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Form, HStack, Input, Span, Switch } from '@ui';
 
-type TypeHandleValidate = 'category_title' | 'category_description';
-
 const Component = ({ id }: { id?: string }) => {
 	const navigate = useNavigate();
 	const uid = new ShortUniqueId();
@@ -37,7 +35,7 @@ const Component = ({ id }: { id?: string }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [category?.category_id]);
 
-	const handleValidate = (name: TypeHandleValidate) => {
+	const handleValidate = (name: TypeHandleValidateCategory) => {
 		if (!watch(name).length) return;
 
 		if (watch(name).includes('\\') || watch(name).includes(';')) {

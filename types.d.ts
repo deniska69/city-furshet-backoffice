@@ -48,4 +48,19 @@ type TypePriceStoreCategory =
 	  })
 	| null;
 
+type TypeHandleValidateCategory = 'category_title' | 'category_description';
+
+interface IFormsProductEditContainer {
+	categoryId?: string;
+	productId?: string;
+	onClose: () => void;
+}
+
+type TypeHandleValidateProduct =
+	| 'product_title'
+	| 'product_title_description'
+	| 'product_description'
+	| 'product_note'
+	| 'product_price';
+
 declare module 'heic-convert';
