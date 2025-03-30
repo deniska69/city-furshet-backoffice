@@ -6,6 +6,8 @@ import { imageManipulator } from './modules/imageManipulator.js';
 import { BUCKUP_DIR, PORT, PROJECT_TITLE, URL } from './utils/constants.js';
 import { getAssetPath, getPreloadPath, getReactPath, isDev } from './utils/helpers.js';
 
+app.commandLine.appendSwitch('disable-http-cache');
+
 app.on('ready', () => {
 	const mainWindow = new BrowserWindow({
 		icon: path.join(getAssetPath(), 'icon.png'),
@@ -36,8 +38,10 @@ app.on('ready', () => {
 	ipcMain.handle('getPrice', () => ftp.getPrice());
 	ipcMain.handle('openBackupdDir', () => shell.openPath(BUCKUP_DIR));
 	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(text));
-
-	ipcMain.handle('openImage', (e, category_id, product_id, image_name) => {
-		return imageManipulator.open(category_id, product_id, image_name);
+	ipcMain.handle('addImage', (e, category_id, product_id, image_id) => {
+		return imageManipulator.addImage(category_id, product_id, image_id);
+	});
+	ipcMain.handle('deleteImage', (e, category_id, product_id, image_id) => {
+		return ftp.deleteImage(category_id, product_id, image_id);
 	});
 });

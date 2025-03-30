@@ -5,8 +5,11 @@ electron.contextBridge.exposeInMainWorld('electron', {
 	getPrice: () => electron.ipcRenderer.invoke('getPrice'),
 	openBackupdDir: () => electron.ipcRenderer.invoke('openBackupdDir'),
 	sendPrice: (price: string) => electron.ipcRenderer.send('sendPrice', price),
-	openImage: (category_id: string, product_id: string, image_name: string) => {
-		return electron.ipcRenderer.invoke('openImage', category_id, product_id, image_name);
+	addImage: (category_id: string, product_id: string, image_id: string) => {
+		return electron.ipcRenderer.invoke('addImage', category_id, product_id, image_id);
+	},
+	deleteImage: (category_id: string, product_id: string, image_id: string) => {
+		return electron.ipcRenderer.invoke('deleteImage', category_id, product_id, image_id);
 	},
 } satisfies Window['electron']);
 

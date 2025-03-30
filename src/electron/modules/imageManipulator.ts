@@ -17,7 +17,7 @@ class ImageManipulator {
 		this.mainWindow.webContents.send('error', '[Electron] [ImageManipulator] ' + e);
 	};
 
-	open = async (category_id: string, product_id: string, image_name: string) => {
+	addImage = async (category_id: string, product_id: string, image_id: string) => {
 		if (!this.mainWindow) return this.sendError('open(): Отсутствует this.mainWindow');
 
 		try {
@@ -43,8 +43,7 @@ class ImageManipulator {
 
 			if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
 
-			const fileName = image_name + '.jpg';
-			const fileFullName = path.join(TEMP_DIR, fileName);
+			const fileFullName = path.join(TEMP_DIR, image_id + '.jpg');
 
 			let readyBuffer = undefined;
 
@@ -59,7 +58,7 @@ class ImageManipulator {
 				.jpeg({ quality: 95 })
 				.toFile(fileFullName);
 
-			await ftp.uploadImage(category_id, product_id, fileName);
+			await ftp.uploadImage(category_id, product_id, image_id);
 
 			this.mainWindow.webContents.send('onAddImageFinally');
 

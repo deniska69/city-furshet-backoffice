@@ -114,13 +114,30 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 
 		const coverId = uid.rnd();
 
-		await electron.openImage(categoryId, watch('product_id'), coverId).then(() => {
+		await electron.addImage(categoryId, watch('product_id'), coverId).then(() => {
 			setValue(
 				'product_cover',
 				`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${coverId}.jpg`,
 			);
 		});
 	};
+
+	const handleDeleteCover = async () => {
+		if (!categoryId) return layoutStore.setError('categoryId:' + categoryId);
+		if (!watch('product_cover').length) {
+			return layoutStore.setError('!watch(product_cover).length');
+		}
+
+		const arr1 = watch('product_cover').split('/');
+		const arr2 = arr1[arr1.length - 1].split('.');
+
+		await electron.deleteImage(categoryId, watch('product_id'), arr2[0]).then(() => {
+			setValue('product_cover', '');
+			layoutStore.setLoading(false);
+		});
+	};
+
+	const handleOpenCover = () => console.log(product);
 
 	return (
 		<Div className="border-border-light dark:border-border-dark border-l pl-6">
@@ -210,7 +227,12 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 					) : null}
 
 					{/* product_cover */}
-					<FormsProductCoverEditor src={watch('product_cover')} onChange={handleChangeCover} />
+					<FormsProductCoverEditor
+						onOpen={handleOpenCover}
+						src={watch('product_cover')}
+						onDelete={handleDeleteCover}
+						onChange={handleChangeCover}
+					/>
 
 					{/* product_gallery */}
 

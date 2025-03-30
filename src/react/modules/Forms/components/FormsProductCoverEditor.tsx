@@ -6,6 +6,8 @@ import { Button, cn, Div, HStack, Image, Span, Stack } from '@ui';
 interface IFormsProductCoverEditor {
 	src?: string;
 	onChange: () => void;
+	onDelete: () => void;
+	onOpen: () => void;
 }
 
 const FormsProductCoverEditor = (props: IFormsProductCoverEditor) => (
@@ -24,13 +26,13 @@ const FormsProductCoverEditor = (props: IFormsProductCoverEditor) => (
 			>
 				{props.src ? (
 					<Fragment>
-						<Button variant="solid" className="!py-1">
+						<Button variant="solid" className="!py-1" onClick={props.onOpen}>
 							<EyeIcon className="w-4" />
 						</Button>
 						<Button variant="muted" className="!py-1" onClick={props.onChange}>
 							<PencilIcon className="w-4" />
 						</Button>
-						<Button variant="error" className="!py-1">
+						<Button variant="error" className="!py-1" onClick={props.onDelete}>
 							<TrashIcon className="w-4" />
 						</Button>
 					</Fragment>

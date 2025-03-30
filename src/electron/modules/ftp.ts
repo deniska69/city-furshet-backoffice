@@ -184,7 +184,7 @@ class FTP {
 		}
 	};
 
-	uploadImage = async (category_id: string, product_id: string, image_name: string) => {
+	uploadImage = async (category_id: string, product_id: string, image_id: string) => {
 		if (this.client?.closed || !this.client) {
 			return this.sendError('uploadImage(): Ошибка подключения.');
 		}
@@ -198,9 +198,32 @@ class FTP {
 			await this.client.ensureDir(product_id);
 			await this.cdDir('images', category_id, product_id);
 
-			return await this.client.uploadFrom(path.join(TEMP_DIR, image_name), image_name);
+			return await this.client.uploadFrom(
+				path.join(TEMP_DIR, image_id + '.jpg'),
+				image_id + '.jpg',
+			);
 		} catch (e) {
 			return this.sendError('uploadImage(): Ошибка.\n' + e);
+		}
+	};
+
+	deleteImage = async (category_id: string, product_id: string, image_id: string) => {
+		if (this.client?.closed || !this.client) {
+			return this.sendError('deleteImage(): Ошибка подключения.');
+		}
+
+		try {
+			await this.cdDir('images');
+
+			await this.client.ensureDir(category_id);
+			await this.cdDir('images', category_id);
+
+			await this.client.ensureDir(product_id);
+			await this.cdDir('images', category_id, product_id);
+
+			return await this.client.remove(image_id + '.jpg');
+		} catch (e) {
+			return this.sendError('deleteImage(): Ошибка.\n' + e);
 		}
 	};
 }
