@@ -79,14 +79,14 @@ const Component = ({ id }: { id?: string }) => {
 		layoutStore.alert(
 			`Вы действительно хотите удалить категорию "${category.category_title}" ?`,
 			[
+				{ title: 'Отмена' },
 				{
-					title: '',
+					title: 'Удалить',
 					onClick: () => {
 						priceStore.deleteCategory(category?.index);
 						navigate('/', { replace: true });
 					},
 				},
-				{ title: 'Отмена' },
 			],
 			'warning',
 		);

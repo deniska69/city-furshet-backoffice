@@ -85,11 +85,11 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		layoutStore.alert(
 			`Вы действительно хотите удалить товар "${product.product_title}" ?`,
 			[
+				{ title: 'Отмена' },
 				{
-					title: '',
+					title: 'Удалить',
 					onClick: () => priceStore.deleteProduct(categoryId, product.product_id),
 				},
-				{ title: 'Отмена' },
 			],
 			'warning',
 		);
