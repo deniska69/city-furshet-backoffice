@@ -41,10 +41,10 @@ const getSource = (code: keyof typeof ERROR_CODES) => {
 
 const getFirstText = (code: keyof typeof ERROR_CODES) => ERROR_CODES[code];
 
-const getSecondText = (text?: unknown) => (text ? '\n' + JSON.stringify(text) : '');
+const getSecondText = (text?: unknown) => (text ? '\n' + JSON.stringify(text) + ' ' : '');
 
 export const getError = (code: keyof typeof ERROR_CODES, secondText?: unknown) => {
-	return `${getSource(code)} ${getFirstText(code)} ${getSecondText(secondText)} [#${code}]`;
+	return `${getSource(code)} ${getFirstText(code)} ${getSecondText(secondText)}[#${code}]`;
 };
 
 export const SUCCESS_CODES = {

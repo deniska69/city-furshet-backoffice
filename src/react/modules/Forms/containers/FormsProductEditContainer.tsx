@@ -112,20 +112,19 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 	const handleChangeCover = async () => {
 		if (!categoryId) return layoutStore.setError('categoryId:' + categoryId);
 
+		layoutStore.setLoading();
+
 		const coverId = uid.rnd();
 
 		await electron
 			.addImage(categoryId, watch('product_id'), coverId)
 			.then(() => {
-				console.log('[handleChangeCover] then()');
 				setValue(
 					'product_cover',
 					`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${coverId}.jpg`,
 				);
 			})
-			.catch(() => {
-				console.log('[handleChangeCover] catch()');
-			});
+			.finally(() => layoutStore.setLoading(false));
 	};
 
 	const handleDeleteCover = async () => {

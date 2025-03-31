@@ -153,7 +153,6 @@ class FTP {
 				.then(() => {
 					if (!this.mainWindow) return;
 					this.mainWindow.webContents.send('success', 100);
-					// this.mainWindow.webContents.send('onSendPriceFinally');
 				})
 				.catch((e) => {
 					return this.sendError(114, e);

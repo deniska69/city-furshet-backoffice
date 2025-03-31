@@ -11,9 +11,10 @@ import { ftp } from './ftp.js';
 class ImageManipulator {
 	mainWindow: BrowserWindow | undefined;
 
-	private sendError = (code: keyof typeof ERROR_CODES, e?: unknown) => {
-		if (!this.mainWindow) return;
-		this.mainWindow.webContents.send('error', getError(code, e));
+	private sendError = async (code: keyof typeof ERROR_CODES, e?: unknown) => {
+		if (!this.mainWindow) return Promise.reject(getError(200));
+		this.mainWindow.webContents.send('error', code, e);
+		return Promise.reject(getError(code, e));
 	};
 
 	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
@@ -27,12 +28,15 @@ class ImageManipulator {
 				filters: [{ name: 'Изображения', extensions: ALLOWED_IMAGE_EXTENSIONS }],
 			});
 
-			if (!result || !result.length) return this.sendError(201);
+			// Прерывание выполнения функции без вызова ErrorSplash
+			if (!result || !result.length) return Promise.reject(getError(201));
 
 			const arr = result[0].split('.');
 			const extension = arr[arr.length - 1].toLowerCase();
 
-			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension)) return this.sendError(202, extension);
+			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension)) {
+				return this.sendError(202, extension);
+			}
 
 			const buffer = fs.readFileSync(result[0]);
 
@@ -55,8 +59,7 @@ class ImageManipulator {
 
 			await ftp.uploadImage(category_id, product_id, image_id);
 
-			this.mainWindow.webContents.send('success', 200);
-			// this.mainWindow.webContents.send('onAddImageFinally');
+			return Promise.resolve();
 		} catch (e) {
 			return this.sendError(203, e);
 		}

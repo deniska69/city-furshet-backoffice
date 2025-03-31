@@ -38,8 +38,8 @@ app.on('ready', () => {
 	ipcMain.handle('getPrice', () => ftp.getPrice());
 	ipcMain.handle('openBackupdDir', () => shell.openPath(BUCKUP_DIR));
 	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(text));
-	ipcMain.handle('addImage', (e, category_id, product_id, image_id) => {
-		return imageManipulator.addImage(category_id, product_id, image_id);
+	ipcMain.handle('addImage', async (e, category_id, product_id, image_id) => {
+		return await imageManipulator.addImage(category_id, product_id, image_id);
 	});
 	ipcMain.handle('deleteImage', (e, category_id, product_id, image_id) => {
 		return ftp.deleteImage(category_id, product_id, image_id);
