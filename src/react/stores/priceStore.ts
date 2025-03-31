@@ -263,7 +263,7 @@ class PriceStore {
 	connect = async () => {
 		layoutStore.setLoading();
 
-		await electron
+		await window.electron
 			.connectHosting()
 			.then(() => this.setConnect())
 			.catch((e: string) => {
@@ -281,7 +281,7 @@ class PriceStore {
 
 		layoutStore.setLoading();
 
-		await electron
+		await window.electron
 			.getPrice()
 			.then((data: TypeReturnGetPrice) => this.setPrice(data))
 			.catch((e: string) => {

@@ -27,6 +27,7 @@
 		"paths": {
 			"@assets/*": ["src/assets/*"],
 			"@constants": ["src/react/constants"],
+			"@electron/*": ["src/electron/*"],
 			"@helpers": ["src/react/helpers"],
 			"@hooks": ["src/react/hooks"],
 			"@modules/*": ["src/react/modules/*"],

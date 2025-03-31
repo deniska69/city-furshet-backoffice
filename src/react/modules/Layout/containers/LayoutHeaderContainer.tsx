@@ -3,9 +3,9 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/16/solid';
 import { FolderOpenIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 
+import { getError } from '@electron/utils/bridgeEvents';
 import { getLastModText } from '@helpers';
-import { electron } from '@services';
-import { priceStore } from '@stores';
+import { layoutStore, priceStore } from '@stores';
 import { Button, Card, cn, HStack, Span } from '@ui';
 
 import LayoutThemeWidget from '../components/LayoutThemeWidget';
@@ -17,11 +17,17 @@ const Component = () => {
 
 	const lastMod = getLastModText(priceStore.lastMod);
 
-	const handleConnect = () => priceStore.connect();
+	const handleConnect = async () => priceStore.connect();
 
 	const handleGetPice = () => priceStore.getPrice();
 
-	const handleOpenBackupDir = () => electron.openBackupdDir();
+	const handleOpenBackupDir = async () => {
+		try {
+			await window.electron.openBackupdDir();
+		} catch (e) {
+			layoutStore.setError(getError(11, e));
+		}
+	};
 
 	return (
 		<Card

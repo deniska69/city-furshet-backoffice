@@ -2,13 +2,13 @@ import { Suspense, useLayoutEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { Outlet, useNavigate } from 'react-router';
 
+import { ERROR_CODES, getError } from '@electron/utils/bridgeEvents';
 import { useTheme } from '@hooks';
 import { Loader, Splash } from '@modules/Elements';
 import { ErrorSplashScreen } from '@modules/Error';
 import { layoutStore, priceStore } from '@stores';
 import { Div, HStack, Stack } from '@ui';
 
-import { ERROR_CODES, getError } from '../../../../electron/utils/bridgeEvents';
 import LayoutHeaderContainer from '../containers/LayoutHeaderContainer';
 import LayoutSidebarContainer from '../containers/LayoutSidebarContainer';
 import { LayoutAlertScreen } from './LayoutAlertScreen';

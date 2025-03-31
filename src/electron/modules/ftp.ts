@@ -35,15 +35,16 @@ class FTP {
 	private lastModPrice: Date | undefined;
 	mainWindow: BrowserWindow | undefined;
 
-	private sendError = (code: keyof typeof ERROR_CODES, e?: unknown) => {
-		if (!this.mainWindow) return;
+	private sendError = async (code: keyof typeof ERROR_CODES, e?: unknown) => {
+		if (!this.mainWindow) return Promise.reject(getError(101));
 		this.mainWindow.webContents.send('error', code, e);
+		return Promise.reject(getError(code, e));
 	};
 
 	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
 
 	private cdDir = async (...args: string[]) => {
-		if (this.client?.closed || !this.client) return this.sendError(102);
+		if (this.client?.closed || !this.client) return this.sendError(111);
 
 		try {
 			const currentDir = await this.client.pwd();
@@ -55,7 +56,7 @@ class FTP {
 
 			return await this.client.cd(cd.replaceAll('\\', '/'));
 		} catch (e) {
-			return this.sendError(103, e);
+			return this.sendError(112, e);
 		}
 	};
 
@@ -65,7 +66,7 @@ class FTP {
 			if (!this.client.closed) return Promise.resolve();
 
 			if (!FTP_CLIENT_CONFIG.host || !FTP_CLIENT_CONFIG.user || !FTP_CLIENT_CONFIG.password) {
-				return Promise.reject(getError(100, FTP_CLIENT_CONFIG));
+				return Promise.reject(getError(121, FTP_CLIENT_CONFIG));
 			}
 
 			await this.client.access(FTP_CLIENT_CONFIG);
@@ -73,7 +74,7 @@ class FTP {
 
 			return Promise.resolve();
 		} catch (e) {
-			return Promise.reject(getError(101, e));
+			return Promise.reject(getError(122, e));
 		}
 	};
 
@@ -85,18 +86,18 @@ class FTP {
 			const price = await this.readLastBackup();
 			return Promise.resolve({ price, lastMod: this.lastModPrice });
 		} catch (e) {
-			return Promise.reject(getError(104, e));
+			return Promise.reject(getError(131, e));
 		}
 	};
 
 	private downloadAndWriteBackup = async () => {
-		if (this.client?.closed || !this.client) return Promise.reject(getError(105));
+		if (this.client?.closed || !this.client) return Promise.reject(getError(141));
 
 		try {
 			await this.cdDir();
 			this.lastModPrice = await this.client.lastMod(FTP_PRICE_FILE_NAME);
 
-			if (!this.lastModPrice) return Promise.reject(getError(106));
+			if (!this.lastModPrice) return Promise.reject(getError(142));
 
 			this.lastBackupPriceFile = path.join(
 				BUCKUP_DIR,
@@ -107,35 +108,32 @@ class FTP {
 
 			return await this.client.downloadTo(this.lastBackupPriceFile, FTP_PRICE_FILE_NAME);
 		} catch (e) {
-			return Promise.reject(getError(107, e));
+			return Promise.reject(getError(143, e));
 		}
 	};
 
 	private readLastBackup = async () => {
-		if (!this.lastBackupPriceFile) return Promise.reject(getError(108));
+		if (!this.lastBackupPriceFile) return Promise.reject(getError(151));
 
-		if (!fs.existsSync(this.lastBackupPriceFile)) return Promise.reject(getError(109));
+		if (!fs.existsSync(this.lastBackupPriceFile)) return Promise.reject(getError(152));
 
 		try {
 			const file = fs.readFileSync(this.lastBackupPriceFile);
-
 			const decodedString = new TextDecoder('windows-1251').decode(file);
 
-			const clearedString = decodedString;
-
-			const parser = initParser(inferSchema(clearedString));
-			const parsedPrice = parser.typedObjs(clearedString);
+			const parser = initParser(inferSchema(decodedString));
+			const parsedPrice = parser.typedObjs(decodedString);
 
 			return Promise.resolve(parsedPrice);
 		} catch (e) {
-			return Promise.reject(getError(110, e));
+			return Promise.reject(getError(153, e));
 		}
 	};
 
 	sendPrice = async (price: string) => {
-		if (this.client?.closed || !this.client) return this.sendError(111);
+		if (this.client?.closed || !this.client) return this.sendError(161);
 
-		if (!price) return this.sendError(112);
+		if (!price) return this.sendError(162);
 
 		try {
 			if (!fs.existsSync(BUCKUP_SEND_DIR)) fs.mkdirSync(BUCKUP_SEND_DIR);
@@ -144,7 +142,7 @@ class FTP {
 			const fullFileName = `${BUCKUP_SEND_DIR}/${FTP_PRICE_FILE_NAME}`;
 
 			fs.writeFile(fullFileName, priceEncoded, (e) => {
-				if (e) return this.sendError(113, e);
+				if (e) return this.sendError(163, e);
 			});
 
 			await this.cdDir();
@@ -155,15 +153,15 @@ class FTP {
 					this.mainWindow.webContents.send('success', 100);
 				})
 				.catch((e) => {
-					return this.sendError(114, e);
+					return this.sendError(164, e);
 				});
 		} catch (e) {
-			return this.sendError(115, e);
+			return this.sendError(165, e);
 		}
 	};
 
 	uploadImage = async (category_id: string, product_id: string, image_id: string) => {
-		if (this.client?.closed || !this.client) return this.sendError(116);
+		if (this.client?.closed || !this.client) return this.sendError(171);
 
 		try {
 			await this.cdDir('images');
@@ -179,12 +177,13 @@ class FTP {
 				image_id + '.jpg',
 			);
 		} catch (e) {
-			return this.sendError(117, e);
+			return this.sendError(172, e);
 		}
 	};
 
 	deleteImage = async (category_id: string, product_id: string, image_id: string) => {
-		if (this.client?.closed || !this.client) return this.sendError(118);
+		if (this.client?.closed || !this.client) return this.sendError(181);
+
 		try {
 			await this.cdDir('images');
 
@@ -196,7 +195,7 @@ class FTP {
 
 			return await this.client.remove(image_id + '.jpg');
 		} catch (e) {
-			return this.sendError(119, e);
+			return this.sendError(182, e);
 		}
 	};
 }

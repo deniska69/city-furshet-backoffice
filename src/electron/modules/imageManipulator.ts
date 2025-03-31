@@ -12,7 +12,7 @@ class ImageManipulator {
 	mainWindow: BrowserWindow | undefined;
 
 	private sendError = async (code: keyof typeof ERROR_CODES, e?: unknown) => {
-		if (!this.mainWindow) return Promise.reject(getError(200));
+		if (!this.mainWindow) return Promise.reject(getError(201));
 		this.mainWindow.webContents.send('error', code, e);
 		return Promise.reject(getError(code, e));
 	};
@@ -20,7 +20,7 @@ class ImageManipulator {
 	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
 
 	addImage = async (category_id: string, product_id: string, image_id: string) => {
-		if (!this.mainWindow) return this.sendError(200);
+		if (!this.mainWindow) return this.sendError(201);
 
 		try {
 			const result = dialog.showOpenDialogSync(this.mainWindow, {
@@ -29,13 +29,13 @@ class ImageManipulator {
 			});
 
 			// Прерывание выполнения функции без вызова ErrorSplash
-			if (!result || !result.length) return Promise.reject(getError(201));
+			if (!result || !result.length) return Promise.reject(getError(211));
 
 			const arr = result[0].split('.');
 			const extension = arr[arr.length - 1].toLowerCase();
 
 			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension)) {
-				return this.sendError(202, extension);
+				return this.sendError(212, extension);
 			}
 
 			const buffer = fs.readFileSync(result[0]);
@@ -61,7 +61,7 @@ class ImageManipulator {
 
 			return Promise.resolve();
 		} catch (e) {
-			return this.sendError(203, e);
+			return this.sendError(213, e);
 		}
 	};
 }

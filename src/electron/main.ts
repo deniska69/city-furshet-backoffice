@@ -34,10 +34,13 @@ app.on('ready', () => {
 	ftp.setMainWindow(mainWindow);
 	imageManipulator.setMainWindow(mainWindow);
 
-	ipcMain.handle('connectHosting', () => ftp.connect());
-	ipcMain.handle('getPrice', () => ftp.getPrice());
 	ipcMain.handle('openBackupdDir', () => shell.openPath(BUCKUP_DIR));
+
+	ipcMain.handle('connectHosting', () => ftp.connect());
+
+	ipcMain.handle('getPrice', () => ftp.getPrice());
 	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(text));
+
 	ipcMain.handle('addImage', async (e, category_id, product_id, image_id) => {
 		return await imageManipulator.addImage(category_id, product_id, image_id);
 	});
