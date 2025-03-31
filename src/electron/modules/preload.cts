@@ -15,12 +15,11 @@ electron.contextBridge.exposeInMainWorld('electron', {
 
 electron.contextBridge.exposeInMainWorld('electronAPI', {
 	onError: (callback) => {
-		return electron.ipcRenderer.on('error', (e: any, value: string) => callback(value));
+		return electron.ipcRenderer.on('error', (e: any, code: number, error?: unknown) =>
+			callback(code, error),
+		);
 	},
-	onSendPriceFinally: (callback) => {
-		return electron.ipcRenderer.on('onSendPriceFinally', () => callback());
-	},
-	onAddImageFinally: (callback) => {
-		return electron.ipcRenderer.on('onAddImageFinally', () => callback());
+	onSuccess: (callback) => {
+		return electron.ipcRenderer.on('success', (e: any, code: number) => callback(code));
 	},
 } satisfies Window['electronAPI']);

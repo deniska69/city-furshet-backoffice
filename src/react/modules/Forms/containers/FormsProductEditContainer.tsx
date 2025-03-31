@@ -114,12 +114,18 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 
 		const coverId = uid.rnd();
 
-		await electron.addImage(categoryId, watch('product_id'), coverId).then(() => {
-			setValue(
-				'product_cover',
-				`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${coverId}.jpg`,
-			);
-		});
+		await electron
+			.addImage(categoryId, watch('product_id'), coverId)
+			.then(() => {
+				console.log('[handleChangeCover] then()');
+				setValue(
+					'product_cover',
+					`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${coverId}.jpg`,
+				);
+			})
+			.catch(() => {
+				console.log('[handleChangeCover] catch()');
+			});
 	};
 
 	const handleDeleteCover = async () => {

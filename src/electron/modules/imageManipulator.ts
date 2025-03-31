@@ -4,21 +4,22 @@ import { BrowserWindow, dialog } from 'electron';
 import heicConvert from 'heic-convert';
 import sharp from 'sharp';
 
+import { ERROR_CODES, getError } from '../utils/bridgeEvents.js';
 import { ALLOWED_IMAGE_EXTENSIONS, MAX_WIDTH_IMAGE, TEMP_DIR } from '../utils/constants.js';
 import { ftp } from './ftp.js';
 
 class ImageManipulator {
 	mainWindow: BrowserWindow | undefined;
 
-	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
-
-	private sendError = (e: string) => {
+	private sendError = (code: keyof typeof ERROR_CODES, e?: unknown) => {
 		if (!this.mainWindow) return;
-		this.mainWindow.webContents.send('error', '[Electron] [ImageManipulator] ' + e);
+		this.mainWindow.webContents.send('error', getError(code, e));
 	};
 
+	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
+
 	addImage = async (category_id: string, product_id: string, image_id: string) => {
-		if (!this.mainWindow) return this.sendError('open(): Отсутствует this.mainWindow');
+		if (!this.mainWindow) return this.sendError(200);
 
 		try {
 			const result = dialog.showOpenDialogSync(this.mainWindow, {
@@ -26,18 +27,12 @@ class ImageManipulator {
 				filters: [{ name: 'Изображения', extensions: ALLOWED_IMAGE_EXTENSIONS }],
 			});
 
-			if (!result || !result.length) {
-				return this.sendError('open(): Не было выбранно изображение');
-			}
+			if (!result || !result.length) return this.sendError(201);
 
 			const arr = result[0].split('.');
 			const extension = arr[arr.length - 1].toLowerCase();
 
-			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension)) {
-				return this.sendError(
-					`open(): Расширение выбранного изображения: "${extension}" не подходит в данной версии программы`,
-				);
-			}
+			if (!ALLOWED_IMAGE_EXTENSIONS.includes(extension)) return this.sendError(202, extension);
 
 			const buffer = fs.readFileSync(result[0]);
 
@@ -60,11 +55,10 @@ class ImageManipulator {
 
 			await ftp.uploadImage(category_id, product_id, image_id);
 
-			this.mainWindow.webContents.send('onAddImageFinally');
-
-			return Promise.resolve();
+			this.mainWindow.webContents.send('success', 200);
+			// this.mainWindow.webContents.send('onAddImageFinally');
 		} catch (e) {
-			return this.sendError('open(): Ошибка.\n' + e);
+			return this.sendError(203, e);
 		}
 	};
 }

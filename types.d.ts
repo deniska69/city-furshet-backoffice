@@ -29,9 +29,8 @@ interface Window {
 		deleteImage: (category_id: string, product_id: string, image_id: string) => Promise<unknown>;
 	};
 	electronAPI: {
-		onError: (callback: (e: string) => void) => Promise<unknown>;
-		onSendPriceFinally: (callback: () => void) => Promise<unknown>;
-		onAddImageFinally: (callback: () => void) => Promise<unknown>;
+		onError: (callback: (code: number, error?: unknown) => void) => Promise<unknown>;
+		onSuccess: (callback: (code: number) => void) => Promise<unknown>;
 	};
 }
 

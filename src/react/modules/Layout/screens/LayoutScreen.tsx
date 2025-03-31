@@ -8,6 +8,7 @@ import { ErrorSplashScreen } from '@modules/Error';
 import { layoutStore, priceStore } from '@stores';
 import { Div, HStack, Stack } from '@ui';
 
+import { ERROR_CODES, getError } from '../../../../electron/utils/bridgeEvents';
 import LayoutHeaderContainer from '../containers/LayoutHeaderContainer';
 import LayoutSidebarContainer from '../containers/LayoutSidebarContainer';
 import { LayoutAlertScreen } from './LayoutAlertScreen';
@@ -24,12 +25,15 @@ const Component = () => {
 	}, [priceStore.price, isShowSplash]);
 
 	useLayoutEffect(() => {
-		window.electronAPI.onError((e: string) => {
+		window.electronAPI.onError((code: number, e?: unknown) => {
 			layoutStore.setLoading(false);
-			layoutStore.setError(e);
+			layoutStore.setError(getError(code as keyof typeof ERROR_CODES, e));
 		});
-		window.electronAPI.onSendPriceFinally(() => priceStore.onSendPriceFinally());
-		window.electronAPI.onAddImageFinally(() => priceStore.onAddImageFinally());
+
+		window.electronAPI.onSuccess((code: number) => {
+			if (code === 100) priceStore.onSendPriceFinally();
+			if (code === 200) priceStore.onAddImageFinally();
+		});
 	}, []);
 
 	const handleHideSplash = () => setIsShowSplash(false);

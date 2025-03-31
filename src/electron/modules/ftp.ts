@@ -6,6 +6,7 @@ import { BrowserWindow } from 'electron';
 import iconv from 'iconv-lite';
 import { inferSchema, initParser } from 'udsv';
 
+import { ERROR_CODES, getError } from '../utils/bridgeEvents.js';
 import {
 	BUCKUP_DIR,
 	BUCKUP_SEND_DIR,
@@ -34,12 +35,15 @@ class FTP {
 	private lastModPrice: Date | undefined;
 	mainWindow: BrowserWindow | undefined;
 
+	private sendError = (code: keyof typeof ERROR_CODES, e?: unknown) => {
+		if (!this.mainWindow) return;
+		this.mainWindow.webContents.send('error', code, e);
+	};
+
 	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
 
-	cdDir = async (...args: string[]) => {
-		if (this.client?.closed || !this.client) {
-			return this.sendError('cdDir(): Ошибка подключения.');
-		}
+	private cdDir = async (...args: string[]) => {
+		if (this.client?.closed || !this.client) return this.sendError(102);
 
 		try {
 			const currentDir = await this.client.pwd();
@@ -51,7 +55,7 @@ class FTP {
 
 			return await this.client.cd(cd.replaceAll('\\', '/'));
 		} catch (e) {
-			return this.sendError('cdDir(): Ошибка.\n' + e);
+			return this.sendError(103, e);
 		}
 	};
 
@@ -61,10 +65,7 @@ class FTP {
 			if (!this.client.closed) return Promise.resolve();
 
 			if (!FTP_CLIENT_CONFIG.host || !FTP_CLIENT_CONFIG.user || !FTP_CLIENT_CONFIG.password) {
-				return Promise.reject(
-					'[Electron] [FTP] connnect(): Ошибка учётных данных для подключения к хостингу.\n' +
-						JSON.stringify(FTP_CLIENT_CONFIG),
-				);
+				return Promise.reject(getError(100, FTP_CLIENT_CONFIG));
 			}
 
 			await this.client.access(FTP_CLIENT_CONFIG);
@@ -72,9 +73,7 @@ class FTP {
 
 			return Promise.resolve();
 		} catch (e) {
-			return Promise.reject(
-				'[Electron] [FTP] connnect(): Ошибка.\n' + e + '\n' + JSON.stringify(e),
-			);
+			return Promise.reject(getError(101, e));
 		}
 	};
 
@@ -86,24 +85,18 @@ class FTP {
 			const price = await this.readLastBackup();
 			return Promise.resolve({ price, lastMod: this.lastModPrice });
 		} catch (e) {
-			return Promise.reject('[Electron] [FTP] getPrice(): Ошибка.\n' + e);
+			return Promise.reject(getError(104, e));
 		}
 	};
 
 	private downloadAndWriteBackup = async () => {
-		if (this.client?.closed || !this.client) {
-			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка подключения.');
-		}
+		if (this.client?.closed || !this.client) return Promise.reject(getError(105));
 
 		try {
 			await this.cdDir();
 			this.lastModPrice = await this.client.lastMod(FTP_PRICE_FILE_NAME);
 
-			if (!this.lastModPrice) {
-				return Promise.reject(
-					'[Electron] [FTP] downloadAndWriteBackup(): Не найден прайс на хостинге.',
-				);
-			}
+			if (!this.lastModPrice) return Promise.reject(getError(106));
 
 			this.lastBackupPriceFile = path.join(
 				BUCKUP_DIR,
@@ -114,20 +107,14 @@ class FTP {
 
 			return await this.client.downloadTo(this.lastBackupPriceFile, FTP_PRICE_FILE_NAME);
 		} catch (e) {
-			return Promise.reject('[Electron] [FTP] downloadAndWriteBackup(): Ошибка.\n' + e);
+			return Promise.reject(getError(107, e));
 		}
 	};
 
 	private readLastBackup = async () => {
-		if (!this.lastBackupPriceFile) {
-			return Promise.reject(
-				'[Electron] [FTP] readLastBackup(): Не найдена запись о последнм бэкапе прайса.',
-			);
-		}
+		if (!this.lastBackupPriceFile) return Promise.reject(getError(108));
 
-		if (!fs.existsSync(this.lastBackupPriceFile)) {
-			return Promise.reject('[Electron] [FTP] readLastBackup(): Не найден файл бэкапа прайса.');
-		}
+		if (!fs.existsSync(this.lastBackupPriceFile)) return Promise.reject(getError(109));
 
 		try {
 			const file = fs.readFileSync(this.lastBackupPriceFile);
@@ -141,32 +128,23 @@ class FTP {
 
 			return Promise.resolve(parsedPrice);
 		} catch (e) {
-			return Promise.reject('[Electron] [FTP] readLastBackup(): Ошибка.\n' + e);
+			return Promise.reject(getError(110, e));
 		}
-	};
-
-	sendError = (e: string) => {
-		if (!this.mainWindow) return;
-		this.mainWindow.webContents.send('error', '[Electron] [FTP] ' + e);
 	};
 
 	sendPrice = async (price: string) => {
-		if (this.client?.closed || !this.client) {
-			return this.sendError('downloadAndWriteBackup(): Ошибка подключения.');
-		}
+		if (this.client?.closed || !this.client) return this.sendError(111);
 
-		if (!price) return this.sendError('sendPrice(): Отсутствует прайс.');
+		if (!price) return this.sendError(112);
 
 		try {
 			if (!fs.existsSync(BUCKUP_SEND_DIR)) fs.mkdirSync(BUCKUP_SEND_DIR);
 
 			const priceEncoded = iconv.encode(price, 'windows1251');
-
-			const fileName = 'Price_v2';
-			const fullFileName = `${BUCKUP_SEND_DIR}/${fileName}.csv`;
+			const fullFileName = `${BUCKUP_SEND_DIR}/${FTP_PRICE_FILE_NAME}`;
 
 			fs.writeFile(fullFileName, priceEncoded, (e) => {
-				if (e) return this.sendError('sendPrice(): Ошибка #2.\n' + e);
+				if (e) return this.sendError(113, e);
 			});
 
 			await this.cdDir();
@@ -174,20 +152,19 @@ class FTP {
 				.uploadFrom(fullFileName, FTP_PRICE_FILE_NAME)
 				.then(() => {
 					if (!this.mainWindow) return;
-					this.mainWindow.webContents.send('onSendPriceFinally');
+					this.mainWindow.webContents.send('success', 100);
+					// this.mainWindow.webContents.send('onSendPriceFinally');
 				})
 				.catch((e) => {
-					return this.sendError('sendPrice(): Ошибка загрузки прайса на хостинг.\n' + e);
+					return this.sendError(114, e);
 				});
 		} catch (e) {
-			return this.sendError('sendPrice(): Ошибка #1.\n' + e);
+			return this.sendError(115, e);
 		}
 	};
 
 	uploadImage = async (category_id: string, product_id: string, image_id: string) => {
-		if (this.client?.closed || !this.client) {
-			return this.sendError('uploadImage(): Ошибка подключения.');
-		}
+		if (this.client?.closed || !this.client) return this.sendError(116);
 
 		try {
 			await this.cdDir('images');
@@ -203,15 +180,12 @@ class FTP {
 				image_id + '.jpg',
 			);
 		} catch (e) {
-			return this.sendError('uploadImage(): Ошибка.\n' + e);
+			return this.sendError(117, e);
 		}
 	};
 
 	deleteImage = async (category_id: string, product_id: string, image_id: string) => {
-		if (this.client?.closed || !this.client) {
-			return this.sendError('deleteImage(): Ошибка подключения.');
-		}
-
+		if (this.client?.closed || !this.client) return this.sendError(118);
 		try {
 			await this.cdDir('images');
 
@@ -223,7 +197,7 @@ class FTP {
 
 			return await this.client.remove(image_id + '.jpg');
 		} catch (e) {
-			return this.sendError('deleteImage(): Ошибка.\n' + e);
+			return this.sendError(119, e);
 		}
 	};
 }
