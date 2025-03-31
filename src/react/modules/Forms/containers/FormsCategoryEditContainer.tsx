@@ -14,7 +14,7 @@ const Component = ({ id }: { id?: string }) => {
 	const navigate = useNavigate();
 	const uid = new ShortUniqueId();
 
-	const isNew = !!id;
+	const isNew = !id;
 	const category = priceStore.getCategory(id);
 	const products = priceStore.getProducts(id);
 

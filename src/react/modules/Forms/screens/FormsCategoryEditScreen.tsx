@@ -10,7 +10,7 @@ export const FormsCategoryEditScreen = () => {
 
 	return (
 		<Card className="max-w-xl">
-			<FormsHeader isNew={!!categoryId} title="Редактор категории" backTo="/" />
+			<FormsHeader isNew={!categoryId} title="Редактор категории" backTo="/" />
 			<FormsCategoryEditContainer id={categoryId} />
 		</Card>
 	);
