@@ -44,6 +44,7 @@ class FTP {
 	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
 
 	private cdDir = async (...args: string[]) => {
+		await this.connect();
 		if (this.client?.closed || !this.client) return this.sendError(111);
 
 		try {
@@ -66,7 +67,7 @@ class FTP {
 			if (!this.client.closed) return Promise.resolve();
 
 			if (!FTP_CLIENT_CONFIG.host || !FTP_CLIENT_CONFIG.user || !FTP_CLIENT_CONFIG.password) {
-				return Promise.reject(getError(121, FTP_CLIENT_CONFIG));
+				return this.sendError(121, FTP_CLIENT_CONFIG);
 			}
 
 			await this.client.access(FTP_CLIENT_CONFIG);
@@ -74,13 +75,11 @@ class FTP {
 
 			return Promise.resolve();
 		} catch (e) {
-			return Promise.reject(getError(122, e));
+			return this.sendError(122, e);
 		}
 	};
 
 	getPrice = async () => {
-		if (this.client?.closed || !this.client) await this.connect();
-
 		try {
 			await this.downloadAndWriteBackup();
 			const price = await this.readLastBackup();
@@ -91,6 +90,7 @@ class FTP {
 	};
 
 	private downloadAndWriteBackup = async () => {
+		await this.connect();
 		if (this.client?.closed || !this.client) return Promise.reject(getError(141));
 
 		try {
@@ -131,6 +131,7 @@ class FTP {
 	};
 
 	sendPrice = async (price: string) => {
+		await this.connect();
 		if (this.client?.closed || !this.client) return this.sendError(161);
 
 		if (!price) return this.sendError(162);
@@ -161,6 +162,7 @@ class FTP {
 	};
 
 	uploadImage = async (category_id: string, product_id: string, image_id: string) => {
+		await this.connect();
 		if (this.client?.closed || !this.client) return this.sendError(171);
 
 		try {
@@ -182,6 +184,7 @@ class FTP {
 	};
 
 	deleteImage = async (category_id: string, product_id: string, image_id: string) => {
+		await this.connect();
 		if (this.client?.closed || !this.client) return this.sendError(181);
 
 		try {

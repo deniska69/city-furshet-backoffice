@@ -16,7 +16,10 @@ class PriceStore {
 
 	setConnect = action((value: boolean = true) => (this.isConnect = value));
 
-	setError = (e: string) => layoutStore.setError(`[React] [priceStore] ${e}`);
+	setError = (method: string, e?: unknown) => {
+		const text = `[React] [priceStore] ${method}():${e}`.replaceAll(':', ':\n');
+		layoutStore.setError(text);
+	};
 
 	//#endregion
 
@@ -266,10 +269,7 @@ class PriceStore {
 		await window.electron
 			.connectHosting()
 			.then(() => this.setConnect())
-			.catch((e: string) => {
-				this.setConnect(false);
-				this.setError('electronConnect(): Ошибка подключения к хостингу.\n' + e);
-			})
+			.catch(() => this.setConnect(false))
 			.finally(() => layoutStore.setLoading(false));
 	};
 
@@ -284,10 +284,10 @@ class PriceStore {
 		await window.electron
 			.getPrice()
 			.then((data: TypeReturnGetPrice) => this.setPrice(data))
-			.catch((e: string) => {
+			.catch((e) => {
 				this.setPrice();
 				this.setConnect(false);
-				this.setError('getPrice(): Ошибка получения прайса.\n' + e);
+				this.setError('getPrice', e?.message);
 			})
 			.finally(() => layoutStore.setLoading(false));
 	};

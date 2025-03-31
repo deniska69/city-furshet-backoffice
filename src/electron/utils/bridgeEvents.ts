@@ -10,7 +10,7 @@ export const ERROR_CODES = {
 	112: 'cdDir(): Ошибка',
 
 	121: 'connnect(): Ошибка учётных данных для подключения к хостингу',
-	122: 'connnect(): Ошибка',
+	122: 'connnect(): Ошибка подключения к хостингу',
 
 	131: 'getPrice(): Ошибка',
 
@@ -52,10 +52,8 @@ const getSource = (code: keyof typeof ERROR_CODES) => {
 
 const getFirstText = (code: keyof typeof ERROR_CODES) => ERROR_CODES[code];
 
-const getSecondText = (text?: unknown) => (text ? '\n' + JSON.stringify(text) + ' ' : '');
-
-export const getError = (code: keyof typeof ERROR_CODES, secondText?: unknown) => {
-	return `${getSource(code)} ${getFirstText(code)} ${getSecondText(secondText)}[#${code}]`;
+export const getError = (code: keyof typeof ERROR_CODES, e?: unknown) => {
+	return `${getSource(code)} ${getFirstText(code)} ${e ? '\n' + e + ' ' : ''}[#${code}]`;
 };
 
 export const SUCCESS_CODES = {
