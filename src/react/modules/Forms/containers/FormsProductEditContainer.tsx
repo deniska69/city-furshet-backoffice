@@ -114,15 +114,23 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 
 		layoutStore.setLoading();
 
-		const coverId = uid.rnd();
+		const arr1 = watch('product_cover').split('/');
+		const arr2 = arr1[arr1.length - 1].split('.');
+		const currentCoverId = arr2[0];
+
+		const newCoverId = uid.rnd();
 
 		await electron
-			.addImage(categoryId, watch('product_id'), coverId)
-			.then(() => {
+			.addImage(categoryId, watch('product_id'), newCoverId)
+			.then(async () => {
 				setValue(
 					'product_cover',
-					`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${coverId}.jpg`,
+					`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${newCoverId}.jpg`,
 				);
+
+				if (currentCoverId) {
+					await electron.deleteImage(categoryId, watch('product_id'), currentCoverId);
+				}
 			})
 			.finally(() => layoutStore.setLoading(false));
 	};
