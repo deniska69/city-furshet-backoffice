@@ -41,6 +41,7 @@ export const ERROR_CODES = {
 	211: 'addImage(): Не было выбранно изображение',
 	212: 'addImage(): Расширение выбранного изображения не подходит в данной версии программы',
 	213: 'addImage(): Ошибка',
+	214: 'addImage(): Ошибка удаления временного файла изображения',
 };
 
 const getSource = (code: keyof typeof ERROR_CODES) => {

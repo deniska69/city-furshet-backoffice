@@ -1,7 +1,6 @@
 import { action, makeAutoObservable, toJS } from 'mobx';
 
 import { isHide } from '@helpers';
-import { electron } from '@services';
 
 import { layoutStore } from './layoutStore';
 
@@ -100,7 +99,7 @@ class PriceStore {
 				});
 			});
 
-			await electron.sendPrice(price);
+			await window.electron.sendPrice(price);
 		} catch (e) {
 			layoutStore.setLoading(false);
 			this.setError('savePrice(): Ошибка формирования прайса.\n' + e);

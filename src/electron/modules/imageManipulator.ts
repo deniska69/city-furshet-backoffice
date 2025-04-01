@@ -59,6 +59,12 @@ class ImageManipulator {
 
 			await ftp.uploadImage(category_id, product_id, image_id);
 
+			if (fs.existsSync(fileFullName)) {
+				fs.rm(fileFullName, (e) => {
+					if (e) return this.sendError(214, e);
+				});
+			}
+
 			return Promise.resolve();
 		} catch (e) {
 			return this.sendError(213, e);
