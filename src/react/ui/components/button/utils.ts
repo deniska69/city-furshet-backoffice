@@ -22,7 +22,7 @@ export const buttonVariants = cva(
 					'border-gray-200 text-gray-500 hover:border-primary hover:text-primary focus:outline-hidden focus:border-primary focus:text-primary dark:border-neutral-700 dark:text-neutral-400 dark:hover:text-primary dark:hover:border-primary dark:focus:text-primary dark:focus:border-primary',
 				solid: 'bg-primary dark:bg-primary hover:bg-primary/60 dark:hover:bg-primary/60',
 				muted: 'bg-gray-200 hover:bg-neutral-300/70 dark:bg-neutral-700 hover:dark:bg-neutral-700/70 !text-neutral-500 dark:!text-neutral-300',
-				error: 'bg-red-500 dark:bg-red-900 hover:bg-red-500/60 dark:hover:bg-red-900/60',
+				error: 'bg-red-700 dark:bg-red-900 hover:bg-red-500/60 dark:hover:bg-red-900/60',
 			},
 		},
 		defaultVariants: {

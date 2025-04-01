@@ -88,13 +88,14 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 				{ title: 'Отмена' },
 				{
 					title: 'Удалить',
-					onClick: () => priceStore.deleteProduct(categoryId, product.product_id),
+					onClick: () => {
+						onClose();
+						priceStore.deleteProduct(categoryId, product.product_id);
+					},
 				},
 			],
 			'warning',
 		);
-
-		onClose();
 	};
 
 	const handleUp = () => {

@@ -6,7 +6,7 @@ import { Button, cn, Div, HStack, Span, Stack } from '@ui';
 
 const variants = {
 	success: 'bg-green-600/60 dark:bg-green-600/20 border-green-700 dark:border-green-900',
-	warning: 'bg-red-600/60 dark:bg-red-600/20 border-red-700 dark:border-red-900',
+	warning: 'bg-red-800/40 dark:bg-red-600/20 border-red-900 dark:border-red-900',
 };
 
 const Component = () => {
