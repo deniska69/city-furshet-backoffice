@@ -23,6 +23,7 @@ const Component = ({ categoryId, onEdit, onAdd, activeProductId }: IComponent) =
 					<FormsProductCard
 						{...item}
 						key={index}
+						categoryId={categoryId}
 						onClick={() => onEdit(item.product_id)}
 						active={item.product_id === activeProductId}
 					/>

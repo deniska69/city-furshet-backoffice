@@ -62,19 +62,25 @@ const Component = ({ id }: { id?: string }) => {
 	};
 
 	const handleUp = () => {
-		if (category?.index !== undefined) {
-			priceStore.changeCategoriesPosition(category?.index, 'up');
+		if (category?.index === undefined) {
+			return layoutStore.setError('category?.index === undefined');
 		}
+
+		priceStore.changeCategoriesPosition(category?.index, 'up');
 	};
 
 	const handleDown = () => {
-		if (category?.index !== undefined) {
-			priceStore.changeCategoriesPosition(category?.index, 'down');
+		if (category?.index === undefined) {
+			return layoutStore.setError('category?.index === undefined');
 		}
+
+		priceStore.changeCategoriesPosition(category?.index, 'down');
 	};
 
 	const handleDelete = () => {
-		if (typeof category?.index !== 'number') return;
+		if (typeof category?.index !== 'number') {
+			return layoutStore.setError('typeof category?.index !== "number"');
+		}
 
 		layoutStore.alert(
 			`Вы действительно хотите удалить категорию "${category.category_title}" ?`,

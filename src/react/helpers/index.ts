@@ -1,9 +1,3 @@
-export const decodeResponse = (data: ArrayBufferLike) => {
-	const dataView = new DataView(data);
-	const decoder = new TextDecoder('windows-1251');
-	return decoder.decode(dataView);
-};
-
 export const getLastModText = (lastMod?: Date) => {
 	if (!lastMod) return undefined;
 	const lastModDate = lastMod.toLocaleDateString();
@@ -14,4 +8,8 @@ export const getLastModText = (lastMod?: Date) => {
 export const isHide = (hide: string | boolean) => {
 	if (typeof hide === 'string') return hide === 'true';
 	return !!hide;
+};
+
+export const getImageUrl = (categoryId?: string, productId?: string, imageId?: string) => {
+	return `https://city-furshet.ru/images/${categoryId}/${productId}/${imageId}.jpg`;
 };

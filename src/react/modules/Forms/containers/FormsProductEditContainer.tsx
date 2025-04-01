@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
 
 import { PRICE_FIELDS } from '@constants';
-import { isHide } from '@helpers';
+import { getImageUrl, isHide } from '@helpers';
+import { ErrorScreen } from '@modules/Error';
 import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
@@ -46,6 +47,8 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [product?.product_id]);
 
+	if (!categoryId) return <ErrorScreen text='Отсутствует "categoryId"' />;
+
 	const handleChangeHide = (value: boolean) => setValue('product_hide', value);
 
 	const handleValidate = (name: TypeHandleValidateProduct) => {
@@ -66,10 +69,6 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		handleValidate('product_note');
 		handleValidate('product_price');
 
-		if (!categoryId) {
-			return layoutStore.setError('Отсутствует обязательный параметр "categoryId"');
-		}
-
 		if (product?.product_id) {
 			priceStore.saveProduct(categoryId, values);
 		} else {
@@ -80,7 +79,9 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 	};
 
 	const handleDelete = () => {
-		if (typeof product?.index !== 'number' || !categoryId) return;
+		if (typeof product?.index !== 'number') {
+			return layoutStore.setError('typeof product?.index !== "number"');
+		}
 
 		layoutStore.alert(
 			`Вы действительно хотите удалить товар "${product.product_title}" ?`,
@@ -98,35 +99,31 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 	};
 
 	const handleUp = () => {
-		if (product?.index !== undefined && categoryId) {
-			priceStore.changeProductPosition(categoryId, product?.index, 'up');
+		if (product?.index === undefined) {
+			return layoutStore.setError('product?.index === undefined');
 		}
+
+		priceStore.changeProductPosition(categoryId, product?.index, 'up');
 	};
 
 	const handleDown = () => {
-		if (product?.index !== undefined && categoryId) {
-			priceStore.changeProductPosition(categoryId, product?.index, 'down');
+		if (product?.index === undefined) {
+			return layoutStore.setError('product?.index === undefined');
 		}
+
+		priceStore.changeProductPosition(categoryId, product?.index, 'down');
 	};
 
 	const handleChangeCover = async () => {
-		if (!categoryId) return layoutStore.setError('categoryId:' + categoryId);
-
 		layoutStore.setLoading();
 
-		const arr1 = watch('product_cover').split('/');
-		const arr2 = arr1[arr1.length - 1].split('.');
-		const currentCoverId = arr2[0];
-
+		const currentCoverId = watch('product_cover');
 		const newCoverId = uid.rnd();
 
 		await electron
 			.addImage(categoryId, watch('product_id'), newCoverId)
 			.then(async () => {
-				setValue(
-					'product_cover',
-					`https://city-furshet.ru/images/${categoryId}/${watch('product_id')}/${newCoverId}.jpg`,
-				);
+				setValue('product_cover', newCoverId);
 
 				if (currentCoverId) {
 					await electron.deleteImage(categoryId, watch('product_id'), currentCoverId);
@@ -136,18 +133,18 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 	};
 
 	const handleDeleteCover = async () => {
-		if (!categoryId) return layoutStore.setError('categoryId:' + categoryId);
-		if (!watch('product_cover').length) {
-			return layoutStore.setError('!watch(product_cover).length');
+		if (!watch('product_cover')) {
+			return layoutStore.setError('Отсутствует "product_cover"');
 		}
 
-		const arr1 = watch('product_cover').split('/');
-		const arr2 = arr1[arr1.length - 1].split('.');
+		layoutStore.setLoading();
 
-		await electron.deleteImage(categoryId, watch('product_id'), arr2[0]).then(() => {
-			setValue('product_cover', '');
-			layoutStore.setLoading(false);
-		});
+		await electron
+			.deleteImage(categoryId, watch('product_id'), watch('product_cover'))
+			.then(() => {
+				setValue('product_cover', '');
+				layoutStore.setLoading(false);
+			});
 	};
 
 	const handleOpenCover = () => console.log(product);
@@ -242,9 +239,13 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 					{/* product_cover */}
 					<FormsProductCoverEditor
 						onOpen={handleOpenCover}
-						src={watch('product_cover')}
 						onDelete={handleDeleteCover}
 						onChange={handleChangeCover}
+						src={
+							watch('product_cover')
+								? getImageUrl(categoryId, watch('product_id'), watch('product_cover'))
+								: undefined
+						}
 					/>
 
 					{/* product_gallery */}

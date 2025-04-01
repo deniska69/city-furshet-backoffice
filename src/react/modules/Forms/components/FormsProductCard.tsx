@@ -1,12 +1,13 @@
 import { EyeSlashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { PencilIcon } from '@heroicons/react/24/solid';
 
-import { isHide } from '@helpers';
+import { getImageUrl, isHide } from '@helpers';
 import { Button, Card, cn, Div, Image, Span, Stack } from '@ui';
 
 interface IFormsProductCard extends TypePriceProduct {
 	onClick: (id: string) => void;
 	active?: boolean;
+	categoryId?: string;
 }
 
 const FormsProductCard = (props: IFormsProductCard) => {
@@ -19,6 +20,7 @@ const FormsProductCard = (props: IFormsProductCard) => {
 		product_hide,
 		onClick,
 		active,
+		categoryId,
 	} = props;
 
 	const handleEdit = () => onClick(product_id);
@@ -32,7 +34,12 @@ const FormsProductCard = (props: IFormsProductCard) => {
 		>
 			<Stack>
 				<Div className="relative">
-					<Image src={product_cover} className="w-[200px] h-[200px] rounded-lg object-cover" />
+					<Image
+						className="w-[200px] h-[200px] rounded-lg object-cover"
+						src={
+							product_cover ? getImageUrl(categoryId, product_id, product_cover) : undefined
+						}
+					/>
 					{isHide(product_hide) ? (
 						<Div className="bg-black/20 dark:bg-black/30 absolute w-full top-0 h-full rounded-lg flex items-center justify-center backdrop-blur-[3px]">
 							<EyeSlashIcon className="w-24 text-text-dark dark:text-text-light" />
