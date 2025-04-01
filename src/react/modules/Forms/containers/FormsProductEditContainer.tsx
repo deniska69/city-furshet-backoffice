@@ -5,14 +5,13 @@ import { useForm } from 'react-hook-form';
 import ShortUniqueId from 'short-unique-id';
 
 import { PRICE_FIELDS } from '@constants';
-import { getImageUrl, isHide } from '@helpers';
+import { isHide } from '@helpers';
 import { ErrorScreen } from '@modules/Error';
-import { electron } from '@services';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
-import FormsProductCoverEditor from '../components/FormsProductCoverEditor';
+import FormsProductCoverEditorContainer from './FormsProductCoverEditorContainer';
 
 const classNameTitleCol = 'min-w-38 mt-1';
 
@@ -114,40 +113,7 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		priceStore.changeProductPosition(categoryId, product?.index, 'down');
 	};
 
-	const handleChangeCover = async () => {
-		layoutStore.setLoading();
-
-		const currentCoverId = watch('product_cover');
-		const newCoverId = uid.rnd();
-
-		await electron
-			.addImage(categoryId, watch('product_id'), newCoverId)
-			.then(async () => {
-				setValue('product_cover', newCoverId);
-
-				if (currentCoverId) {
-					await electron.deleteImage(categoryId, watch('product_id'), currentCoverId);
-				}
-			})
-			.finally(() => layoutStore.setLoading(false));
-	};
-
-	const handleDeleteCover = async () => {
-		if (!watch('product_cover')) {
-			return layoutStore.setError('Отсутствует "product_cover"');
-		}
-
-		layoutStore.setLoading();
-
-		await electron
-			.deleteImage(categoryId, watch('product_id'), watch('product_cover'))
-			.then(() => {
-				setValue('product_cover', '');
-				layoutStore.setLoading(false);
-			});
-	};
-
-	const handleOpenCover = () => console.log(product);
+	const handleChangeCover = async (coverId: string) => setValue('product_cover', coverId);
 
 	return (
 		<Div className="border-border-light dark:border-border-dark border-l pl-6">
@@ -237,15 +203,11 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 					) : null}
 
 					{/* product_cover */}
-					<FormsProductCoverEditor
-						onOpen={handleOpenCover}
-						onDelete={handleDeleteCover}
+					<FormsProductCoverEditorContainer
+						categoryId={categoryId}
 						onChange={handleChangeCover}
-						src={
-							watch('product_cover')
-								? getImageUrl(categoryId, watch('product_id'), watch('product_cover'))
-								: undefined
-						}
+						productId={watch('product_id')}
+						coverId={watch('product_cover')}
 					/>
 
 					{/* product_gallery */}
