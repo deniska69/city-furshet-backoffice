@@ -4,16 +4,19 @@ import { To, useNavigate } from 'react-router';
 import { Button, Divider, HStack, Span, Stack } from '@ui';
 
 interface IFormsHeader {
-	isNew: boolean;
+	isNew?: boolean;
 	title: string;
-	backTo: To;
+	backTo?: To;
 	onClose?: () => void;
 }
 
 const FormsHeader = ({ isNew, title, backTo, onClose }: IFormsHeader) => {
 	const navigate = useNavigate();
 
-	const handleClose = () => (onClose ? onClose() : navigate(backTo, { replace: true }));
+	const handleClose = () => {
+		if (onClose) return onClose();
+		if (backTo) navigate(backTo, { replace: true });
+	};
 
 	return (
 		<Stack className="gap-y-3">

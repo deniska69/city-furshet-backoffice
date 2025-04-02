@@ -22,6 +22,11 @@ const Component = (props: IFormsProductCoverEditor) => {
 
 	const uid = new ShortUniqueId();
 
+	const handleShow = () => {
+		if (!coverId) return layoutStore.setError('Отсутствует "coverId"');
+		layoutStore.showCover(categoryId, productId, coverId);
+	};
+
 	const handleChange = async () => {
 		layoutStore.setLoading();
 		const newCoverId = uid.rnd();
@@ -65,7 +70,7 @@ const Component = (props: IFormsProductCoverEditor) => {
 				>
 					{src ? (
 						<Fragment>
-							<Button variant="solid" className="!py-1" onClick={() => {}}>
+							<Button variant="solid" className="!py-1" onClick={handleShow}>
 								<EyeIcon className="w-4" />
 							</Button>
 							<Button variant="muted" className="!py-1" onClick={handleChange}>

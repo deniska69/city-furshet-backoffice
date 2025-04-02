@@ -11,6 +11,7 @@ import { Div, HStack, Stack } from '@ui';
 
 import LayoutHeaderContainer from '../containers/LayoutHeaderContainer';
 import LayoutSidebarContainer from '../containers/LayoutSidebarContainer';
+import ImageModalScreen from './ImageModalScreen';
 import LayouSplashScreen from './LayouSplashScreen';
 import LayoutAlertScreen from './LayoutAlertScreen';
 
@@ -41,6 +42,7 @@ const Component = () => {
 
 	return (
 		<Div>
+			<ImageModalScreen />
 			{layoutStore.loading ? <Loader /> : null}
 			<LayoutAlertScreen />
 			<ErrorSplashScreen />

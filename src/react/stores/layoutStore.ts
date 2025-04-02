@@ -5,12 +5,15 @@ type TypeAlertButtons = {
 	onClick?: () => void;
 }[];
 
+type TypeCoverView = { categoryId: string; productId: string; coverId: string };
+
 class LayoutStore {
 	loading: boolean = false;
 	error: string | undefined;
 	alertText: string | undefined;
 	alertButtons: TypeAlertButtons | undefined;
 	alertType: 'warning' | 'success' | undefined;
+	coverView: TypeCoverView | undefined;
 
 	setLoading = action((value: boolean = true) => (this.loading = value));
 
@@ -36,6 +39,12 @@ class LayoutStore {
 		this.alertType = undefined;
 		this.alertButtons = undefined;
 	});
+
+	showCover = action((categoryId: string, productId: string, coverId: string) => {
+		this.coverView = { categoryId, productId, coverId };
+	});
+
+	hideCover = action(() => (this.coverView = undefined));
 }
 
 export const layoutStore = makeAutoObservable(new LayoutStore());
