@@ -15,7 +15,7 @@ const Component = () => {
 	const buttons = layoutStore.alertButtons || [];
 
 	return (
-		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-50 flex h-screen w-full items-center justify-center">
+		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-51 flex h-screen w-full items-center justify-center">
 			{layoutStore.alertType === 'success' ? (
 				<CheckBadgeIcon className="w-32 text-white" />
 			) : (
@@ -44,4 +44,5 @@ const Component = () => {
 	);
 };
 
-export const LayoutAlertScreen = observer(Component);
+const LayoutAlertScreen = observer(Component);
+export default LayoutAlertScreen;

@@ -25,7 +25,7 @@ export const ErrorScreen = (props: IErrorScreen) => {
 	};
 
 	return (
-		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-51 flex h-screen w-full items-center justify-center">
+		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-52 flex h-screen w-full items-center justify-center">
 			<ExclamationTriangleIcon className="w-32 text-white" />
 
 			<Span className="block text-center text-4xl font-bold text-white">{title}</Span>

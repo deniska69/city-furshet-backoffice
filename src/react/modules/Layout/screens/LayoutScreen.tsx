@@ -4,14 +4,15 @@ import { Outlet, useNavigate } from 'react-router';
 
 import { ERROR_CODES, getError } from '@electron/utils/bridgeEvents';
 import { useTheme } from '@hooks';
-import { Loader, Splash } from '@modules/Elements';
+import { Loader } from '@modules/Elements';
 import { ErrorSplashScreen } from '@modules/Error';
 import { layoutStore, priceStore } from '@stores';
 import { Div, HStack, Stack } from '@ui';
 
 import LayoutHeaderContainer from '../containers/LayoutHeaderContainer';
 import LayoutSidebarContainer from '../containers/LayoutSidebarContainer';
-import { LayoutAlertScreen } from './LayoutAlertScreen';
+import LayouSplashScreen from './LayouSplashScreen';
+import LayoutAlertScreen from './LayoutAlertScreen';
 
 const Component = () => {
 	useTheme();
@@ -39,24 +40,26 @@ const Component = () => {
 	const handleHideSplash = () => setIsShowSplash(false);
 
 	return (
-		<HStack>
-			<ErrorSplashScreen />
+		<Div>
 			{layoutStore.loading ? <Loader /> : null}
-			{isShowSplash ? <Splash onHide={handleHideSplash} /> : null}
 			<LayoutAlertScreen />
+			<ErrorSplashScreen />
+			{isShowSplash ? <LayouSplashScreen onHide={handleHideSplash} /> : null}
 
-			<LayoutSidebarContainer />
+			<HStack>
+				<LayoutSidebarContainer />
 
-			<Stack className="h-screen w-full max-h-screen">
-				<LayoutHeaderContainer />
+				<Stack className="h-screen w-full max-h-screen">
+					<LayoutHeaderContainer />
 
-				<Div className="h-full overflow-x-hidden overflow-y-auto !p-6">
-					<Suspense>
-						<Outlet />
-					</Suspense>
-				</Div>
-			</Stack>
-		</HStack>
+					<Div className="h-full overflow-x-hidden overflow-y-auto !p-6">
+						<Suspense>
+							<Outlet />
+						</Suspense>
+					</Div>
+				</Stack>
+			</HStack>
+		</Div>
 	);
 };
 
