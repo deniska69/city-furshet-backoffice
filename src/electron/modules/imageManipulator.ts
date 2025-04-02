@@ -5,7 +5,12 @@ import heicConvert from 'heic-convert';
 import sharp from 'sharp';
 
 import { ERROR_CODES, getError } from '../utils/bridgeEvents.js';
-import { ALLOWED_IMAGE_EXTENSIONS, MAX_WIDTH_IMAGE, TEMP_DIR } from '../utils/constants.js';
+import {
+	ALLOWED_IMAGE_EXTENSIONS,
+	MAX_WIDTH_IMAGE,
+	QUALITY_COMPRESS_IMAGE,
+	TEMP_DIR,
+} from '../utils/constants.js';
 import { ftp } from './ftp.js';
 
 class ImageManipulator {
@@ -54,7 +59,7 @@ class ImageManipulator {
 
 			await sharp(readyBuffer)
 				.resize(MAX_WIDTH_IMAGE)
-				.jpeg({ quality: 95 })
+				.jpeg({ quality: QUALITY_COMPRESS_IMAGE })
 				.toFile(fileFullName);
 
 			await ftp.uploadImage(category_id, product_id, image_id);

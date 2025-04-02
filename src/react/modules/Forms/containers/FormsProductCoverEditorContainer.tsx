@@ -41,6 +41,20 @@ const Component = (props: IFormsProductCoverEditor) => {
 		}
 	};
 
+	const handleDeleteConfirm = () => {
+		layoutStore.alert(
+			`Вы действительно хотите удалить изображение ?`,
+			[
+				{ title: 'Отмена' },
+				{
+					title: 'Удалить',
+					onClick: handleDelete,
+				},
+			],
+			'warning',
+		);
+	};
+
 	const handleDelete = async () => {
 		if (!coverId) return layoutStore.setError('Отсутствует "coverId"');
 
@@ -78,7 +92,7 @@ const Component = (props: IFormsProductCoverEditor) => {
 							<Button variant="muted" className="!py-1" onClick={handleChange}>
 								<PencilIcon className="w-4" />
 							</Button>
-							<Button variant="error" className="!py-1" onClick={handleDelete}>
+							<Button variant="error" className="!py-1" onClick={handleDeleteConfirm}>
 								<TrashIcon className="w-4" />
 							</Button>
 						</Fragment>
