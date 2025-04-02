@@ -4,7 +4,6 @@ import { observer } from 'mobx-react';
 import ShortUniqueId from 'short-unique-id';
 
 import { getImageUrl } from '@helpers';
-import { electron } from '@services';
 import { layoutStore } from '@stores';
 import { Button, cn, Div, HStack, Image, Span, Stack } from '@ui';
 
@@ -31,16 +30,15 @@ const Component = (props: IFormsProductCoverEditor) => {
 		layoutStore.setLoading();
 		const newCoverId = uid.rnd();
 
-		await electron
+		await window.electron
 			.addImage(categoryId, productId, newCoverId)
-			.then(async () => {
-				if (coverId) {
-					await electron.deleteImage(categoryId, productId, coverId);
-				}
-
-				onChange(newCoverId);
-			})
+			.then(() => onChange(newCoverId))
+			.catch(() => {})
 			.finally(() => layoutStore.setLoading(false));
+
+		if (coverId) {
+			await window.electron.deleteImage(categoryId, productId, coverId);
+		}
 	};
 
 	const handleDelete = async () => {
@@ -48,10 +46,14 @@ const Component = (props: IFormsProductCoverEditor) => {
 
 		layoutStore.setLoading();
 
-		await electron.deleteImage(categoryId, productId, coverId).then(() => {
-			onChange('');
-			layoutStore.setLoading(false);
-		});
+		await window.electron
+			.deleteImage(categoryId, productId, coverId)
+			.then(() => {})
+			.catch(() => {})
+			.finally(() => {
+				onChange('');
+				layoutStore.setLoading(false);
+			});
 	};
 
 	return (

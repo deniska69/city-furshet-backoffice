@@ -29,6 +29,7 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		setValue,
 		setError,
 		handleSubmit,
+		getValues,
 		formState: { errors },
 	} = useForm<TypePriceProduct>();
 
@@ -61,7 +62,7 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		}
 	};
 
-	const handleSave = (values: TypePriceProduct) => {
+	const handleSaveValues = (values: TypePriceProduct) => {
 		handleValidate('product_title');
 		handleValidate('product_title_description');
 		handleValidate('product_description');
@@ -73,7 +74,10 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		} else {
 			priceStore.addProduct(categoryId, values);
 		}
+	};
 
+	const handleSave = (values: TypePriceProduct) => {
+		handleSaveValues(values);
 		onClose();
 	};
 
@@ -114,7 +118,10 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		priceStore.changeProductPosition(categoryId, product?.index, 'down');
 	};
 
-	const handleChangeCover = async (coverId: string) => setValue('product_cover', coverId);
+	const handleChangeCover = async (coverId: string) => {
+		setValue('product_cover', coverId);
+		handleSaveValues(getValues());
+	};
 
 	return (
 		<Div className="border-border-light dark:border-border-dark border-l pl-6">

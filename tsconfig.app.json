@@ -31,7 +31,6 @@
 			"@helpers": ["src/react/helpers"],
 			"@hooks": ["src/react/hooks"],
 			"@modules/*": ["src/react/modules/*"],
-			"@services": ["src/react/services"],
 			"@stores": ["src/react/stores"],
 			"@ui": ["src/react/ui"]
 		}
