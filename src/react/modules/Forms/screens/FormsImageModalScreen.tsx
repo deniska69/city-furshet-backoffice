@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 
@@ -6,14 +7,43 @@ import FormsHeader from '@modules/Forms/components/FormsHeader';
 import { layoutStore } from '@stores';
 import { Button, Card, HStack, Image, Stack } from '@ui';
 
+const isDivisible = (x: number, y: number) => !(x % y);
+
 const Component = () => {
+	const [deg, setDeg] = useState(0);
+
 	if (!layoutStore.coverView) return null;
 
 	const { categoryId, productId, coverId } = layoutStore.coverView;
 
 	const src = getImageUrl(categoryId, productId, coverId);
 
-	const handleClose = () => layoutStore.hideCover();
+	const handleClose = () => {
+		setDeg(0);
+		layoutStore.hideCover();
+	};
+
+	const handleRotateRight = () => {
+		const newDeg = isDivisible(deg + 90, 360) ? 0 : deg + 90;
+		const element = document.getElementById(coverId);
+
+		if (element) {
+			element.style.transform = `rotate(${newDeg}deg)`;
+			setDeg(newDeg);
+		}
+	};
+
+	const handleRotateLeft = () => {
+		const newDeg = isDivisible(deg - 90, 360) ? 0 : deg - 90;
+		const element = document.getElementById(coverId);
+
+		if (element) {
+			element.style.transform = `rotate(${newDeg}deg)`;
+			setDeg(newDeg);
+		}
+	};
+
+	const handleSave = () => console.log({ deg });
 
 	return (
 		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-49 flex h-screen w-full items-center justify-center">
@@ -21,16 +51,20 @@ const Component = () => {
 				<FormsHeader title="Просмотр обложки товара" onClose={handleClose} />
 
 				<Stack className="mt-4 items-center relative">
-					<Image src={src} className="w-full aspect-square rounded-lg object-cover" />
+					<Image
+						id={coverId}
+						src={src}
+						className="w-full aspect-square rounded-lg object-cover"
+					/>
 
 					<HStack className="absolute gap-x-1 bottom-4">
-						<Button>
+						<Button onClick={handleRotateRight}>
 							<ArrowRotateRight />
 						</Button>
-						<Button>
+						<Button onClick={handleSave}>
 							<CheckIcon className="w-5" />
 						</Button>
-						<Button>
+						<Button onClick={handleRotateLeft}>
 							<ArrowRotateLeft />
 						</Button>
 					</HStack>
