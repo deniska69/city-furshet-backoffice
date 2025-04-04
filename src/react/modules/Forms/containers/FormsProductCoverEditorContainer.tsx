@@ -23,7 +23,7 @@ const Component = (props: IFormsProductCoverEditor) => {
 
 	const handleShow = () => {
 		if (!coverId) return layoutStore.setError('Отсутствует "coverId"');
-		layoutStore.showCover(categoryId, productId, coverId);
+		layoutStore.showCover({ categoryId, productId, coverId, onChange });
 	};
 
 	const handleChange = async () => {

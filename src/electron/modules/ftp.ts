@@ -201,6 +201,28 @@ class FTP {
 			return this.sendError(182, e);
 		}
 	};
+
+	downloadImage = async (categoryId: string, productId: string, imageId: string) => {
+		await this.connect();
+		if (this.client?.closed || !this.client) return this.sendError(191);
+
+		try {
+			await this.cdDir('images');
+
+			await this.client.ensureDir(categoryId);
+			await this.cdDir('images', categoryId);
+
+			await this.client.ensureDir(productId);
+			await this.cdDir('images', categoryId, productId);
+
+			return await this.client.downloadTo(
+				path.join(TEMP_DIR, `${imageId}.jpg`),
+				`${imageId}.jpg`,
+			);
+		} catch (e) {
+			return this.sendError(192, e);
+		}
+	};
 }
 
 export const ftp = new FTP();

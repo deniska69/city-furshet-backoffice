@@ -34,6 +34,9 @@ export const ERROR_CODES = {
 	181: 'deleteImage(): Ошибка подключения к хостингу',
 	182: 'deleteImage(): Ошибка',
 
+	191: 'downloadImage(): Ошибка подключения к хостингу',
+	192: 'downloadImage(): Ошибка',
+
 	/** [ImageManipulator] */
 
 	201: 'sendError(): Отсутствует this.mainWindow',
@@ -43,8 +46,8 @@ export const ERROR_CODES = {
 	213: 'addImage(): Ошибка',
 	214: 'addImage(): Ошибка удаления временного файла изображения',
 
-	221: 'saveImage(): Ошибка записи во временный файл',
-	222: 'saveImage(): Ошибка',
+	221: 'rotateAndSaveImage(): Ошибка записи во временный файл',
+	222: 'rotateAndSaveImage(): Ошибка',
 };
 
 const getSource = (code: keyof typeof ERROR_CODES) => {

@@ -76,17 +76,25 @@ class ImageManipulator {
 		}
 	};
 
-	saveImage = async (file: string, image_id: string) => {
+	rotateAndSaveImage = async (
+		angle: number,
+		categoryId: string,
+		productId: string,
+		imageId: string,
+		newImageId: string,
+	) => {
 		try {
-			if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
+			const fileFullNameCurrent = path.join(TEMP_DIR, `${imageId}.jpg`);
 
-			const data = file.replace(/^data:image\/\w+;base64,/, '');
+			if (!fs.existsSync(fileFullNameCurrent)) {
+				await ftp.downloadImage(categoryId, productId, imageId);
+			}
 
-			const fileFullName = path.join(TEMP_DIR, image_id + '.jpg');
+			const fileFullNameNew = path.join(TEMP_DIR, `${newImageId}.jpg`);
 
-			fs.writeFile(fileFullName, data, { encoding: 'base64' }, (e) => {
-				if (e) return this.sendError(221, e);
-			});
+			const buffer = fs.readFileSync(fileFullNameCurrent);
+
+			return await sharp(buffer).rotate(angle).jpeg({ quality: 100 }).toFile(fileFullNameNew);
 		} catch (e) {
 			return this.sendError(222, e);
 		}

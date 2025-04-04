@@ -8,8 +8,21 @@ electron.contextBridge.exposeInMainWorld('electron', {
 	addImage: async (category_id: string, product_id: string, image_id: string) => {
 		return await electron.ipcRenderer.invoke('addImage', category_id, product_id, image_id);
 	},
-	saveImage: async (file: string, image_id: string) => {
-		return await electron.ipcRenderer.invoke('saveImage', file, image_id);
+	rotateAndSaveImage: async (
+		angle: number,
+		categoryId: string,
+		productId: string,
+		imageId: string,
+		newImageId: string,
+	) => {
+		return await electron.ipcRenderer.invoke(
+			'rotateAndSaveImage',
+			angle,
+			categoryId,
+			productId,
+			imageId,
+			newImageId,
+		);
 	},
 	deleteImage: async (category_id: string, product_id: string, image_id: string) => {
 		return electron.ipcRenderer.invoke('deleteImage', category_id, product_id, image_id);

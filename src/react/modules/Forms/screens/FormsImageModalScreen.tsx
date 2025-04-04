@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
+import ShortUniqueId from 'short-unique-id';
 
-import { getImageUrl, toBase64 } from '@helpers';
+import { getImageUrl } from '@helpers';
 import FormsHeader from '@modules/Forms/components/FormsHeader';
 import { layoutStore } from '@stores';
 import { Button, Card, HStack, Image, Stack } from '@ui';
@@ -10,11 +11,13 @@ import { Button, Card, HStack, Image, Stack } from '@ui';
 const isDivisible = (x: number, y: number) => !(x % y);
 
 const Component = () => {
+	const uid = new ShortUniqueId();
+
 	const [deg, setDeg] = useState(0);
 
 	if (!layoutStore.coverView) return null;
 
-	const { categoryId, productId, coverId } = layoutStore.coverView;
+	const { categoryId, productId, coverId, onChange } = layoutStore.coverView;
 
 	const src = getImageUrl(categoryId, productId, coverId);
 
@@ -43,11 +46,19 @@ const Component = () => {
 		}
 	};
 
-	const handleSave = () => {
-		const element = document.getElementById(coverId);
-		toBase64(element, async (result) => {
-			await window.electron.saveImage(result);
-		});
+	const handleSave = async () => {
+		layoutStore.setLoading();
+
+		const newCoverId = uid.rnd();
+
+		await window.electron
+			.rotateAndSaveImage(deg, categoryId, productId, coverId, newCoverId)
+			.then(() => {
+				onChange(newCoverId);
+				handleClose();
+			})
+			.catch(() => {})
+			.finally(() => layoutStore.setLoading(false));
 	};
 
 	return (

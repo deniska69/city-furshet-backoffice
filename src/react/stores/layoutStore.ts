@@ -5,7 +5,12 @@ type TypeAlertButtons = {
 	onClick?: () => void;
 }[];
 
-type TypeCoverView = { categoryId: string; productId: string; coverId: string };
+type TypeCoverView = {
+	categoryId: string;
+	productId: string;
+	coverId: string;
+	onChange: (value: string) => void;
+};
 
 class LayoutStore {
 	loading: boolean = false;
@@ -40,9 +45,7 @@ class LayoutStore {
 		this.alertButtons = undefined;
 	});
 
-	showCover = action((categoryId: string, productId: string, coverId: string) => {
-		this.coverView = { categoryId, productId, coverId };
-	});
+	showCover = action((args: TypeCoverView) => (this.coverView = args));
 
 	hideCover = action(() => (this.coverView = undefined));
 }
