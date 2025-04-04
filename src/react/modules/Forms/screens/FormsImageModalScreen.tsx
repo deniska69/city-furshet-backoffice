@@ -67,14 +67,15 @@ const Component = () => {
 				<FormsHeader title="Просмотр обложки товара" onClose={handleClose} />
 
 				<Stack className="mt-4 items-center relative">
-					<Div className="absolute top-4 right-4 px-3 pt-0 pb-1 bg-neutral-800/30 rounded-lg">
-						<Span className="text-white text-xs">{coverId}</Span>
-					</Div>
 					<Image
 						id={coverId}
 						src={src}
 						className="w-full aspect-square rounded-lg object-cover"
 					/>
+
+					<Div className="absolute top-4 right-4 px-3 pt-0 pb-1 bg-neutral-800/30 rounded-lg">
+						<Span className="text-white text-xs">{coverId}</Span>
+					</Div>
 
 					<HStack className="absolute gap-x-1 bottom-4">
 						<Button onClick={handleRotateRight}>
