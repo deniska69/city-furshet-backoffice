@@ -8,6 +8,9 @@ electron.contextBridge.exposeInMainWorld('electron', {
 	addImage: async (category_id: string, product_id: string, image_id: string) => {
 		return await electron.ipcRenderer.invoke('addImage', category_id, product_id, image_id);
 	},
+	saveImage: async (file: string, image_id: string) => {
+		return await electron.ipcRenderer.invoke('saveImage', file, image_id);
+	},
 	deleteImage: async (category_id: string, product_id: string, image_id: string) => {
 		return electron.ipcRenderer.invoke('deleteImage', category_id, product_id, image_id);
 	},

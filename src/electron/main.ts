@@ -44,6 +44,9 @@ app.on('ready', () => {
 	ipcMain.handle('addImage', async (e, category_id, product_id, image_id) => {
 		return await imageManipulator.addImage(category_id, product_id, image_id);
 	});
+	ipcMain.handle('saveImage', async (e, file, image_id) => {
+		return await imageManipulator.saveImage(file, image_id);
+	});
 	ipcMain.handle('deleteImage', (e, category_id, product_id, image_id) => {
 		return ftp.deleteImage(category_id, product_id, image_id);
 	});

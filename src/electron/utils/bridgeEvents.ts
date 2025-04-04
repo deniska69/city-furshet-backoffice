@@ -42,6 +42,9 @@ export const ERROR_CODES = {
 	212: 'addImage(): Расширение выбранного изображения не подходит в данной версии программы',
 	213: 'addImage(): Ошибка',
 	214: 'addImage(): Ошибка удаления временного файла изображения',
+
+	221: 'saveImage(): Ошибка записи во временный файл',
+	222: 'saveImage(): Ошибка',
 };
 
 const getSource = (code: keyof typeof ERROR_CODES) => {

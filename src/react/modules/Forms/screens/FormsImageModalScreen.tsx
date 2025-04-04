@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 
-import { getImageUrl } from '@helpers';
+import { getImageUrl, toBase64 } from '@helpers';
 import FormsHeader from '@modules/Forms/components/FormsHeader';
 import { layoutStore } from '@stores';
 import { Button, Card, HStack, Image, Stack } from '@ui';
@@ -43,7 +43,12 @@ const Component = () => {
 		}
 	};
 
-	const handleSave = () => console.log({ deg });
+	const handleSave = () => {
+		const element = document.getElementById(coverId);
+		toBase64(element, async (result) => {
+			await window.electron.saveImage(result);
+		});
+	};
 
 	return (
 		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-49 flex h-screen w-full items-center justify-center">

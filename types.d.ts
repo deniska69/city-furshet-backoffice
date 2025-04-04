@@ -26,6 +26,7 @@ interface Window {
 		openBackupdDir: () => Promise<unknown>;
 		sendPrice: (price: string) => Promise<unknown>;
 		addImage: (category_id: string, product_id: string, image_id: string) => Promise<unknown>;
+		saveImage: (file: string, image_id: string) => Promise<unknown>;
 		deleteImage: (category_id: string, product_id: string, image_id: string) => Promise<unknown>;
 	};
 	electronAPI: {

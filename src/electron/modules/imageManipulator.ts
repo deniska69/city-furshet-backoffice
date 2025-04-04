@@ -75,6 +75,22 @@ class ImageManipulator {
 			return this.sendError(213, e);
 		}
 	};
+
+	saveImage = async (file: string, image_id: string) => {
+		try {
+			if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
+
+			const data = file.replace(/^data:image\/\w+;base64,/, '');
+
+			const fileFullName = path.join(TEMP_DIR, image_id + '.jpg');
+
+			fs.writeFile(fileFullName, data, { encoding: 'base64' }, (e) => {
+				if (e) return this.sendError(221, e);
+			});
+		} catch (e) {
+			return this.sendError(222, e);
+		}
+	};
 }
 
 export const imageManipulator = new ImageManipulator();
