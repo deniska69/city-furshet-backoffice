@@ -161,23 +161,30 @@ class FTP {
 		}
 	};
 
-	uploadImage = async (category_id: string, product_id: string, image_id: string) => {
+	uploadImage = async (categoryId: string, productId: string, imageId: string) => {
 		await this.connect();
 		if (this.client?.closed || !this.client) return this.sendError(171);
 
 		try {
 			await this.cdDir('images');
 
-			await this.client.ensureDir(category_id);
-			await this.cdDir('images', category_id);
+			await this.client.ensureDir(categoryId);
+			await this.cdDir('images', categoryId);
 
-			await this.client.ensureDir(product_id);
-			await this.cdDir('images', category_id, product_id);
+			await this.client.ensureDir(productId);
+			await this.cdDir('images', categoryId, productId);
 
-			return await this.client.uploadFrom(
-				path.join(TEMP_DIR, image_id + '.jpg'),
-				image_id + '.jpg',
-			);
+			const fileName = `${imageId}.jpg`;
+			const fileFullName = path.join(TEMP_DIR, fileName);
+
+			await this.client.uploadFrom(fileFullName, fileName);
+
+			if (fs.existsSync(fileFullName)) {
+				fs.rm(fileFullName, (e) => {
+					if (e) return this.sendError(173, e);
+				});
+			}
+			return Promise.resolve();
 		} catch (e) {
 			return this.sendError(172, e);
 		}

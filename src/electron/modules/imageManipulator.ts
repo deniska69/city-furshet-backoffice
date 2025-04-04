@@ -33,7 +33,6 @@ class ImageManipulator {
 				filters: [{ name: 'Изображения', extensions: ALLOWED_IMAGE_EXTENSIONS }],
 			});
 
-			// Прерывание выполнения функции без вызова ErrorSplash
 			if (!result || !result.length) return Promise.reject(getError(211));
 
 			const arr = result[0].split('.');
@@ -62,15 +61,7 @@ class ImageManipulator {
 				.jpeg({ quality: QUALITY_COMPRESS_IMAGE })
 				.toFile(fileFullName);
 
-			await ftp.uploadImage(category_id, product_id, image_id);
-
-			if (fs.existsSync(fileFullName)) {
-				fs.rm(fileFullName, (e) => {
-					if (e) return this.sendError(214, e);
-				});
-			}
-
-			return Promise.resolve();
+			return await ftp.uploadImage(category_id, product_id, image_id);
 		} catch (e) {
 			return this.sendError(213, e);
 		}
@@ -94,7 +85,15 @@ class ImageManipulator {
 
 			const buffer = fs.readFileSync(fileFullNameCurrent);
 
-			return await sharp(buffer).rotate(angle).jpeg({ quality: 100 }).toFile(fileFullNameNew);
+			await sharp(buffer).rotate(angle).jpeg({ quality: 100 }).toFile(fileFullNameNew);
+
+			if (fs.existsSync(fileFullNameCurrent)) {
+				fs.rm(fileFullNameCurrent, (e) => {
+					if (e) return this.sendError(223, e);
+				});
+			}
+
+			return await ftp.uploadImage(categoryId, productId, newImageId);
 		} catch (e) {
 			return this.sendError(222, e);
 		}

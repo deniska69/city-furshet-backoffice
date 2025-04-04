@@ -6,7 +6,7 @@ import ShortUniqueId from 'short-unique-id';
 import { getImageUrl } from '@helpers';
 import FormsHeader from '@modules/Forms/components/FormsHeader';
 import { layoutStore } from '@stores';
-import { Button, Card, HStack, Image, Stack } from '@ui';
+import { Button, Card, Div, HStack, Image, Span, Stack } from '@ui';
 
 const isDivisible = (x: number, y: number) => !(x % y);
 
@@ -67,6 +67,9 @@ const Component = () => {
 				<FormsHeader title="Просмотр обложки товара" onClose={handleClose} />
 
 				<Stack className="mt-4 items-center relative">
+					<Div className="absolute top-4 right-4 px-3 pt-0 pb-1 bg-neutral-800/30 rounded-lg">
+						<Span className="text-white text-xs">{coverId}</Span>
+					</Div>
 					<Image
 						id={coverId}
 						src={src}
@@ -96,9 +99,9 @@ const ArrowRotateLeft = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16">
 		<path
 			fill="currentColor"
-			fill-rule="evenodd"
+			fillRule="evenodd"
 			d="M8 1.5a6.5 6.5 0 1 1-6.445 7.348a.75.75 0 1 1 1.487-.194A5.001 5.001 0 1 0 4.43 4.5h1.32a.75.75 0 0 1 0 1.5h-3A.75.75 0 0 1 2 5.25v-3a.75.75 0 0 1 1.5 0v1.06A6.48 6.48 0 0 1 8 1.5"
-			clip-rule="evenodd"
+			clipRule="evenodd"
 		/>
 	</svg>
 );
@@ -107,9 +110,9 @@ const ArrowRotateRight = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16">
 		<path
 			fill="currentColor"
-			fill-rule="evenodd"
+			fillRule="evenodd"
 			d="M8 1.5a6.5 6.5 0 1 0 6.445 7.348a.75.75 0 1 0-1.487-.194A5.001 5.001 0 1 1 11.57 4.5h-1.32a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 .75-.75v-3a.75.75 0 0 0-1.5 0v1.06A6.48 6.48 0 0 0 8 1.5"
-			clip-rule="evenodd"
+			clipRule="evenodd"
 		/>
 	</svg>
 );
