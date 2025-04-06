@@ -24,7 +24,7 @@ class ImageManipulator {
 
 	setMainWindow = (mainWindow: BrowserWindow) => (this.mainWindow = mainWindow);
 
-	addImage = async (category_id: string, product_id: string, image_id: string) => {
+	addImage = async (categoryId: string, productId: string, imageId: string) => {
 		if (!this.mainWindow) return this.sendError(201);
 
 		try {
@@ -46,7 +46,7 @@ class ImageManipulator {
 
 			if (!fs.existsSync(TEMP_DIR)) fs.mkdirSync(TEMP_DIR);
 
-			const fileFullName = path.join(TEMP_DIR, image_id + '.jpg');
+			const fileFullName = path.join(TEMP_DIR, `${imageId}.jpg`);
 
 			let readyBuffer = undefined;
 
@@ -61,7 +61,7 @@ class ImageManipulator {
 				.jpeg({ quality: QUALITY_COMPRESS_IMAGE })
 				.toFile(fileFullName);
 
-			return await ftp.uploadImage(category_id, product_id, image_id);
+			return await ftp.uploadImage(categoryId, productId, imageId);
 		} catch (e) {
 			return this.sendError(213, e);
 		}

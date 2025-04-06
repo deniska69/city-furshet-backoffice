@@ -41,8 +41,8 @@ app.on('ready', () => {
 	ipcMain.handle('getPrice', () => ftp.getPrice());
 	ipcMain.on('sendPrice', (e, text) => ftp.sendPrice(text));
 
-	ipcMain.handle('addImage', async (e, category_id, product_id, image_id) => {
-		return await imageManipulator.addImage(category_id, product_id, image_id);
+	ipcMain.handle('addImage', async (e, categoryId, productId, imageId) => {
+		return await imageManipulator.addImage(categoryId, productId, imageId);
 	});
 
 	ipcMain.handle(
@@ -58,7 +58,7 @@ app.on('ready', () => {
 		},
 	);
 
-	ipcMain.handle('deleteImage', (e, category_id, product_id, image_id) => {
-		return ftp.deleteImage(category_id, product_id, image_id);
+	ipcMain.handle('deleteImage', (e, categoryId, productId, imageId) => {
+		return ftp.deleteImage(categoryId, productId, imageId);
 	});
 });

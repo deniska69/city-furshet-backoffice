@@ -5,8 +5,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
 	getPrice: async () => await electron.ipcRenderer.invoke('getPrice'),
 	openBackupdDir: async () => await electron.ipcRenderer.invoke('openBackupdDir'),
 	sendPrice: async (price: string) => await electron.ipcRenderer.send('sendPrice', price),
-	addImage: async (category_id: string, product_id: string, image_id: string) => {
-		return await electron.ipcRenderer.invoke('addImage', category_id, product_id, image_id);
+	addImage: async (categoryId: string, productId: string, imageId: string) => {
+		return await electron.ipcRenderer.invoke('addImage', categoryId, productId, imageId);
 	},
 	rotateAndSaveImage: async (
 		angle: number,
@@ -24,8 +24,8 @@ electron.contextBridge.exposeInMainWorld('electron', {
 			newImageId,
 		);
 	},
-	deleteImage: async (category_id: string, product_id: string, image_id: string) => {
-		return electron.ipcRenderer.invoke('deleteImage', category_id, product_id, image_id);
+	deleteImage: async (categoryId: string, productId: string, imageId: string) => {
+		return electron.ipcRenderer.invoke('deleteImage', categoryId, productId, imageId);
 	},
 } satisfies Window['electron']);
 
