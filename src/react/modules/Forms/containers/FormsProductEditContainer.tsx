@@ -12,6 +12,7 @@ import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '
 
 import FormsHeader from '../components/FormsHeader';
 import FormsProductCoverEditorContainer from './FormsProductCoverEditorContainer';
+import FormsProductGalleryEditorContainer from './FormsProductGalleryEditorContainer';
 
 const classNameTitleCol = 'min-w-38 mt-1';
 
@@ -123,6 +124,11 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		handleSaveValues(getValues());
 	};
 
+	const handleChangeGallery = async (ids: string) => {
+		setValue('product_gallery', ids);
+		handleSaveValues(getValues());
+	};
+
 	return (
 		<Div className="border-border-light dark:border-border-dark border-l pl-6">
 			<Card className="!min-w-xl max-w-xl">
@@ -219,6 +225,12 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 					/>
 
 					{/* product_gallery */}
+					<FormsProductGalleryEditorContainer
+						categoryId={categoryId}
+						onChange={handleChangeGallery}
+						productId={watch('product_id')}
+						ids={watch('product_gallery')}
+					/>
 
 					{/* butons */}
 					<HStack className="items-center mt-2 justify-end gap-x-3">

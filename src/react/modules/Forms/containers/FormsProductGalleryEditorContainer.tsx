@@ -1,22 +1,29 @@
-import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 
 import { getImageUrl } from '@helpers';
-import { Button, Div, HStack, Image, Span, Stack } from '@ui';
+import { Button, Card, Div, HStack, Image, Span, Stack } from '@ui';
+
+import FormsNewPhoto from '../components/FormsNewPhoto';
 
 interface IComponent {
 	categoryId: string;
 	productId: string;
-	coverId?: string;
-	onChange: (coverId?: string) => void;
+	ids?: string;
+	onChange: (ids: string) => void;
 }
 
 const Component = (props: IComponent) => {
+	const handleAddNew = () => console.log('[handleAddNew]');
+
 	return (
 		<HStack className="max-w-[1100px] gap-x-3 items-start">
 			<Span className="min-w-38 mt-1" text="Галерея" />
 
-			<Photo {...props} />
+			<HStack>
+				<Photo {...props} />
+				<FormsNewPhoto onClick={handleAddNew} />
+			</HStack>
 		</HStack>
 	);
 };
