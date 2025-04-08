@@ -191,10 +191,13 @@ class FTP {
 	};
 
 	deleteImage = async (categoryId: string, productId: string, imageId: string) => {
-		await this.connect();
-		if (this.client?.closed || !this.client) return this.sendError(181);
-
 		try {
+			await this.connect().catch(() => {
+				return Promise.resolve();
+			});
+
+			if (this.client?.closed || !this.client) return Promise.resolve();
+
 			await this.cdDir('images');
 
 			await this.client.ensureDir(categoryId);
@@ -203,10 +206,10 @@ class FTP {
 			await this.client.ensureDir(productId);
 			await this.cdDir('images', categoryId, productId);
 
-			return await this.client.remove(`${imageId}.jpg`);
-		} catch (e) {
-			return this.sendError(182, e);
-		}
+			await this.client.remove(`${imageId}.jpg`);
+			return Promise.resolve();
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
+		} catch (e: unknown) {}
 	};
 
 	downloadImage = async (categoryId: string, productId: string, imageId: string) => {

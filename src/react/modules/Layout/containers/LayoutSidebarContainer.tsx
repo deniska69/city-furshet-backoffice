@@ -40,7 +40,7 @@ const Component = () => {
 						/>
 						{priceStore.isNeedSaved ? (
 							<Span variant="primary" className="text-sm self-center">
-								Есть не сохранённые изменения
+								Есть несохранённые изменения
 							</Span>
 						) : null}
 					</Stack>

@@ -21,10 +21,10 @@ app.on('ready', () => {
 	mainWindow.setMinimumSize(1280, 720);
 	mainWindow.setMenuBarVisibility(false);
 	mainWindow.maximize();
-	mainWindow.webContents.openDevTools();
 
 	if (isDev()) {
 		mainWindow.loadURL(URL + PORT);
+		mainWindow.webContents.openDevTools();
 	} else {
 		mainWindow.loadFile(getReactPath()).then(() => mainWindow.loadURL('/home'));
 	}
