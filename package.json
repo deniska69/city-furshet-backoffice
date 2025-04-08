@@ -18,7 +18,7 @@
 		"build:e:win": "yarn transpile:e && yarn build:r && electron-builder --win --x64"
 	},
 	"author": {
-		"name": "deniska69",
+		"name": "Denis Gostev",
 		"email": "gostev.dy@yandex.ru"
 	},
 	"dependencies": {
