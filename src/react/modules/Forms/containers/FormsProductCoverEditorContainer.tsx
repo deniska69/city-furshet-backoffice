@@ -1,33 +1,26 @@
-import { useState } from 'react';
-import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 import ShortUniqueId from 'short-unique-id';
 
-import { getImageUrl } from '@helpers';
 import { layoutStore } from '@stores';
-import { Button, Div, HStack, Image, Span, Stack } from '@ui';
+import { HStack, Span } from '@ui';
 
-import FormsNewPhoto from '../components/FormsNewPhoto';
+import FormsAddImage from '../components/FormsAddImage';
+import FormsEditImage from '../components/FormsEditImage';
 
 interface IFormsProductCoverEditor {
 	categoryId: string;
 	productId: string;
-	coverId?: string;
-	onChange: (coverId: string) => void;
+	imageId?: string;
+	onChange: (imageId: string) => void;
 }
 
 const Component = (props: IFormsProductCoverEditor) => {
-	const { categoryId, productId, coverId, onChange } = props;
-
-	const src = coverId ? getImageUrl(categoryId, productId, coverId) : undefined;
-
-	const [image, setImage] = useState(src);
+	const { categoryId, productId, imageId, onChange } = props;
 
 	const uid = new ShortUniqueId();
 
-	const handleShow = () => {
-		if (!coverId) return layoutStore.setError('Отсутствует "coverId"');
-		layoutStore.showCover({ categoryId, productId, coverId, onChange });
+	const handleShow = (id: string) => {
+		layoutStore.showImageModal({ categoryId, productId, imageId: id, onChange });
 	};
 
 	const handleChange = async () => {
@@ -39,10 +32,6 @@ const Component = (props: IFormsProductCoverEditor) => {
 			.then(() => onChange(newCoverId))
 			.catch(() => {})
 			.finally(() => layoutStore.setLoading(false));
-
-		if (coverId) {
-			await window.electron.deleteImage(categoryId, productId, coverId);
-		}
 	};
 
 	const handleDeleteConfirm = () => {
@@ -59,48 +48,21 @@ const Component = (props: IFormsProductCoverEditor) => {
 		);
 	};
 
-	const handleDelete = async () => {
-		if (!coverId) return layoutStore.setError('Отсутствует "coverId"');
-
-		layoutStore.setLoading();
-
-		await window.electron
-			.deleteImage(categoryId, productId, coverId)
-			.then(() => {})
-			.catch(() => {})
-			.finally(() => {
-				onChange('');
-				layoutStore.setLoading(false);
-			});
-	};
-
-	const handleError = () => setImage(undefined);
+	const handleDelete = async () => onChange('');
 
 	return (
 		<HStack className="max-w-[1100px] gap-x-3 items-start">
 			<Span className="min-w-38 mt-1" text="Обложка" />
 
-			{image ? (
-				<Div className="relative group">
-					<Image
-						src={image}
-						onError={handleError}
-						className="w-24 h-24 rounded-lg object-cover"
-					/>
-					<Stack className="hidden group-hover:flex backdrop-blur-[2px] absolute h-full w-full top-0 rounded-lg p-1 gap-y-1 justify-center">
-						<Button variant="solid" className="!py-1" onClick={handleShow}>
-							<EyeIcon className="w-4" />
-						</Button>
-						<Button variant="muted" className="!py-1" onClick={handleChange}>
-							<PencilIcon className="w-4" />
-						</Button>
-						<Button variant="error" className="!py-1" onClick={handleDeleteConfirm}>
-							<TrashIcon className="w-4" />
-						</Button>
-					</Stack>
-				</Div>
+			{imageId ? (
+				<FormsEditImage
+					onShow={handleShow}
+					onChange={handleChange}
+					onDelete={handleDeleteConfirm}
+					{...{ categoryId, productId, imageId }}
+				/>
 			) : (
-				<FormsNewPhoto onClick={handleChange} />
+				<FormsAddImage onClick={handleChange} />
 			)}
 		</HStack>
 	);

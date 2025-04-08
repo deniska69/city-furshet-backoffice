@@ -221,7 +221,7 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 						categoryId={categoryId}
 						onChange={handleChangeCover}
 						productId={watch('product_id')}
-						coverId={watch('product_cover')}
+						imageId={watch('product_cover')}
 					/>
 
 					{/* product_gallery */}

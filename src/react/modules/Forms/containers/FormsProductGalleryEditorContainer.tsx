@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { getImageUrl } from '@helpers';
 import { Button, Card, Div, HStack, Image, Span, Stack } from '@ui';
 
-import FormsNewPhoto from '../components/FormsNewPhoto';
+import FormsNewPhoto from '../components/FormsAddImage';
 
 interface IComponent {
 	categoryId: string;

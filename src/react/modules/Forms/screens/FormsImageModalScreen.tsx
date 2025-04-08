@@ -17,18 +17,18 @@ const Component = () => {
 
 	if (!layoutStore.coverView) return null;
 
-	const { categoryId, productId, coverId, onChange } = layoutStore.coverView;
+	const { categoryId, productId, imageId, onChange } = layoutStore.coverView;
 
-	const src = getImageUrl(categoryId, productId, coverId);
+	const src = getImageUrl(categoryId, productId, imageId);
 
 	const handleClose = () => {
 		setDeg(0);
-		layoutStore.hideCover();
+		layoutStore.hideImageModal();
 	};
 
 	const handleRotateRight = () => {
 		const newDeg = isDivisible(deg + 90, 360) ? 0 : deg + 90;
-		const element = document.getElementById(coverId);
+		const element = document.getElementById(imageId);
 
 		if (element) {
 			element.style.transform = `rotate(${newDeg}deg)`;
@@ -38,7 +38,7 @@ const Component = () => {
 
 	const handleRotateLeft = () => {
 		const newDeg = isDivisible(deg - 90, 360) ? 0 : deg - 90;
-		const element = document.getElementById(coverId);
+		const element = document.getElementById(imageId);
 
 		if (element) {
 			element.style.transform = `rotate(${newDeg}deg)`;
@@ -52,7 +52,7 @@ const Component = () => {
 		const newCoverId = uid.rnd();
 
 		await window.electron
-			.rotateAndSaveImage(deg, categoryId, productId, coverId, newCoverId)
+			.rotateAndSaveImage(deg, categoryId, productId, imageId, newCoverId)
 			.then(() => {
 				onChange(newCoverId);
 				handleClose();
@@ -68,13 +68,13 @@ const Component = () => {
 
 				<Stack className="mt-4 items-center relative">
 					<Image
-						id={coverId}
+						id={imageId}
 						src={src}
 						className="w-full aspect-square rounded-lg object-cover"
 					/>
 
 					<Div className="absolute top-4 right-4 px-3 pt-0 pb-1 bg-neutral-800/30 rounded-lg">
-						<Span className="text-white text-xs">{coverId}</Span>
+						<Span className="text-white text-xs">{imageId}</Span>
 					</Div>
 
 					<HStack className="absolute gap-x-1 bottom-4">

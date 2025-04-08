@@ -8,7 +8,7 @@ type TypeAlertButtons = {
 type TypeCoverView = {
 	categoryId: string;
 	productId: string;
-	coverId: string;
+	imageId: string;
 	onChange: (value: string) => void;
 };
 
@@ -45,9 +45,9 @@ class LayoutStore {
 		this.alertButtons = undefined;
 	});
 
-	showCover = action((args: TypeCoverView) => (this.coverView = args));
+	showImageModal = action((args: TypeCoverView) => (this.coverView = args));
 
-	hideCover = action(() => (this.coverView = undefined));
+	hideImageModal = action(() => (this.coverView = undefined));
 }
 
 export const layoutStore = makeAutoObservable(new LayoutStore());
