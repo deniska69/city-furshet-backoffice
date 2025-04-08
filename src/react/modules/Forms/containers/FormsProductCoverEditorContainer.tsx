@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { observer } from 'mobx-react';
 import ShortUniqueId from 'short-unique-id';
@@ -19,6 +20,8 @@ const Component = (props: IFormsProductCoverEditor) => {
 	const { categoryId, productId, coverId, onChange } = props;
 
 	const src = coverId ? getImageUrl(categoryId, productId, coverId) : undefined;
+
+	const [image, setImage] = useState(src);
 
 	const uid = new ShortUniqueId();
 
@@ -71,13 +74,19 @@ const Component = (props: IFormsProductCoverEditor) => {
 			});
 	};
 
+	const handleError = () => setImage(undefined);
+
 	return (
 		<HStack className="max-w-[1100px] gap-x-3 items-start">
 			<Span className="min-w-38 mt-1" text="Обложка" />
 
-			{src ? (
+			{image ? (
 				<Div className="relative group">
-					<Image src={src} className="w-24 h-24 rounded-lg object-cover" />
+					<Image
+						src={image}
+						onError={handleError}
+						className="w-24 h-24 rounded-lg object-cover"
+					/>
 					<Stack className="hidden group-hover:flex backdrop-blur-[2px] absolute h-full w-full top-0 rounded-lg p-1 gap-y-1 justify-center">
 						<Button variant="solid" className="!py-1" onClick={handleShow}>
 							<EyeIcon className="w-4" />
