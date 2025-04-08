@@ -75,6 +75,8 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		} else {
 			priceStore.addProduct(categoryId, values);
 		}
+
+		priceStore.setNeedSave();
 	};
 
 	const handleSave = (values: TypePriceProduct) => {

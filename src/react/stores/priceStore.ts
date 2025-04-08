@@ -12,6 +12,7 @@ class PriceStore {
 	lastMod: Date | undefined;
 	categories: TypePriceCategory[] | undefined;
 	products: Map<string, TypePriceProduct[]> | undefined;
+	isNeedSaved: boolean = false;
 
 	setConnect = action((value: boolean = true) => (this.isConnect = value));
 
@@ -20,11 +21,15 @@ class PriceStore {
 		layoutStore.setError(text);
 	};
 
+	setNeedSave = action((value: boolean = true) => (this.isNeedSaved = value));
+
 	//#endregion
 
 	//#region Price
 
 	setPrice = action(async (data?: TypeReturnGetPrice) => {
+		this.setNeedSave(false);
+		this.isNeedSaved = false;
 		this.price = data?.lastMod && data.price.length ? data?.price : undefined;
 		this.lastMod = data?.lastMod;
 
@@ -158,11 +163,13 @@ class PriceStore {
 	addCategory = action((values: TypePriceCategory) => {
 		if (!Array.isArray(this.categories)) this.categories = [];
 		this.categories.push(values);
+		this.setNeedSave();
 	});
 
 	deleteCategory = action((index: number) => {
 		if (!Array.isArray(this.categories)) this.categories = [];
 		this.categories = toJS(this.categories).filter((el, i) => i !== index && el);
+		this.setNeedSave();
 	});
 
 	changeCategoriesPosition = action((index: number, direction: 'up' | 'down') => {
@@ -178,11 +185,13 @@ class PriceStore {
 		[arr[from], arr[to]] = [arr[to], arr[from]];
 
 		this.categories = arr;
+		this.setNeedSave();
 	});
 
 	saveCategory = action((index: number, values: TypePriceCategory) => {
 		if (!Array.isArray(this.categories)) this.categories = [];
 		this.categories = toJS(this.categories).map((el, i) => (index === i ? values : el));
+		this.setNeedSave();
 	});
 
 	//#endregion
@@ -230,6 +239,7 @@ class PriceStore {
 		const itemsUpdated = items.map((el) => (el.product_id === item.product_id ? item : el));
 
 		this.products.set(category_id, itemsUpdated);
+		this.setNeedSave();
 	});
 
 	changeProductPosition = action(
@@ -246,6 +256,7 @@ class PriceStore {
 			[arr[from], arr[to]] = [arr[to], arr[from]];
 
 			this.products.set(category_id, arr);
+			this.setNeedSave();
 		},
 	);
 
@@ -256,6 +267,7 @@ class PriceStore {
 		const itemsUpdated = items.filter((el) => el.product_id !== product_id && el);
 
 		this.products.set(category_id, itemsUpdated);
+		this.setNeedSave();
 	});
 
 	//#endregion

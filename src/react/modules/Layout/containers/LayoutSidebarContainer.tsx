@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 import logoFull from '@assets/logo_full.png';
 import { priceStore } from '@stores';
-import { Button, Card, Div, Image, Stack } from '@ui';
+import { Button, Card, Div, Image, Span, Stack } from '@ui';
 
 import LayoutCategories from '../components/LayoutCategories';
 
@@ -32,13 +32,18 @@ const Component = () => {
 						items={priceStore.categories}
 					/>
 
-					<Div className="py-4 mt-4 mx-4 border-t border-border-light dark:border-border-dark flex justify-center">
+					<Stack className="py-4 mt-4 mx-4 border-t border-border-light dark:border-border-dark flex justify-center gap-y-3">
 						<Button
 							onClick={handleSave}
 							text="Сохранить прайс"
 							disabled={!priceStore.categories || !priceStore.categories.length}
 						/>
-					</Div>
+						{priceStore.isNeedSaved ? (
+							<Span variant="primary" className="text-sm self-center">
+								Есть не сохранённые изменения
+							</Span>
+						) : null}
+					</Stack>
 				</Stack>
 			) : null}
 		</Card>
