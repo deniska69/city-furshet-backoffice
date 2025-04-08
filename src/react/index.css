@@ -24,7 +24,10 @@
 
 * {
 	-webkit-tap-highlight-color: transparent;
-	@apply [&::-webkit-scrollbar]:my-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700;
+	@apply [&::-webkit-scrollbar]:my-4 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2;
+	@apply [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full;
+	@apply [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500;
+	@apply [&::-webkit-scrollbar-track]:bg-gray-100 dark:[&::-webkit-scrollbar-track]:bg-neutral-700;
 }
 
 :root {

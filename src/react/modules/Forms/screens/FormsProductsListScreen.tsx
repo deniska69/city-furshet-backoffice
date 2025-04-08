@@ -25,16 +25,16 @@ export const FormsProductsListScreen = () => {
 
 			<HStack className="items-start gap-x-6">
 				<FormsProductsListContainer
+					onAdd={handleAdd}
+					onEdit={handleEdit}
 					activeProductId={item}
 					categoryId={categoryId}
-					onEdit={handleEdit}
-					onAdd={handleAdd}
 				/>
 				{item ? (
 					<FormsProductEditContainer
-						categoryId={categoryId}
 						productId={item}
 						onClose={handleClose}
+						categoryId={categoryId}
 					/>
 				) : null}
 			</HStack>

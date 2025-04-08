@@ -7,14 +7,14 @@ import { HStack, Span } from '@ui';
 import FormsAddImage from '../components/FormsAddImage';
 import FormsEditImage from '../components/FormsEditImage';
 
-interface IFormsProductCoverEditor {
+interface IComponent {
 	categoryId: string;
 	productId: string;
 	imageId?: string;
 	onChange: (imageId: string) => void;
 }
 
-const Component = (props: IFormsProductCoverEditor) => {
+const Component = (props: IComponent) => {
 	const { categoryId, productId, imageId, onChange } = props;
 
 	const uid = new ShortUniqueId();
@@ -62,7 +62,7 @@ const Component = (props: IFormsProductCoverEditor) => {
 					{...{ categoryId, productId, imageId }}
 				/>
 			) : (
-				<FormsAddImage onClick={handleChange} />
+				<FormsAddImage onChange={handleChange} />
 			)}
 		</HStack>
 	);
