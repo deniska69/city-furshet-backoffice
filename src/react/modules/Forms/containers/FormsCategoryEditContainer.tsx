@@ -146,7 +146,12 @@ const Component = ({ id }: { id?: string }) => {
 				<Span className={classNameTitleCol}>Товары</Span>
 				<HStack className="gap-x-3">
 					<Input disabled className="max-w-18" value={`${products?.length || 0} шт.`} />
-					<Button variant="muted" text="Редактировать" onClick={handleEditProducts} />
+					<Button
+						variant="muted"
+						disabled={isNew}
+						text="Редактировать"
+						onClick={handleEditProducts}
+					/>
 				</HStack>
 			</HStack>
 
