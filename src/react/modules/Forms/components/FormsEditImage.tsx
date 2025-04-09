@@ -50,7 +50,7 @@ const FormsEditImage = (props: IFormsEditImage) => {
 				<Image
 					src={image}
 					onError={handleError}
-					className="min-w-24 h-24 rounded-lg object-cover"
+					className="min-w-24 max-w-24 h-24 rounded-lg object-cover"
 				/>
 			)}
 
