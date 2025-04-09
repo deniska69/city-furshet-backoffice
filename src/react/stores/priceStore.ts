@@ -41,36 +41,40 @@ class PriceStore {
 			this.price.forEach((item) => {
 				const { category_id, category_hide, category_title, category_description } = item;
 
-				mapPrice.set(category_id, {
-					category_id,
-					category_hide,
-					category_title,
-					category_description,
-				});
+				if (category_id) {
+					mapPrice.set(category_id, {
+						category_id,
+						category_hide,
+						category_title,
+						category_description,
+					});
 
-				const {
-					product_id,
-					product_hide,
-					product_title,
-					product_title_description,
-					product_description,
-					product_note,
-					product_price,
-					product_cover,
-					product_gallery,
-				} = item;
+					const {
+						product_id,
+						product_hide,
+						product_title,
+						product_title_description,
+						product_description,
+						product_note,
+						product_price,
+						product_cover,
+						product_gallery,
+					} = item;
 
-				this.addProduct(category_id, {
-					product_id,
-					product_hide,
-					product_title,
-					product_title_description,
-					product_description,
-					product_note,
-					product_price,
-					product_cover,
-					product_gallery,
-				});
+					if (product_id) {
+						this.addProduct(category_id, {
+							product_id,
+							product_hide,
+							product_title,
+							product_title_description,
+							product_description,
+							product_note,
+							product_price,
+							product_cover,
+							product_gallery,
+						});
+					}
+				}
 			});
 
 			this.categories = [...mapPrice.values()];
