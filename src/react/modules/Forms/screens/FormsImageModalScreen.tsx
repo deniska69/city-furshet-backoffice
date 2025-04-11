@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import ShortUniqueId from 'short-unique-id';
 
 import { getImageUrl } from '@helpers';
+import { useEscape } from '@hooks';
 import FormsHeader from '@modules/Forms/components/FormsHeader';
 import { layoutStore } from '@stores';
 import { Button, Card, Div, HStack, Image, Span, Stack } from '@ui';
@@ -15,16 +16,18 @@ const Component = () => {
 
 	const [deg, setDeg] = useState(0);
 
+	const handleClose = () => {
+		setDeg(0);
+		layoutStore.hideImageModal();
+	};
+
+	useEscape(handleClose);
+
 	if (!layoutStore.coverView) return null;
 
 	const { categoryId, productId, imageId, onChange } = layoutStore.coverView;
 
 	const src = getImageUrl(categoryId, productId, imageId);
-
-	const handleClose = () => {
-		setDeg(0);
-		layoutStore.hideImageModal();
-	};
 
 	const handleRotateRight = () => {
 		const newDeg = isDivisible(deg + 90, 360) ? 0 : deg + 90;

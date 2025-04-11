@@ -6,7 +6,7 @@ import { Button, Divider, HStack, Span, Stack } from '@ui';
 interface IFormsHeader {
 	isNew?: boolean;
 	title: string;
-	titleNew: string;
+	titleNew?: string;
 	backTo?: To;
 	onClose?: () => void;
 }
