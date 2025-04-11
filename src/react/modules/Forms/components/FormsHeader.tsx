@@ -6,11 +6,12 @@ import { Button, Divider, HStack, Span, Stack } from '@ui';
 interface IFormsHeader {
 	isNew?: boolean;
 	title: string;
+	titleNew: string;
 	backTo?: To;
 	onClose?: () => void;
 }
 
-const FormsHeader = ({ isNew, title, backTo, onClose }: IFormsHeader) => {
+const FormsHeader = ({ isNew, title, titleNew, backTo, onClose }: IFormsHeader) => {
 	const navigate = useNavigate();
 
 	const handleClose = () => {
@@ -22,12 +23,13 @@ const FormsHeader = ({ isNew, title, backTo, onClose }: IFormsHeader) => {
 		<Stack className="gap-y-3">
 			<HStack className="items-center justify-between">
 				<HStack className="gap-x-1">
-					<Span className="text-bold text-2xl">{title}</Span>
 					{isNew ? (
-						<Span variant="primary" className="mt-1.5">
-							(new)
+						<Span variant="primary" className="text-bold text-2xl">
+							{titleNew}
 						</Span>
-					) : null}
+					) : (
+						<Span className="text-bold text-2xl">{title}</Span>
+					)}
 				</HStack>
 				<Button variant="ghost" onClick={handleClose} className="!px-1.5 !py-4 !rounded-full">
 					<XMarkIcon className="w-5" />

@@ -134,7 +134,13 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 	return (
 		<Div className="border-border-light dark:border-border-dark border-l pl-6">
 			<Card className="!min-w-xl max-w-xl">
-				<FormsHeader isNew={isNew} backTo={backTo} title="Редактор товара" onClose={onClose} />
+				<FormsHeader
+					isNew={isNew}
+					backTo={backTo}
+					onClose={onClose}
+					titleNew="Новый товар"
+					title="Редактор товара"
+				/>
 
 				<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
 					{/* product_id */}
