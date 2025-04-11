@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 import logoFull from '@assets/logo_full.png';
 import { priceStore } from '@stores';
-import { Button, Card, Div, Image, Span, Stack } from '@ui';
+import { Button, Card, Div, Image, Pressable, Span, Stack } from '@ui';
 
 import LayoutCategories from '../components/LayoutCategories';
 
@@ -17,6 +17,8 @@ const Component = () => {
 	};
 
 	const handleSave = () => priceStore.savePrice();
+
+	const handleReset = () => priceStore.getPrice();
 
 	return (
 		<Card className="h-screen !max-h-screen max-w-64 min-w-64 !p-0 border-y-0 border-r border-l-0 flex flex-col !rounded-none justify-between">
@@ -39,9 +41,16 @@ const Component = () => {
 							disabled={!priceStore.categories || !priceStore.categories.length}
 						/>
 						{priceStore.isNeedSaved ? (
-							<Span variant="primary" className="text-sm self-center">
-								Есть несохранённые изменения
-							</Span>
+							<Stack className="gap-y-3 items-center">
+								<Span variant="primary" className="text-sm self-center">
+									Есть несохранённые изменения
+								</Span>
+								<Pressable onClick={handleReset}>
+									<Span variant="muted" className="hover:underline text-sm">
+										Сбросить
+									</Span>
+								</Pressable>
+							</Stack>
 						) : null}
 					</Stack>
 				</Stack>
