@@ -27,6 +27,7 @@ electron.contextBridge.exposeInMainWorld('electron', {
 	deleteImage: async (categoryId: string, productId: string, imageId: string) => {
 		return electron.ipcRenderer.invoke('deleteImage', categoryId, productId, imageId);
 	},
+	allowClose: async () => await electron.ipcRenderer.invoke('allowClose'),
 } satisfies Window['electron']);
 
 electron.contextBridge.exposeInMainWorld('electronAPI', {
@@ -38,4 +39,5 @@ electron.contextBridge.exposeInMainWorld('electronAPI', {
 	onSuccess: (callback) => {
 		return electron.ipcRenderer.on('success', (e: any, code: number) => callback(code));
 	},
+	onWillClose: (callback) => electron.ipcRenderer.on('willClose', () => callback()),
 } satisfies Window['electronAPI']);

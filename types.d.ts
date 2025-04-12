@@ -34,10 +34,12 @@ interface Window {
 			newImageId: string,
 		) => Promise<unknown>;
 		deleteImage: (category_id: string, product_id: string, image_id: string) => Promise<unknown>;
+		allowClose: () => Promise<unknown>;
 	};
 	electronAPI: {
 		onError: (callback: (code: number, error?: unknown) => void) => Promise<unknown>;
 		onSuccess: (callback: (code: number) => void) => Promise<unknown>;
+		onWillClose: (callback: () => void) => Promise<unknown>;
 	};
 }
 

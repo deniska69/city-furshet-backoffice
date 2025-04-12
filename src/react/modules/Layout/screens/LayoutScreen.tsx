@@ -36,6 +36,24 @@ const Component = () => {
 			if (code === 100) priceStore.onSendPriceFinally();
 			if (code === 200) priceStore.onAddImageFinally();
 		});
+
+		window.electronAPI.onWillClose(() => {
+			if (priceStore.isNeedSaved) {
+				layoutStore.alert(
+					'Есть не сохранённые изменения. Вы действительно хотите закрыть программу?',
+					[
+						{ title: 'Отмена' },
+						{
+							title: 'Закрыть',
+							onClick: () => window.electron.allowClose(),
+						},
+					],
+					'warning',
+				);
+			} else {
+				window.electron.allowClose();
+			}
+		});
 	}, []);
 
 	const handleHideSplash = () => setIsShowSplash(false);

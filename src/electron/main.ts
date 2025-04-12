@@ -61,4 +61,18 @@ app.on('ready', () => {
 	ipcMain.handle('deleteImage', (e, categoryId, productId, imageId) => {
 		return ftp.deleteImage(categoryId, productId, imageId);
 	});
+
+	let allowClose = false;
+
+	mainWindow.on('close', (e) => {
+		if (!allowClose) {
+			e.preventDefault();
+			mainWindow.webContents.send('willClose');
+		}
+	});
+
+	ipcMain.handle('allowClose', () => {
+		allowClose = true;
+		mainWindow.close();
+	});
 });
