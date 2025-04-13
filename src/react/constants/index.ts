@@ -12,7 +12,6 @@ export const CATEGORY_FIELDS = {
 export const PRICE_FIELDS = {
 	product_id: 'ID',
 	product_title: 'Название',
-	product_title_description: 'Описание названия',
 	product_description: 'Описание',
 	product_hide: 'Скрыто',
 	product_note: 'Примечание',

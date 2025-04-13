@@ -6,7 +6,7 @@ import { ERROR_CODES, getError } from '@electron/utils/bridgeEvents';
 import { useTheme } from '@hooks';
 import { Loader } from '@modules/Elements';
 import { ErrorSplashScreen } from '@modules/Error';
-import { FormsImageModalScreen } from '@modules/Forms';
+import { FormsImageModalScreen, FormsProductModalScreen } from '@modules/Forms';
 import { layoutStore, priceStore } from '@stores';
 import { Div, HStack, Stack } from '@ui';
 
@@ -60,6 +60,7 @@ const Component = () => {
 
 	return (
 		<Div>
+			<FormsProductModalScreen />
 			<FormsImageModalScreen />
 			{layoutStore.loading ? <Loader /> : null}
 			<LayoutAlertScreen />

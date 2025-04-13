@@ -9,11 +9,12 @@ import FormsProductNewCard from '../components/FormsProductNewCard';
 interface IComponent {
 	categoryId?: string;
 	onEdit: (value: string) => void;
+	onOpen: (value: string) => void;
 	onAdd: () => void;
 	activeProductId?: string;
 }
 
-const Component = ({ categoryId, onEdit, onAdd, activeProductId }: IComponent) => {
+const Component = ({ categoryId, onEdit, onOpen, onAdd, activeProductId }: IComponent) => {
 	const items = categoryId ? priceStore.getProducts(categoryId) : undefined;
 
 	return (
@@ -24,7 +25,8 @@ const Component = ({ categoryId, onEdit, onAdd, activeProductId }: IComponent) =
 						{...item}
 						key={index}
 						categoryId={categoryId}
-						onClick={() => onEdit(item.product_id)}
+						onEdit={() => onEdit(item.product_id)}
+						onOpen={() => onOpen(item.product_id)}
 						active={item.product_id === activeProductId}
 					/>
 				))}

@@ -9,7 +9,6 @@ type TypePriceProduct = {
 	product_id: string;
 	product_hide: boolean;
 	product_title: string;
-	product_title_description: string;
 	product_description: string;
 	product_note: string;
 	product_price: string;
@@ -67,7 +66,6 @@ interface IFormsProductEditContainer {
 
 type TypeHandleValidateProduct =
 	| 'product_title'
-	| 'product_title_description'
 	| 'product_description'
 	| 'product_note'
 	| 'product_price';

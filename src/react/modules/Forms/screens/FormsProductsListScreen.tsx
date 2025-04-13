@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import { ErrorScreen } from '@modules/Error';
+import { layoutStore } from '@stores';
 import { Button, HStack, Stack } from '@ui';
 
 import { FormsProductEditContainer } from '../containers/FormsProductEditContainer';
@@ -11,6 +13,8 @@ export const FormsProductsListScreen = () => {
 	const { categoryId } = useParams();
 	const [item, setItem] = useState<string | undefined>(undefined);
 
+	if (!categoryId) return <ErrorScreen text='Отсутствует "categoryId"' />;
+
 	const handleBack = () => navigate(`/category/${categoryId}`, { replace: true });
 
 	const handleEdit = (id: string) => setItem(id);
@@ -18,6 +22,8 @@ export const FormsProductsListScreen = () => {
 	const handleAdd = () => setItem('new');
 
 	const handleClose = () => setItem(undefined);
+
+	const handleOpen = (id: string) => layoutStore.showProductModal({ categoryId, productId: id });
 
 	return (
 		<Stack className="items-start gap-y-3">
@@ -27,6 +33,7 @@ export const FormsProductsListScreen = () => {
 				<FormsProductsListContainer
 					onAdd={handleAdd}
 					onEdit={handleEdit}
+					onOpen={handleOpen}
 					activeProductId={item}
 					categoryId={categoryId}
 				/>

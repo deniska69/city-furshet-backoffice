@@ -1,11 +1,11 @@
 import { EyeSlashIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { PencilIcon } from '@heroicons/react/24/solid';
 
 import { getImageUrl, isHide } from '@helpers';
 import { Button, Card, cn, Div, Image, Span, Stack } from '@ui';
 
 interface IFormsProductCard extends TypePriceProduct {
-	onClick: (id: string) => void;
+	onEdit: (id: string) => void;
+	onOpen: (id: string) => void;
 	active?: boolean;
 	categoryId?: string;
 }
@@ -14,21 +14,24 @@ const FormsProductCard = (props: IFormsProductCard) => {
 	const {
 		product_id,
 		product_title,
-		product_title_description,
 		product_price,
 		product_cover,
 		product_hide,
-		onClick,
+		product_note,
+		onEdit,
+		onOpen,
 		active,
 		categoryId,
 	} = props;
 
-	const handleEdit = () => onClick(product_id);
+	const handleOpen = () => onOpen(product_id);
+
+	const handleEdit = () => onEdit(product_id);
 
 	return (
 		<Card
 			className={cn(
-				'relative group flex flex-col  h-auto items-start max-w-[234px] justify-between',
+				'relative group flex flex-col h-auto items-start max-w-[234px] justify-between',
 				active && '!border-primary',
 			)}
 		>
@@ -47,7 +50,7 @@ const FormsProductCard = (props: IFormsProductCard) => {
 					) : null}
 				</Div>
 				<Span className="font-semibold mt-1" text={product_title} />
-				<Span variant="muted" text={product_title_description} />
+				<Span variant="muted" text={product_note} />
 			</Stack>
 
 			<Button className="mt-2 !rounded-full !px-3">
@@ -55,12 +58,9 @@ const FormsProductCard = (props: IFormsProductCard) => {
 				<PlusIcon className="w-6" />
 			</Button>
 
-			<Div
-				onClick={handleEdit}
-				className="hidden group-hover:flex ml-[calc(-1rem)] mt-[calc(-1rem)] rounded-xl absolute flex-col gap-y-3 h-full min-w-full items-center bg-white/10 backdrop-blur-xs z-50 cursor-pointer pt-16"
-			>
-				<PencilIcon className="w-18 fill-primary" />
-				<Span className="!text-primary font-bold text-xl" text="Редактировать" />
+			<Div className="hidden group-hover:flex ml-[calc(-1rem)] mt-[calc(-1rem)] rounded-xl absolute flex-col gap-y-3 h-full min-w-full items-center justify-center bg-black/10 dark:bg-white/10 backdrop-blur-xs z-50">
+				<Button onClick={handleOpen} text="Открыть" variant="solid" className="w-48" />
+				<Button onClick={handleEdit} text="Редактировать" variant="muted" className="w-48" />
 			</Div>
 		</Card>
 	);

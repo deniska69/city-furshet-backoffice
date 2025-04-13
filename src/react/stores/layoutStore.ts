@@ -5,11 +5,16 @@ type TypeAlertButtons = {
 	onClick?: () => void;
 }[];
 
-type TypeCoverView = {
+type TypeImageView = {
 	categoryId: string;
 	productId: string;
 	imageId: string;
 	onChange: (value: string) => void;
+};
+
+type TypeProductView = {
+	categoryId: string;
+	productId: string;
 };
 
 class LayoutStore {
@@ -18,7 +23,8 @@ class LayoutStore {
 	alertText: string | undefined;
 	alertButtons: TypeAlertButtons | undefined;
 	alertType: 'warning' | 'success' | undefined;
-	coverView: TypeCoverView | undefined;
+	imageModal: TypeImageView | undefined;
+	productModal: TypeProductView | undefined;
 
 	setLoading = action((value: boolean = true) => (this.loading = value));
 
@@ -45,9 +51,13 @@ class LayoutStore {
 		this.alertButtons = undefined;
 	});
 
-	showImageModal = action((args: TypeCoverView) => (this.coverView = args));
+	showImageModal = action((args: TypeImageView) => (this.imageModal = args));
 
-	hideImageModal = action(() => (this.coverView = undefined));
+	hideImageModal = action(() => (this.imageModal = undefined));
+
+	showProductModal = action((args: TypeProductView) => (this.productModal = args));
+
+	hideProductModal = action(() => (this.productModal = undefined));
 }
 
 export const layoutStore = makeAutoObservable(new LayoutStore());

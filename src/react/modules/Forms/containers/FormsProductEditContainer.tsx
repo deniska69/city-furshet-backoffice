@@ -38,7 +38,6 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		setValue('product_id', product?.product_id || uid.rnd());
 		setValue('product_hide', product?.product_hide ? isHide(product?.product_hide) : false);
 		setValue('product_title', product?.product_title || '');
-		setValue('product_title_description', product?.product_title_description || '');
 		setValue('product_description', product?.product_description || '');
 		setValue('product_note', product?.product_note || '');
 		setValue('product_price', product?.product_price || '');
@@ -53,7 +52,7 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 	const handleChangeHide = (value: boolean) => setValue('product_hide', value);
 
 	const handleValidate = (name: TypeHandleValidateProduct) => {
-		if (!watch(name).length) return;
+		if (!watch(name).length) return Promise.resolve();
 
 		if (watch(name).includes('\\') || watch(name).includes(';')) {
 			const message = `Поле "${PRICE_FIELDS[name]}" содержит запрещённый символ "\\" или ";"`;
@@ -63,9 +62,8 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		}
 	};
 
-	const handleSaveValues = (values: TypePriceProduct) => {
+	const handleSaveValues = async (values: TypePriceProduct) => {
 		handleValidate('product_title');
-		handleValidate('product_title_description');
 		handleValidate('product_description');
 		handleValidate('product_note');
 		handleValidate('product_price');
@@ -77,10 +75,12 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		}
 
 		priceStore.setNeedSave();
+
+		return Promise.resolve();
 	};
 
-	const handleSave = (values: TypePriceProduct) => {
-		handleSaveValues(values);
+	const handleSave = async (values: TypePriceProduct) => {
+		await handleSaveValues(values);
 		onClose();
 	};
 
@@ -164,15 +164,6 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 							autoFocus
 							isInvalid={!!errors.product_title}
 							{...register('product_title', { required: true })}
-						/>
-					</HStack>
-
-					{/* product_title_description */}
-					<HStack className="max-w-[1100px] gap-x-3 items-center">
-						<Span className={classNameTitleCol}>Описание названия</Span>
-						<Input
-							{...register('product_title_description')}
-							isInvalid={!!errors.product_title_description}
 						/>
 					</HStack>
 

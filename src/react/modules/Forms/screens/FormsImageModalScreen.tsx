@@ -23,9 +23,9 @@ const Component = () => {
 
 	useEscape(handleClose);
 
-	if (!layoutStore.coverView) return null;
+	if (!layoutStore.imageModal) return null;
 
-	const { categoryId, productId, imageId, onChange } = layoutStore.coverView;
+	const { categoryId, productId, imageId, onChange } = layoutStore.imageModal;
 
 	const src = getImageUrl(categoryId, productId, imageId);
 
