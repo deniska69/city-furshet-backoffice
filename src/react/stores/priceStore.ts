@@ -55,6 +55,7 @@ class PriceStore {
 						product_title,
 						product_description,
 						product_note,
+						product_note_additional,
 						product_price,
 						product_cover,
 						product_gallery,
@@ -67,6 +68,7 @@ class PriceStore {
 							product_title,
 							product_description,
 							product_note,
+							product_note_additional,
 							product_price,
 							product_cover,
 							product_gallery,
@@ -91,7 +93,7 @@ class PriceStore {
 		layoutStore.setLoading();
 
 		try {
-			let price = `category_id;category_hide;category_title;category_description;product_id;product_hide;product_title;product_description;product_note;product_price;product_cover;product_gallery;\n`;
+			let price = `category_id;category_hide;category_title;category_description;product_id;product_hide;product_title;product_description;product_note;product_note_additional;product_price;product_cover;product_gallery;\n`;
 
 			this.categories.forEach((cat) => {
 				const prods = priceStore.products?.has(cat.category_id)
@@ -100,7 +102,7 @@ class PriceStore {
 
 				if (prods) {
 					prods.forEach((prod) => {
-						const s = `${cat.category_id};${isHide(cat.category_hide) ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${isHide(prod.product_hide) ? 'true' : ''};${prod.product_title || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};`;
+						const s = `${cat.category_id};${isHide(cat.category_hide) ? 'true' : ''};${cat.category_title || ''};${cat.category_description || ''};${prod.product_id};${isHide(prod.product_hide) ? 'true' : ''};${prod.product_title || ''};${prod.product_description || ''};${prod.product_note || ''};${prod.product_note_additional || ''};${prod.product_price || ''};${prod.product_cover || ''};${prod.product_gallery || ''};`;
 
 						price += s + '\n';
 					});

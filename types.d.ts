@@ -11,6 +11,7 @@ type TypePriceProduct = {
 	product_title: string;
 	product_description: string;
 	product_note: string;
+	product_note_additional: string;
 	product_price: string;
 	product_cover: string;
 	product_gallery: string;
@@ -68,6 +69,7 @@ type TypeHandleValidateProduct =
 	| 'product_title'
 	| 'product_description'
 	| 'product_note'
+	| 'product_note_additional'
 	| 'product_price';
 
 declare module 'heic-convert';

@@ -20,8 +20,14 @@ const Component = () => {
 
 	if (!product) return null;
 
-	const { product_cover, product_title, product_description, product_note, product_price } =
-		product;
+	const {
+		product_cover,
+		product_title,
+		product_description,
+		product_note,
+		product_price,
+		product_note_additional,
+	} = product;
 
 	const cover = getImageUrl(categoryId, productId, product_cover);
 
@@ -31,7 +37,10 @@ const Component = () => {
 				<FormsHeader title={product_title} onClose={handleClose} />
 
 				<HStack className="mt-4 items-start relative">
-					<Image src={cover} className="w-[400px] aspect-square rounded-lg object-cover" />
+					<Image
+						src={cover}
+						className="min-w-[400px] min-h-[400px] w-[400px] aspect-square rounded-lg object-cover"
+					/>
 
 					<Stack className="px-6 gap-y-3">
 						<Span className="text-xl font-light">{product_description}</Span>
@@ -40,15 +49,22 @@ const Component = () => {
 						</Span>
 
 						<HStack className="items-center gap-x-3">
-							<Button className="mt-2 !rounded-full !px-3" variant="muted">
+							<Button
+								className="mt-2 !rounded-full !px-3 hover:cursor-default"
+								variant="muted"
+							>
 								<MinusIcon className="w-6 text-white" />
 							</Button>
 							<Span className="text-2xl mt-1">0</Span>
-							<Button className="mt-2 !rounded-full !px-3">
+							<Button className="mt-2 !rounded-full !px-3 hover:cursor-default">
 								<Span className="!text-white" text={`${product_price || 0} ₽`} />
 								<PlusIcon className="w-6" />
 							</Button>
 						</HStack>
+
+						<Span className="text-xl font-light" variant="muted">
+							{product_note_additional}
+						</Span>
 					</Stack>
 				</HStack>
 			</Card>

@@ -15,6 +15,7 @@ export const PRICE_FIELDS = {
 	product_description: 'Описание',
 	product_hide: 'Скрыто',
 	product_note: 'Примечание',
+	product_note_additional: 'Доп. примечание',
 	product_price: 'Цена',
 	product_cover: 'Обложка',
 	product_gallery: 'Галерея',

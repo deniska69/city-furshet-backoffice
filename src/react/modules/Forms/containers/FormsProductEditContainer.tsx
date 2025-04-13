@@ -40,6 +40,7 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		setValue('product_title', product?.product_title || '');
 		setValue('product_description', product?.product_description || '');
 		setValue('product_note', product?.product_note || '');
+		setValue('product_note_additional', product?.product_note_additional || '');
 		setValue('product_price', product?.product_price || '');
 		setValue('product_cover', product?.product_cover || '');
 		setValue('product_gallery', product?.product_gallery || '');
@@ -66,6 +67,7 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 		handleValidate('product_title');
 		handleValidate('product_description');
 		handleValidate('product_note');
+		handleValidate('product_note_additional');
 		handleValidate('product_price');
 
 		if (product?.product_id) {
@@ -180,6 +182,15 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
 						<Span className={classNameTitleCol} text="Примечание" />
 						<Input {...register('product_note')} isInvalid={!!errors.product_note} />
+					</HStack>
+
+					{/* product_note_additional */}
+					<HStack className="max-w-[1100px] gap-x-3 items-center">
+						<Span className={classNameTitleCol} text="Доп. примечание" />
+						<Input
+							{...register('product_note_additional')}
+							isInvalid={!!errors.product_note_additional}
+						/>
 					</HStack>
 
 					{/* product_price */}
