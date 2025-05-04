@@ -82,3 +82,19 @@ html.dark {
 .splash-logo {
 	filter: drop-shadow(0 0 2em #9abc39);
 }
+
+.swiper-button-prev::after {
+	color: var(--color-primary);
+}
+
+.swiper-button-next::after {
+	color: var(--color-primary);
+}
+
+.swiper-pagination-bullet-active {
+	background: var(--color-primary) !important;
+}
+
+.swiper-slide {
+	user-select: none;
+}
