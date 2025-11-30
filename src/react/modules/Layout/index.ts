@@ -1,4 +1,4 @@
+import Layout from './Layout';
 import LayoutHomeScreen from './screens/LayoutHomeScreen';
-import LayoutScreen from './screens/LayoutScreen';
 
-export { LayoutScreen, LayoutHomeScreen };
+export { Layout, LayoutHomeScreen };

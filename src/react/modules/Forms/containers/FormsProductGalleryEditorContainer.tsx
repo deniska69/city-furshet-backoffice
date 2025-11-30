@@ -11,11 +11,12 @@ interface IComponent {
 	categoryId: string;
 	productId: string;
 	ids?: string;
+	isNew: boolean;
 	onChange: (ids: string) => void;
 }
 
-const Component = (props: IComponent) => {
-	const { categoryId, productId, ids, onChange } = props;
+const FormsProductGalleryEditorContainer = observer((props: IComponent) => {
+	const { categoryId, productId, ids, isNew, onChange } = props;
 
 	const images = ids ? ids.split(',') : [];
 
@@ -37,6 +38,10 @@ const Component = (props: IComponent) => {
 	};
 
 	const handleChange = async (index?: number) => {
+		if (isNew) {
+			return layoutStore.setError('Для добавления галереи - необходимо сохранить товар.');
+		}
+
 		layoutStore.setLoading();
 		const newId = uid.rnd();
 
@@ -92,8 +97,6 @@ const Component = (props: IComponent) => {
 			</HStack>
 		</HStack>
 	);
-};
-
-const FormsProductGalleryEditorContainer = observer(Component);
+});
 
 export default FormsProductGalleryEditorContainer;

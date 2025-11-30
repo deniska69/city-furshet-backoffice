@@ -63,6 +63,7 @@ interface IFormsProductEditContainer {
 	categoryId?: string;
 	productId?: string;
 	onClose: () => void;
+	onSaveCallback: (productId: string) => void;
 }
 
 type TypeHandleValidateProduct =

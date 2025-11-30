@@ -9,13 +9,13 @@ const variants = {
 	warning: 'bg-red-800/40 dark:bg-red-600/20 border-red-900 dark:border-red-900',
 };
 
-const Component = () => {
+const LayoutAlertScreen = observer(() => {
 	if (!layoutStore.alertText || !layoutStore.alertType) return null;
 
 	const buttons = layoutStore.alertButtons || [];
 
 	return (
-		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-51 flex h-screen w-full items-center justify-center">
+		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-[101] flex h-screen w-full items-center justify-center">
 			{layoutStore.alertType === 'success' ? (
 				<CheckBadgeIcon className="w-32 text-white" />
 			) : (
@@ -42,7 +42,6 @@ const Component = () => {
 			</HStack>
 		</Stack>
 	);
-};
+});
 
-const LayoutAlertScreen = observer(Component);
 export default LayoutAlertScreen;

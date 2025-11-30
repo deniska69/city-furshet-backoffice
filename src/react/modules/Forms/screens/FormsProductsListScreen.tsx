@@ -1,29 +1,30 @@
-import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { ErrorScreen } from '@modules/Error';
 import { layoutStore } from '@stores';
 import { Button, HStack, Stack } from '@ui';
 
-import { FormsProductEditContainer } from '../containers/FormsProductEditContainer';
-import { FormsProductsListContainer } from '../containers/FormsProductsListContainer';
+import FormsProductsListContainer from '../containers/FormsProductsListContainer';
 
-export const FormsProductsListScreen = () => {
+const FormsProductsListScreen = () => {
 	const navigate = useNavigate();
 	const { categoryId } = useParams();
-	const [item, setItem] = useState<string | undefined>(undefined);
 
 	if (!categoryId) return <ErrorScreen text='Отсутствует "categoryId"' />;
 
 	const handleBack = () => navigate(`/category/${categoryId}`, { replace: true });
 
-	const handleEdit = (id: string) => setItem(id);
+	const handleEdit = (productId: string) => {
+		layoutStore.showProductEditModal({ categoryId, productId });
+	};
 
-	const handleAdd = () => setItem('new');
+	const handleAdd = () => {
+		layoutStore.showProductEditModal({ categoryId });
+	};
 
-	const handleClose = () => setItem(undefined);
-
-	const handleOpen = (id: string) => layoutStore.showProductModal({ categoryId, productId: id });
+	const handleOpen = (productId: string) => {
+		layoutStore.showProductViewModal({ categoryId, productId });
+	};
 
 	return (
 		<Stack className="items-start gap-y-3">
@@ -33,18 +34,12 @@ export const FormsProductsListScreen = () => {
 				<FormsProductsListContainer
 					onAdd={handleAdd}
 					onEdit={handleEdit}
-					onOpen={handleOpen}
-					activeProductId={item}
+					onPreview={handleOpen}
 					categoryId={categoryId}
 				/>
-				{item ? (
-					<FormsProductEditContainer
-						productId={item}
-						onClose={handleClose}
-						categoryId={categoryId}
-					/>
-				) : null}
 			</HStack>
 		</Stack>
 	);
 };
+
+export default FormsProductsListScreen;

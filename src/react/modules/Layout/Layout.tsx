@@ -5,17 +5,17 @@ import { Outlet, useNavigate } from 'react-router';
 import { ERROR_CODES, getError } from '@electron/utils/bridgeEvents';
 import { useTheme } from '@hooks';
 import { Loader } from '@modules/Elements';
-import { ErrorSplashScreen } from '@modules/Error';
-import { FormsImageModalScreen, FormsProductModalScreen } from '@modules/Forms';
 import { layoutStore, priceStore } from '@stores';
 import { Div, HStack, Stack } from '@ui';
 
-import LayoutHeaderContainer from '../containers/LayoutHeaderContainer';
-import LayoutSidebarContainer from '../containers/LayoutSidebarContainer';
-import LayouSplashScreen from './LayouSplashScreen';
-import LayoutAlertScreen from './LayoutAlertScreen';
+import LayoutHeaderContainer from './containers/LayoutHeaderContainer';
+import LayoutModalsContainer from './containers/LayoutModalsContainer';
+import LayoutSidebarContainer from './containers/LayoutSidebarContainer';
+import LayouSplashScreen from './screens/LayouSplashScreen';
+import LayoutAlertScreen from './screens/LayoutAlertScreen';
+import LayoutErrorSplashScreen from './screens/LayoutErrorSplashScreen';
 
-const Component = () => {
+const Layout = observer(() => {
 	useTheme();
 	const navigate = useNavigate();
 
@@ -60,11 +60,13 @@ const Component = () => {
 
 	return (
 		<Div>
-			<FormsProductModalScreen />
-			<FormsImageModalScreen />
 			{layoutStore.loading ? <Loader /> : null}
+
 			<LayoutAlertScreen />
-			<ErrorSplashScreen />
+			<LayoutErrorSplashScreen />
+
+			<LayoutModalsContainer />
+
 			{isShowSplash ? <LayouSplashScreen onHide={handleHideSplash} /> : null}
 
 			<HStack>
@@ -82,8 +84,6 @@ const Component = () => {
 			</HStack>
 		</Div>
 	);
-};
+});
 
-const LayoutScreen = observer(Component);
-
-export default LayoutScreen;
+export default Layout;

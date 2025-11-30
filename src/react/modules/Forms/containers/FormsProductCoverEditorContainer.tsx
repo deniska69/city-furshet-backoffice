@@ -11,11 +11,12 @@ interface IComponent {
 	categoryId: string;
 	productId: string;
 	imageId?: string;
+	isNew: boolean;
 	onChange: (imageId: string) => void;
 }
 
-const Component = (props: IComponent) => {
-	const { categoryId, productId, imageId, onChange } = props;
+const FormsProductCoverEditorContainer = observer((props: IComponent) => {
+	const { categoryId, productId, imageId, isNew, onChange } = props;
 
 	const uid = new ShortUniqueId();
 
@@ -24,6 +25,10 @@ const Component = (props: IComponent) => {
 	};
 
 	const handleChange = async () => {
+		if (isNew) {
+			return layoutStore.setError('Для добавления обложки - необходимо сохранить товар.');
+		}
+
 		layoutStore.setLoading();
 		const newCoverId = uid.rnd();
 
@@ -66,8 +71,6 @@ const Component = (props: IComponent) => {
 			)}
 		</HStack>
 	);
-};
-
-const FormsProductCoverEditorContainer = observer(Component);
+});
 
 export default FormsProductCoverEditorContainer;

@@ -8,143 +8,139 @@ import { PRICE_FIELDS } from '@constants';
 import { isHide } from '@helpers';
 import { ErrorScreen } from '@modules/Error';
 import { layoutStore, priceStore } from '@stores';
-import { Button, Card, Div, Form, HStack, Input, Span, Switch, Textarea } from '@ui';
+import { Button, Divider, Form, HStack, Input, Span, Stack, Switch, Textarea } from '@ui';
 
-import FormsHeader from '../components/FormsHeader';
 import FormsProductCoverEditorContainer from './FormsProductCoverEditorContainer';
 import FormsProductGalleryEditorContainer from './FormsProductGalleryEditorContainer';
 
 const classNameTitleCol = 'min-w-38 mt-1';
 
-const Component = ({ categoryId, productId, onClose }: IFormsProductEditContainer) => {
-	const uid = new ShortUniqueId();
+const FormsProductEditContainer = observer(
+	({ categoryId, productId, onClose, onSaveCallback }: IFormsProductEditContainer) => {
+		const uid = new ShortUniqueId();
 
-	const isNew = !productId || productId === 'new';
-	const backTo = `/category/${categoryId}/products`;
+		const isNew = !productId;
 
-	const product = !isNew && categoryId ? priceStore.getProduct(categoryId, productId) : undefined;
+		const product =
+			!isNew && categoryId ? priceStore.getProduct(categoryId, productId) : undefined;
 
-	const {
-		watch,
-		register,
-		setValue,
-		setError,
-		handleSubmit,
-		getValues,
-		formState: { errors },
-	} = useForm<TypePriceProduct>();
+		const {
+			watch,
+			register,
+			setValue,
+			setError,
+			handleSubmit,
+			getValues,
+			formState: { errors },
+		} = useForm<TypePriceProduct>();
 
-	useEffect(() => {
-		setValue('product_id', product?.product_id || uid.rnd());
-		setValue('product_hide', product?.product_hide ? isHide(product?.product_hide) : false);
-		setValue('product_title', product?.product_title || '');
-		setValue('product_description', product?.product_description || '');
-		setValue('product_note', product?.product_note || '');
-		setValue('product_note_additional', product?.product_note_additional || '');
-		setValue('product_price', product?.product_price || '');
-		setValue('product_cover', product?.product_cover || '');
-		setValue('product_gallery', product?.product_gallery || '');
+		useEffect(() => {
+			setValue('product_id', product?.product_id || uid.rnd());
+			setValue('product_hide', product?.product_hide ? isHide(product?.product_hide) : false);
+			setValue('product_title', product?.product_title || '');
+			setValue('product_description', product?.product_description || '');
+			setValue('product_note', product?.product_note || '');
+			setValue('product_note_additional', product?.product_note_additional || '');
+			setValue('product_price', product?.product_price || '');
+			setValue('product_cover', product?.product_cover || '');
+			setValue('product_gallery', product?.product_gallery || '');
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [product?.product_id]);
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [product?.product_id]);
 
-	if (!categoryId) return <ErrorScreen text='Отсутствует "categoryId"' />;
+		if (!categoryId) return <ErrorScreen text='Отсутствует "categoryId"' />;
 
-	const handleChangeHide = (value: boolean) => setValue('product_hide', value);
+		const handleChangeHide = (value: boolean) => setValue('product_hide', value);
 
-	const handleValidate = (name: TypeHandleValidateProduct) => {
-		if (!watch(name).length) return Promise.resolve();
+		const handleValidate = (name: TypeHandleValidateProduct) => {
+			if (!watch(name).length) return Promise.resolve();
 
-		if (watch(name).includes('\\') || watch(name).includes(';')) {
-			const message = `Поле "${PRICE_FIELDS[name]}" содержит запрещённый символ "\\" или ";"`;
-			setError(name, { type: 'manual', message });
-			layoutStore.setError(message);
-			throw new Error(message);
-		}
-	};
+			if (watch(name).includes('\\') || watch(name).includes(';')) {
+				const message = `Поле "${PRICE_FIELDS[name]}" содержит запрещённый символ "\\" или ";"`;
+				setError(name, { type: 'manual', message });
+				layoutStore.setError(message);
+				throw new Error(message);
+			}
+		};
 
-	const handleSaveValues = async (values: TypePriceProduct) => {
-		handleValidate('product_title');
-		handleValidate('product_description');
-		handleValidate('product_note');
-		handleValidate('product_note_additional');
-		handleValidate('product_price');
+		const handleSaveValues = async (values: TypePriceProduct) => {
+			handleValidate('product_title');
+			handleValidate('product_description');
+			handleValidate('product_note');
+			handleValidate('product_note_additional');
+			handleValidate('product_price');
 
-		if (product?.product_id) {
-			priceStore.saveProduct(categoryId, values);
-		} else {
-			priceStore.addProduct(categoryId, values);
-		}
+			if (product?.product_id) {
+				priceStore.saveProduct(categoryId, values);
+			} else {
+				priceStore.addProduct(categoryId, values);
+			}
 
-		priceStore.setNeedSave();
+			priceStore.setNeedSave();
 
-		return Promise.resolve();
-	};
+			return Promise.resolve();
+		};
 
-	const handleSave = async (values: TypePriceProduct) => {
-		await handleSaveValues(values);
-		onClose();
-	};
+		const handleSave = async (values: TypePriceProduct) => {
+			await handleSaveValues(values);
 
-	const handleDelete = () => {
-		if (typeof product?.index !== 'number') {
-			return layoutStore.setError('typeof product?.index !== "number"');
-		}
+			if (isNew) {
+				onSaveCallback(values.product_id);
+			} else {
+				onClose();
+			}
+		};
 
-		layoutStore.alert(
-			`Вы действительно хотите удалить товар "${product.product_title}" ?`,
-			[
-				{ title: 'Отмена' },
-				{
-					title: 'Удалить',
-					onClick: () => {
-						onClose();
-						priceStore.deleteProduct(categoryId, product.product_id);
+		const handleDelete = () => {
+			if (typeof product?.index !== 'number') {
+				return layoutStore.setError('typeof product?.index !== "number"');
+			}
+
+			layoutStore.alert(
+				`Вы действительно хотите удалить товар "${product.product_title}" ?`,
+				[
+					{ title: 'Отмена' },
+					{
+						title: 'Удалить',
+						onClick: () => {
+							onClose();
+							priceStore.deleteProduct(categoryId, product.product_id);
+						},
 					},
-				},
-			],
-			'warning',
-		);
-	};
+				],
+				'warning',
+			);
+		};
 
-	const handleUp = () => {
-		if (product?.index === undefined) {
-			return layoutStore.setError('product?.index === undefined');
-		}
+		const handleUp = () => {
+			if (product?.index === undefined) {
+				return layoutStore.setError('product?.index === undefined');
+			}
 
-		priceStore.changeProductPosition(categoryId, product?.index, 'up');
-	};
+			priceStore.changeProductPosition(categoryId, product?.index, 'up');
+		};
 
-	const handleDown = () => {
-		if (product?.index === undefined) {
-			return layoutStore.setError('product?.index === undefined');
-		}
+		const handleDown = () => {
+			if (product?.index === undefined) {
+				return layoutStore.setError('product?.index === undefined');
+			}
 
-		priceStore.changeProductPosition(categoryId, product?.index, 'down');
-	};
+			priceStore.changeProductPosition(categoryId, product?.index, 'down');
+		};
 
-	const handleChangeCover = async (coverId: string) => {
-		setValue('product_cover', coverId);
-		handleSaveValues(getValues());
-	};
+		const handleChangeCover = async (coverId: string) => {
+			setValue('product_cover', coverId);
+			handleSaveValues(getValues());
+		};
 
-	const handleChangeGallery = async (ids: string) => {
-		setValue('product_gallery', ids);
-		handleSaveValues(getValues());
-	};
+		const handleChangeGallery = async (ids: string) => {
+			setValue('product_gallery', ids);
+			handleSaveValues(getValues());
+		};
 
-	return (
-		<Div className="border-border-light dark:border-border-dark border-l pl-6">
-			<Card className="!min-w-xl max-w-xl">
-				<FormsHeader
-					isNew={isNew}
-					backTo={backTo}
-					onClose={onClose}
-					titleNew="Новый товар"
-					title="Редактор товара"
-				/>
-
-				<Form className="gap-y-3 !mt-6" onSubmit={handleSubmit(handleSave)}>
+		return (
+			<Form className="" onSubmit={handleSubmit(handleSave)}>
+				<Stack className="gap-y-3 p-4">
 					{/* product_id */}
 					<HStack className="max-w-[1100px] gap-x-3 items-center">
 						<Span className={classNameTitleCol} variant="muted" text="ID" />
@@ -200,34 +196,38 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 					</HStack>
 
 					{/* ordinal number */}
-					{!isNew ? (
-						<HStack className="max-w-[1100px] gap-x-3 items-center">
-							<Span className={classNameTitleCol}>Порядковый номер</Span>
-							<HStack className="gap-x-3">
-								<Input disabled className="max-w-18" value={(product?.index || 0) + 1} />
-								<Button
-									onClick={handleUp}
-									disabled={product?.first}
-									className="!px-1.5 !py-4 !rounded-full"
-									variant={product?.first ? 'ghost' : 'ghost-primary'}
-								>
-									<ChevronUpIcon className="w-5" />
-								</Button>
 
-								<Button
-									onClick={handleDown}
-									disabled={product?.last}
-									className="!px-1.5 !py-4 !rounded-full"
-									variant={product?.last ? 'ghost' : 'ghost-primary'}
-								>
-									<ChevronDownIcon className="w-5" />
-								</Button>
-							</HStack>
+					<HStack className="max-w-[1100px] gap-x-3 items-center">
+						<Span className={classNameTitleCol}>Порядковый номер</Span>
+						<HStack className="gap-x-3">
+							<Input
+								disabled
+								className="max-w-24"
+								value={isNew ? '' : (product?.index || 0) + 1}
+							/>
+							<Button
+								onClick={handleUp}
+								disabled={product?.first || isNew}
+								className="!px-1.5 !py-4 !rounded-full"
+								variant={product?.first || isNew ? 'ghost' : 'ghost-primary'}
+							>
+								<ChevronUpIcon className="w-5" />
+							</Button>
+
+							<Button
+								onClick={handleDown}
+								disabled={product?.last || isNew}
+								className="!px-1.5 !py-4 !rounded-full"
+								variant={product?.last || isNew ? 'ghost' : 'ghost-primary'}
+							>
+								<ChevronDownIcon className="w-5" />
+							</Button>
 						</HStack>
-					) : null}
+					</HStack>
 
 					{/* product_cover */}
 					<FormsProductCoverEditorContainer
+						isNew={isNew}
 						categoryId={categoryId}
 						onChange={handleChangeCover}
 						productId={watch('product_id')}
@@ -236,26 +236,29 @@ const Component = ({ categoryId, productId, onClose }: IFormsProductEditContaine
 
 					{/* product_gallery */}
 					<FormsProductGalleryEditorContainer
+						isNew={isNew}
 						categoryId={categoryId}
 						onChange={handleChangeGallery}
-						productId={watch('product_id')}
 						ids={watch('product_gallery')}
+						productId={watch('product_id')}
 					/>
+				</Stack>
 
-					{/* butons */}
-					<HStack className="items-center mt-2 justify-end gap-x-3">
-						{!isNew ? (
-							<Button className="!px-2" variant="error" onClick={handleDelete}>
-								<TrashIcon className="w-5" />
-							</Button>
-						) : null}
+				<Divider />
 
-						<Button type="submit" text="Сохранить" />
-					</HStack>
-				</Form>
-			</Card>
-		</Div>
-	);
-};
+				{/* butons */}
+				<HStack className="items-center justify-end gap-x-3 p-4">
+					{!isNew ? (
+						<Button className="!px-2" variant="error" onClick={handleDelete}>
+							<TrashIcon className="w-5" />
+						</Button>
+					) : null}
 
-export const FormsProductEditContainer = observer(Component);
+					<Button type="submit" text="Сохранить" />
+				</HStack>
+			</Form>
+		);
+	},
+);
+
+export default FormsProductEditContainer;

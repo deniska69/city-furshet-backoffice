@@ -11,7 +11,7 @@ import { Button, Card, Div, HStack, Image, Span, Stack } from '@ui';
 
 const isDivisible = (x: number, y: number) => !(x % y);
 
-const Component = () => {
+export const ImageViewModal = observer(() => {
 	const uid = new ShortUniqueId();
 
 	const [deg, setDeg] = useState(0);
@@ -65,22 +65,22 @@ const Component = () => {
 	};
 
 	return (
-		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-49 flex h-screen w-full items-center justify-center">
-			<Card className="!min-w-lg max-w-lg">
+		<Stack className="bg-bg-dark/50 backdrop-blur-xs absolute z-52 flex h-screen w-full items-center justify-center">
+			<Card className="!min-w-lg max-w-lg p-0!">
 				<FormsHeader title="Просмотр обложки товара" onClose={handleClose} />
 
-				<Stack className="mt-4 items-center relative">
+				<Stack className="items-center relative p-4">
 					<Image
 						id={imageId}
 						src={src}
 						className="w-full aspect-square rounded-lg object-cover"
 					/>
 
-					<Div className="absolute top-4 right-4 px-3 pt-0 pb-1 bg-neutral-800/30 rounded-lg">
-						<Span className="text-white text-xs">{imageId}</Span>
+					<Div className="absolute top-8 right-8 px-3 pt-0 pb-1 bg-neutral-800/30 rounded-lg">
+						ID: <Span className="text-white text-xs">{imageId}</Span>
 					</Div>
 
-					<HStack className="absolute gap-x-1 bottom-4">
+					<HStack className="absolute gap-x-1 bottom-8">
 						<Button onClick={handleRotateRight}>
 							<ArrowRotateRight />
 						</Button>
@@ -95,9 +95,7 @@ const Component = () => {
 			</Card>
 		</Stack>
 	);
-};
-
-export const FormsImageModalScreen = observer(Component);
+});
 
 const ArrowRotateLeft = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16">

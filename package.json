@@ -4,7 +4,7 @@
 	"description": "Desktop app back-office for city-furshet.ru",
 	"repository": "https://github.com/deniska69/city-furshet-backoffice.git",
 	"private": true,
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"main": "dist-electron/main.js",
 	"scripts": {

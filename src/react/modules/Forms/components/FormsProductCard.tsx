@@ -1,12 +1,11 @@
 import { EyeSlashIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 import { getImageUrl, isHide } from '@helpers';
-import { Button, Card, cn, Div, Image, Span, Stack } from '@ui';
+import { Button, Card, Div, Image, Span, Stack } from '@ui';
 
 interface IFormsProductCard extends TypePriceProduct {
 	onEdit: (id: string) => void;
-	onOpen: (id: string) => void;
-	active?: boolean;
+	onPreview: (id: string) => void;
 	categoryId?: string;
 }
 
@@ -19,22 +18,16 @@ const FormsProductCard = (props: IFormsProductCard) => {
 		product_hide,
 		product_note,
 		onEdit,
-		onOpen,
-		active,
+		onPreview,
 		categoryId,
 	} = props;
 
-	const handleOpen = () => onOpen(product_id);
+	const handleOpen = () => onPreview(product_id);
 
 	const handleEdit = () => onEdit(product_id);
 
 	return (
-		<Card
-			className={cn(
-				'relative group flex flex-col h-auto items-start max-w-[234px] justify-between',
-				active && '!border-primary',
-			)}
-		>
+		<Card className="relative group flex flex-col h-auto items-start max-w-[234px] justify-between">
 			<Stack>
 				<Div className="relative">
 					<Image
@@ -59,7 +52,7 @@ const FormsProductCard = (props: IFormsProductCard) => {
 			</Button>
 
 			<Div className="hidden group-hover:flex ml-[calc(-1rem)] mt-[calc(-1rem)] rounded-xl absolute flex-col gap-y-3 h-full min-w-full items-center justify-center bg-black/10 dark:bg-white/10 backdrop-blur-xs z-50">
-				<Button onClick={handleOpen} text="Открыть" variant="solid" className="w-48" />
+				<Button onClick={handleOpen} text="Предпросмотр" variant="solid" className="w-48" />
 				<Button onClick={handleEdit} text="Редактировать" variant="muted" className="w-48" />
 			</Div>
 		</Card>

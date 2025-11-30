@@ -4,14 +4,13 @@ import { To, useNavigate } from 'react-router';
 import { Button, Divider, HStack, Span, Stack } from '@ui';
 
 interface IFormsHeader {
-	isNew?: boolean;
 	title: string;
 	titleNew?: string;
 	backTo?: To;
 	onClose?: () => void;
 }
 
-const FormsHeader = ({ isNew, title, titleNew, backTo, onClose }: IFormsHeader) => {
+const FormsHeader = ({ title, titleNew, backTo, onClose }: IFormsHeader) => {
 	const navigate = useNavigate();
 
 	const handleClose = () => {
@@ -20,16 +19,15 @@ const FormsHeader = ({ isNew, title, titleNew, backTo, onClose }: IFormsHeader) 
 	};
 
 	return (
-		<Stack className="gap-y-3">
-			<HStack className="items-center justify-between">
-				<HStack className="gap-x-1">
-					{isNew ? (
+		<Stack className="gap-y-3 pt-4">
+			<HStack className="items-center justify-between px-4">
+				<HStack className="gap-x-3">
+					<Span className="text-bold text-2xl">{title}</Span>
+					{titleNew ? (
 						<Span variant="primary" className="text-bold text-2xl">
-							{titleNew}
+							{`(${titleNew || 'New'})`}
 						</Span>
-					) : (
-						<Span className="text-bold text-2xl">{title}</Span>
-					)}
+					) : null}
 				</HStack>
 				<Button variant="ghost" onClick={handleClose} className="!px-1.5 !py-4 !rounded-full">
 					<XMarkIcon className="w-5" />

@@ -9,30 +9,30 @@ import FormsProductNewCard from '../components/FormsProductNewCard';
 interface IComponent {
 	categoryId?: string;
 	onEdit: (value: string) => void;
-	onOpen: (value: string) => void;
+	onPreview: (value: string) => void;
 	onAdd: () => void;
-	activeProductId?: string;
 }
 
-const Component = ({ categoryId, onEdit, onOpen, onAdd, activeProductId }: IComponent) => {
-	const items = categoryId ? priceStore.getProducts(categoryId) : undefined;
+const FormsProductsListContainer = observer(
+	({ categoryId, onEdit, onPreview, onAdd }: IComponent) => {
+		const items = categoryId ? priceStore.getProducts(categoryId) : undefined;
 
-	return (
-		<HStack className="gap-3 flex-wrap overflow-y-auto">
-			{items &&
-				items.map((item, index) => (
-					<FormsProductCard
-						{...item}
-						key={index}
-						categoryId={categoryId}
-						onEdit={() => onEdit(item.product_id)}
-						onOpen={() => onOpen(item.product_id)}
-						active={item.product_id === activeProductId}
-					/>
-				))}
-			<FormsProductNewCard onClick={onAdd} />
-		</HStack>
-	);
-};
+		return (
+			<HStack className="gap-3 flex-wrap overflow-y-auto">
+				{items &&
+					items.map((item, index) => (
+						<FormsProductCard
+							{...item}
+							key={index}
+							categoryId={categoryId}
+							onEdit={() => onEdit(item.product_id)}
+							onPreview={() => onPreview(item.product_id)}
+						/>
+					))}
+				<FormsProductNewCard onClick={onAdd} />
+			</HStack>
+		);
+	},
+);
 
-export const FormsProductsListContainer = observer(Component);
+export default FormsProductsListContainer;

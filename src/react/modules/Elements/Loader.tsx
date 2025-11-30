@@ -3,7 +3,7 @@ import { cn, Div, Spinner } from '@ui';
 export const Loader = ({ className }: { className?: string }) => (
 	<Div
 		className={cn(
-			'absolute flex h-full min-w-full items-center justify-center bg-white/10 backdrop-blur-md z-50',
+			'absolute flex h-full min-w-full items-center justify-center bg-white/10 backdrop-blur-md z-99',
 			className,
 		)}
 	>

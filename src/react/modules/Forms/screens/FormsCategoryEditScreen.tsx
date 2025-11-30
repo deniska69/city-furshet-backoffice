@@ -3,20 +3,21 @@ import { useParams } from 'react-router';
 import { Card } from '@ui';
 
 import FormsHeader from '../components/FormsHeader';
-import { FormsCategoryEditContainer } from '../containers/FormsCategoryEditContainer';
+import FormsCategoryEditContainer from '../containers/FormsCategoryEditContainer';
 
-export const FormsCategoryEditScreen = () => {
+const FormsCategoryEditScreen = () => {
 	const { categoryId } = useParams();
 
 	return (
 		<Card className="max-w-xl">
 			<FormsHeader
 				backTo="/"
-				isNew={!categoryId}
 				title="Редактор категории"
-				titleNew="Новая категория"
+				titleNew={!categoryId ? 'Новая категория' : undefined}
 			/>
 			<FormsCategoryEditContainer id={categoryId} />
 		</Card>
 	);
 };
+
+export default FormsCategoryEditScreen;

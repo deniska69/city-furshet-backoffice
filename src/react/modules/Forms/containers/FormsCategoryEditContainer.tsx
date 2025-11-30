@@ -10,7 +10,7 @@ import { isHide } from '@helpers';
 import { layoutStore, priceStore } from '@stores';
 import { Button, Form, HStack, Input, Span, Switch } from '@ui';
 
-const Component = ({ id }: { id?: string }) => {
+const FormsCategoryEditContainer = observer(({ id }: { id?: string }) => {
 	const navigate = useNavigate();
 	const uid = new ShortUniqueId();
 
@@ -194,6 +194,6 @@ const Component = ({ id }: { id?: string }) => {
 			</HStack>
 		</Form>
 	);
-};
+});
 
-export const FormsCategoryEditContainer = observer(Component);
+export default FormsCategoryEditContainer;

@@ -20,14 +20,14 @@ import 'swiper/css/navigation';
 
 import { Navigation, Pagination } from 'swiper/modules';
 
-const Component = () => {
-	const handleClose = () => layoutStore.hideProductModal();
+export const ProductPreviewModal = observer(() => {
+	const handleClose = () => layoutStore.hideProductViewModal();
 
 	useEscape(handleClose);
 
-	if (!layoutStore.productModal) return null;
+	if (!layoutStore.productViewModal) return null;
 
-	const { categoryId, productId } = layoutStore.productModal;
+	const { categoryId, productId } = layoutStore.productViewModal;
 
 	const product = priceStore.getProduct(categoryId, productId);
 
@@ -52,10 +52,10 @@ const Component = () => {
 			className="bg-bg-dark/50 backdrop-blur-xs absolute z-[100] flex h-screen w-full items-center justify-center"
 			onClick={handleClose}
 		>
-			<Card className="!min-w-[900px] !max-w-[900px]" onClick={(e) => e.stopPropagation()}>
-				<FormsHeader title={product_title} onClose={handleClose} />
+			<Card className="!min-w-[900px] !max-w-[900px] p-0!" onClick={(e) => e.stopPropagation()}>
+				<FormsHeader title={product_title} titleNew="Предпросмотр" onClose={handleClose} />
 
-				<HStack className="mt-4 items-start relative">
+				<HStack className="items-start relative p-4">
 					{gallery ? (
 						<Div className="max-w-[400px] min-h-[400px] max-h-[400px] rounded-lg overflow-hidden">
 							<Swiper
@@ -115,6 +115,4 @@ const Component = () => {
 			</Card>
 		</Stack>
 	);
-};
-
-export const FormsProductModalScreen = observer(Component);
+});

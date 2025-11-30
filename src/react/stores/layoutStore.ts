@@ -24,7 +24,8 @@ class LayoutStore {
 	alertButtons: TypeAlertButtons | undefined;
 	alertType: 'warning' | 'success' | undefined;
 	imageModal: TypeImageView | undefined;
-	productModal: TypeProductView | undefined;
+	productViewModal: TypeProductView | undefined;
+	productEditModal: { isShow: boolean } & Partial<TypeProductView> = { isShow: false };
 
 	setLoading = action((value: boolean = true) => (this.loading = value));
 
@@ -55,9 +56,15 @@ class LayoutStore {
 
 	hideImageModal = action(() => (this.imageModal = undefined));
 
-	showProductModal = action((args: TypeProductView) => (this.productModal = args));
+	showProductViewModal = action((args: TypeProductView) => (this.productViewModal = args));
 
-	hideProductModal = action(() => (this.productModal = undefined));
+	hideProductViewModal = action(() => (this.productViewModal = undefined));
+
+	showProductEditModal = action((args: Partial<TypeProductView>) => {
+		this.productEditModal = { ...args, isShow: true };
+	});
+
+	hideProductEditModal = action(() => (this.productEditModal = { isShow: false }));
 }
 
 export const layoutStore = makeAutoObservable(new LayoutStore());
