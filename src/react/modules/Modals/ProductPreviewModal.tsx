@@ -57,7 +57,7 @@ export const ProductPreviewModal = observer(() => {
 
 				<HStack className="items-start relative p-4">
 					{gallery ? (
-						<Div className="max-w-[400px] min-h-[400px] max-h-[400px] rounded-lg overflow-hidden">
+						<Div className="min-w-[400px] max-w-[400px] min-h-[400px] max-h-[400px] rounded-lg overflow-hidden">
 							<Swiper
 								pagination={true}
 								navigation={true}
